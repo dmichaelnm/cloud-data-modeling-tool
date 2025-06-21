@@ -20,6 +20,7 @@
     "pinia": "^3.0.1",
     "@quasar/extras": "^1.16.4",
     "quasar": "^2.16.0",
+    "quasar-extras-svg-icons": "^2.1.1",
     "vue": "^3.4.18",
     "vue-router": "^4.0.12",
     "firebase": "^11.9.1"
