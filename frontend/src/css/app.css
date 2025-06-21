@@ -1,27 +1,24 @@
-// app global css in SCSS form
-@import 'quasar.variables';
-
 body {
-  background-color: $light-body-background;
-  font-family: 'Roboto', sans-serif;
+  background-color: #F0F0F0;
+  font-family: "Roboto", sans-serif;
   font-size: 11pt;
-  color: $light-text-normal;
+  color: #505050;
 }
 
 body.body--dark {
-  background-color: $dark-body-background;
-  color: $dark-text-normal;
+  background-color: #101010;
+  color: #B0B0B0;
 }
 
 .frame {
   padding: 8px 16px;
-  background-color: $light-frame-background;
+  background-color: #FFFFFF;
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }
 
 .body--dark .frame {
-  background-color: $dark-frame-background;
+  background-color: #202020;
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.9);
 }
 
@@ -30,19 +27,19 @@ body.body--dark {
 }
 
 .text-normal {
-  color: $light-text-normal;
+  color: #505050;
 }
 
 .body--dark .text-normal {
-  color: $dark-text-normal;
+  color: #B0B0B0;
 }
 
 .text-label {
-  color: $light-text-label;
+  color: #101010;
 }
 
 .body--dark .text-label {
-  color: $dark-text-label;
+  color: #F0F0F0;
 }
 
 .text-field {
@@ -50,46 +47,48 @@ body.body--dark {
 }
 
 .text-disabled {
-  color: $light-text-disabled;
+  color: #A0A0A0;
 }
 
 .body--dark .text-disabled {
-  color: $dark-text-disabled;
+  color: #505050;
 }
 
 .q-menu {
   border-radius: 4px;
-  background-color: $light-frame-background;
+  background-color: #FFFFFF;
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid $light-border-normal;
+  border: 1px solid #E0E0E0;
 }
 
 .body--dark .q-menu {
-  background-color: $dark-frame-background;
+  background-color: #202020;
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.9);
-  border: 1px solid $dark-border-normal;
+  border: 1px solid #303030;
 }
 
 .q-field--outlined .q-field__control:before {
-  border-color: $light-border-normal;
+  border-color: #E0E0E0;
 }
 
 .q-field--outlined .q-field__control:hover:before {
-  border-color: $dark-border-normal;
+  border-color: #303030;
 }
 
 .q-field--outlined.q-field--highlighted .q-field__control:after {
-  border-color: $light-border-selected;
+  border-color: #0060BF;
 }
 
 .body--dark .q-field--outlined .q-field__control:before {
-  border-color: $dark-border-normal;
+  border-color: #303030;
 }
 
 .body--dark .q-field--outlined .q-field__control:hover:before {
-  border-color: $light-border-normal;
+  border-color: #E0E0E0;
 }
 
 .body--dark .q-field--outlined.q-field--highlighted .q-field__control:after {
-  border-color: $dark-border-selected;
+  border-color: #40A0FF;
 }
+
+/*# sourceMappingURL=app.css.map */

@@ -35,5 +35,8 @@ yarn-error.log*
 # Visual Studio Code
 .vscode
 
+# Generated files
+/src/css/app.css.map
+
 # Secret information
 /src/scripts/config/FirebaseConfig.ts
