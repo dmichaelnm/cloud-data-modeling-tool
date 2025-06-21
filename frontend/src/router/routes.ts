@@ -1,8 +1,26 @@
 import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
-  // Always leave this as last one,
-  // but you can also remove it
+  // Authentication Layout
+  {
+    path: '/auth',
+    component: () => import('layouts/AuthenticationLayout.vue'),
+    children: [
+      {
+        path: 'login',
+        component: () => import('pages/authentication/LoginPage.vue'),
+      },
+    ],
+  },
+
+  // Main Layout
+  {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [],
+  },
+
+  // Error page
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
