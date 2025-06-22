@@ -6,6 +6,7 @@
     :push="_appearance === 'push'"
     :flat="_appearance === 'link'"
     :class="`button-label button-label-${_appearance}`"
+    :to="to"
     no-caps
   />
 </template>
@@ -45,6 +46,7 @@ const props = defineProps<{
   label: string;
   type?: 'button' | 'submit' | 'reset';
   appearance?: 'push' | 'link';
+  to?: string;
 }>();
 
 const _appearance = computed(() => props.appearance ?? 'push').value;

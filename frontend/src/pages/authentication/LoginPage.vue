@@ -38,7 +38,22 @@
             <!-- Login Button Column -->
             <div class="col text-center">
               <!-- Login Button -->
-              <button-label :label="$t('authentication.button.login')" type="submit" />
+              <button-label
+                :label="$t('authentication.button.login')"
+                type="submit"
+                style="width: 230px"
+              />
+            </div>
+          </div>
+          <!-- Login Google Row -->
+          <div class="row">
+            <!-- Login Google Column -->
+            <div class="col text-center">
+              <!-- Login Google Button -->
+              <button-google
+                :label="$t('authentication.button.loginGoogle')"
+                @click="loginGoogle"
+              />
             </div>
           </div>
           <!-- Additional Links Row -->
@@ -46,12 +61,20 @@
             <!-- Register Account Column -->
             <div class="col">
               <!-- Register Account Button -->
-              <button-label :label="$t('authentication.button.register')" appearance="link" />
+              <button-label
+                :label="$t('authentication.button.register')"
+                appearance="link"
+                to="/auth/register"
+              />
             </div>
             <!-- Reset Password Column -->
             <div class="col text-right">
               <!-- Reset Password Button -->
-              <button-label :label="$t('authentication.button.resetPassword')" appearance="link" />
+              <button-label
+                :label="$t('authentication.button.resetPassword')"
+                appearance="link"
+                to="/auth/reset"
+              />
             </div>
           </div>
         </div>
@@ -66,6 +89,7 @@ import { useCommonComposables } from 'src/scripts/composables/Common';
 import AuthenticationFrame from 'src/components/authentication/AuthenticationFrame.vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonLabel from 'components/common/ButtonLabel.vue';
+import ButtonGoogle from 'components/authentication/ButtonGoogle.vue';
 
 const common = useCommonComposables();
 
@@ -76,7 +100,7 @@ onBeforeMount(() => {
   email.value = common.quasar.cookies.get('email') ?? '';
 });
 
-function login(): void {
-  console.debug('login');
-}
+function login(): void {}
+
+function loginGoogle(): void {}
 </script>

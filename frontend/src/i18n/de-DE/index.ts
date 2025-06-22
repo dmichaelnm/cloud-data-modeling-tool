@@ -3,14 +3,21 @@ export default {
     title: 'Cloud Data Modeling Tool',
   },
 
+  button: {
+    back: 'Zurück',
+  },
+
   label: {
     email: 'Email-Adresse',
+    firstname: 'Vorname',
+    lastname: 'Nachname',
     password: 'Kennwort',
+    passwordConfirm: 'Kennwort bestätigen',
   },
 
   message: {
     noSelection: 'Keine Auswahl',
-    mandatory: 'Dieses Eingabefeld darf nicht leer sein.'
+    mandatory: 'Dieses Eingabefeld darf nicht leer sein.',
   },
 
   options: {
@@ -23,15 +30,21 @@ export default {
   authentication: {
     button: {
       login: 'Anmelden',
+      loginGoogle: 'Über Google anmelden',
       register: 'Konto erstellen',
+      registerGoogle: 'Über Google registrieren',
       resetPassword: 'Kennwort zurücksetzen',
     },
     message: {
       login:
-        'Bitte melden Sie sich mit Ihrer E-Mail-Adresse und Ihrem Passwort an oder nutzen Sie Ihr Google-Konto für ' +
+        'Bitte melden Sie sich mit Ihrer E-Mail-Adresse und Ihrem Kennwort an oder nutzen Sie Ihr Google-Konto für ' +
         'einen schnellen Zugang. Wenn Sie noch kein Konto haben, können Sie ein neues erstellen, indem Sie unten auf ' +
-        'den Link "Registrieren" klicken. Ihr Konto muss von einem Administrator genehmigt werden, bevor Sie sich ' +
+        'den Link "Konto erstellen" klicken. Ihr Konto muss von einem Administrator genehmigt werden, bevor Sie sich ' +
         'anmelden können.',
+      register:
+        'Bitte geben Sie Ihren Namen, ihre Email-Adresse und das Kennwort für Ihr neues Konto ein. Alternativ ' +
+        'können Sie sich mit Ihrem Google-Konto registrieren. Nach erfolgreicher Registrierung muss jedoch noch ein ' +
+        'Administrator Ihr Konto freischalten, damit Sie sich anmelden können.',
     },
   },
 };
