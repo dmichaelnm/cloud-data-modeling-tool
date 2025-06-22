@@ -21,6 +21,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+/**
+ * Properties used in this component.
+ */
 const props = defineProps<{
   modelValue: string | number | null;
   autoComplete?: string;
@@ -30,10 +33,16 @@ const props = defineProps<{
   autoFocus?: boolean;
 }>();
 
+/**
+ * Emits events used for component communication.
+ */
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string | number | null): void;
 }>();
 
+/**
+ * A computed property that acts as a two-way data binding for the `modelValue` prop.
+ */
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (value: string | number | null) => emits('update:modelValue', value),

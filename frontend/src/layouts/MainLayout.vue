@@ -8,8 +8,14 @@ import { onBeforeMount } from 'vue';
 import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 
+/**
+ * Function returning the most common composables like "router", "quasar", "i18n".
+ */
 const common = useCommonComposables();
 
+/**
+ * Lifecycle method that is called before this component is mounted.
+ */
 onBeforeMount(() => {
   const provider = getDocumentProvider();
   provider.onAccountStateChanged((account) => {

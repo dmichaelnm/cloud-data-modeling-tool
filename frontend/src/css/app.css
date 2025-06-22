@@ -1,3 +1,19 @@
+.text-light-border-normal {
+  color: #E0E0E0;
+}
+
+.text-light-border-highlighted {
+  color: #0060BF;
+}
+
+.text-dark-border-normal {
+  color: #303030;
+}
+
+.text-dark-border-highlighted {
+  color: #40A0FF;
+}
+
 body {
   background-color: #F0F0F0;
   font-family: "Roboto", sans-serif;

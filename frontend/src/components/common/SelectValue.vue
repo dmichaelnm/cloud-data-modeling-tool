@@ -63,23 +63,41 @@
 import { computed } from 'vue';
 import type { TSelectOption } from 'src/scripts/composables/Options';
 
+/**
+ * Properties used in this component.
+ */
 const props = defineProps<{
   modelValue: string | null;
   options: TSelectOption[];
   borderless?: boolean;
 }>();
 
+/**
+ * Emits events used for component communication.
+ */
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string | null): void;
 }>();
 
+/**
+ * A computed property that acts as a two-way data binding for the `modelValue` prop.
+ */
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (value: string | null) => emits('update:modelValue', value),
 });
 
+/**
+ * A computed property that determines whether an icon should be shown
+ * by evaluating if any of the provided options contain an `icon` property.
+ */
 const _showIcon = computed(() => props.options.some((opt) => opt.icon));
 
+/**
+ * A computed property that determines the currently selected option.
+ * The selected option is derived by matching the value of `_modelValue`
+ * against the `value` property of the available options in `props.options`.
+ */
 const _selectedOption = computed(() => {
   return props.options.find((opt) => opt.value === _modelValue.value);
 });

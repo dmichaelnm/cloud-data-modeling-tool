@@ -7,7 +7,10 @@
     :flat="_appearance === 'link'"
     :class="`button-label button-label-${_appearance}`"
     :to="to"
+    :color="color"
+    :dense="dense"
     no-caps
+    @click="emits('click')"
   />
 </template>
 
@@ -36,18 +39,35 @@
 .body--dark .button-label-link {
   color: $dark-text-highlighted;
 }
-
 </style>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 
+/**
+ * Properties used in this component.
+ */
 const props = defineProps<{
   label: string;
   type?: 'button' | 'submit' | 'reset';
-  appearance?: 'push' | 'link';
+  appearance?: 'push' | 'link' | undefined;
   to?: string;
+  color?: string | undefined;
+  dense?: boolean;
 }>();
 
+/**
+ * Emits events used for component communication.
+ */
+const emits = defineEmits<{
+  (event: 'click'): void;
+}>();
+
+/**
+ * Computed variable that determines the appearance style of a component.
+ *
+ * This variable evaluates the `appearance` property from `props` and uses its value if provided.
+ * If the `appearance` property is not specified, it defaults to the value 'push'.
+ */
 const _appearance = computed(() => props.appearance ?? 'push').value;
 </script>

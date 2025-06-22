@@ -147,10 +147,16 @@
 </style>
 
 <script setup lang="ts">
+/**
+ * Properties used in this component.
+ */
 defineProps<{
   label: string;
 }>();
 
+/**
+ * Emits events used for component communication.
+ */
 const emits = defineEmits<{
   (event: 'click'): void;
 }>();

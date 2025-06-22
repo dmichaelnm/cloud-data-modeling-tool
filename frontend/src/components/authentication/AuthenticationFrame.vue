@@ -55,39 +55,78 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, ref } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
+import { useLanguageOptions } from 'src/scripts/composables/Options';
 import ButtonIcon from 'components/common/ButtonIcon.vue';
 import SelectValue from 'components/common/SelectValue.vue';
-import { useLanguageOptions } from 'src/scripts/composables/Options';
 
+/**
+ * Function returning the most common composables like "router", "quasar", "i18n".
+ */
 const common = useCommonComposables();
+
+/**
+ * Function returning an array of possible languages.
+ */
 const languageOptions = useLanguageOptions();
 
+/**
+ * A reactive string variable that holds the code for the selected language.
+ */
 const languageCode = ref<string>('');
 
+/**
+ * Properties used in this component.
+ */
 defineProps<{
   message: string;
 }>();
 
+/**
+ * A computed property that determines the icon to be displayed based on the dark mode state.
+ * If dark mode is active, the icon will represent light mode ('o_light_mode').
+ * If dark mode is inactive, the icon will represent dark mode ('o_dark_mode').
+ */
 const _darkModeIcon = computed(() => {
   return common.quasar.dark.isActive ? 'o_light_mode' : 'o_dark_mode';
 });
 
+/**
+ * Lifecycle method that is called before this component is mounted.
+ */
 onBeforeMount(() => {
   languageCode.value = common.quasar.cookies.get('language') ?? getDefaultLanguageCode();
   common.i18n.locale.value = languageCode.value;
   common.quasar.dark.set(common.quasar.cookies.get('dark') === 'true');
 });
 
+/**
+ * Toggles the dark mode setting for the application.
+ * Updates the dark mode state in the Quasar framework and synchronizes the preference in cookies.
+ *
+ * @return {void} Does not return a value.
+ */
 function toggleDarkMode(): void {
   common.quasar.dark.set(!common.quasar.dark.isActive);
   common.quasar.cookies.set('dark', common.quasar.dark.isActive.toString());
 }
 
+/**
+ * Switches the application language by updating the locale value and saving the selected language
+ * code in cookies.
+ *
+ * @return {void} Does not return a value.
+ */
 function switchLanguage(): void {
   common.i18n.locale.value = languageCode.value;
   common.quasar.cookies.set('language', languageCode.value);
 }
 
+/**
+ * Retrieves the default language code based on the user's current language settings.
+ * If a matching language code is not found, it defaults to 'en-US'.
+ *
+ * @return {string} The default language code.
+ */
 function getDefaultLanguageCode(): string {
   const options = languageOptions();
   const option = options.find((opt) => opt.value === navigator.language);

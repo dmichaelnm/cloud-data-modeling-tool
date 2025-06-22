@@ -5,6 +5,7 @@ export default {
 
   button: {
     back: 'Zurück',
+    close: 'Schließen',
   },
 
   label: {
