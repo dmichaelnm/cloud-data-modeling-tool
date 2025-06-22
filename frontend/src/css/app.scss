@@ -79,7 +79,11 @@ body.body--dark {
 }
 
 .q-field--outlined.q-field--highlighted .q-field__control:after {
-  border-color: $light-border-selected;
+  border-color: $light-border-highlighted;
+}
+
+.q-field--highlighted .q-field__label {
+  color: $light-text-highlighted;
 }
 
 .body--dark .q-field--outlined .q-field__control:before {
@@ -91,5 +95,9 @@ body.body--dark {
 }
 
 .body--dark .q-field--outlined.q-field--highlighted .q-field__control:after {
-  border-color: $dark-border-selected;
+  border-color: $dark-border-highlighted;
+}
+
+.body--dark .q-field--highlighted .q-field__label {
+  color: $dark-text-highlighted;
 }

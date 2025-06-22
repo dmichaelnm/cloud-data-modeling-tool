@@ -79,6 +79,10 @@ body.body--dark {
   border-color: #0060BF;
 }
 
+.q-field--highlighted .q-field__label {
+  color: #0060BF;
+}
+
 .body--dark .q-field--outlined .q-field__control:before {
   border-color: #303030;
 }
@@ -89,6 +93,10 @@ body.body--dark {
 
 .body--dark .q-field--outlined.q-field--highlighted .q-field__control:after {
   border-color: #40A0FF;
+}
+
+.body--dark .q-field--highlighted .q-field__label {
+  color: #40A0FF;
 }
 
 /*# sourceMappingURL=app.css.map */

@@ -3,8 +3,14 @@ export default {
     title: 'Cloud Data Modeling Tool',
   },
 
+  label: {
+    email: 'Email-Adresse',
+    password: 'Kennwort',
+  },
+
   message: {
     noSelection: 'Keine Auswahl',
+    mandatory: 'Dieses Eingabefeld darf nicht leer sein.'
   },
 
   options: {
@@ -15,6 +21,11 @@ export default {
   },
 
   authentication: {
+    button: {
+      login: 'Anmelden',
+      register: 'Konto erstellen',
+      resetPassword: 'Kennwort zurücksetzen',
+    },
     message: {
       login:
         'Bitte melden Sie sich mit Ihrer E-Mail-Adresse und Ihrem Passwort an oder nutzen Sie Ihr Google-Konto für ' +
