@@ -72,7 +72,6 @@ export function useRunAsync(): (
                 ? error
                 : (error.toString() as string);
           // Show error dialog
-          console.error(details);
           messageDialog(
             'error',
             common.i18n.t('dialog.unexpectedError.title'),
