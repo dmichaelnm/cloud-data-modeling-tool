@@ -2,6 +2,8 @@ import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useMessageDialog } from 'src/scripts/composables/Dialog';
+import { DocumentError } from 'src/scripts/documents/DocumentError';
+import { FirebaseError } from 'firebase/app';
 
 /**
  * Provides common composables used across the application.
@@ -16,6 +18,25 @@ export function useCommonComposables() {
     i18n: useI18n(),
     quasar: useQuasar(),
     router: useRouter(),
+  };
+}
+
+/**
+ * A custom hook that returns a function to determine the error code from an unknown error object.
+ * It checks if the error is an instance of `DocumentError` or `FirebaseError` and retrieves the
+ * associated error code.
+ *
+ * @return {function(error: unknown): (string | undefined)} A function that takes an error object as input and
+ * returns the corresponding error code if the error is of a recognized type, or undefined otherwise.
+ */
+export function useDetermineErrorCode(): (error: unknown) => string | undefined {
+  return (error) => {
+    if (error instanceof DocumentError) {
+      return error.code;
+    } else if (error instanceof FirebaseError) {
+      return error.code;
+    }
+    return undefined;
   };
 }
 

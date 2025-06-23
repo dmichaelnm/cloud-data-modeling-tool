@@ -52,7 +52,7 @@ export type TMessageDialogOptions = {
   message: string;
   details: string | undefined;
   buttons: TDialogButton[] | undefined;
-  closeHandler: ((value: string) => void) | undefined;
+  closeHandler: ((value: string) => void | Promise<void>) | undefined;
   visibility: boolean;
 };
 
@@ -77,21 +77,23 @@ export const messageDialogOptions = ref<TMessageDialogOptions>({
  * - title: The title text displayed in the dialog.
  * - message: The main message or content of the dialog.
  * - details: Optional. Additional details or descriptions to display in the dialog.
+ * - closeHandler: Optional. A callback function that is called after the dialog is closed.
  */
 export function useMessageDialog(): (
   type: TMessageDialogType,
   title: string,
   message: string,
   details?: string,
+  closeHandler?: (value: string) => (void | Promise<void>),
 ) => void {
-  return (type, title, message, details) => {
+  return (type, title, message, details, closeHandler) => {
     messageDialogOptions.value = {
       type: type,
       title: title,
       message: message,
       details: details,
       buttons: undefined,
-      closeHandler: undefined,
+      closeHandler: closeHandler,
       visibility: true,
     };
   };

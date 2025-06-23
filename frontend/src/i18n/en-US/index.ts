@@ -59,5 +59,32 @@ export default {
         'you can register with your Google account. However, after successful registration, an ' +
         'administrator must approve your account before you can log in.',
     },
+    dialog: {
+      register: {
+        success: {
+          title: 'Registration Successful',
+          message:
+            'Your account has been successfully registered. However, please note that you can only log in ' +
+            'after an administrator has approved your account.',
+        },
+        exists: {
+          title: 'Account already exists',
+          message:
+            'This account already exists. If it has already been activated, you can log in using the ' +
+            'corresponding provider (e.g., Google).',
+        },
+        aborted: {
+          title: 'Registration Aborted',
+          message:
+            'You have aborted the registration process. Your account was not created. Please try again.',
+        },
+      },
+    },
+    error: {
+      passwordConfirmationFailed: 'The password confirmation failed.',
+      invalidEmail: 'The email address is invalid.',
+      invalidPassword: 'The password does not match the requirements.',
+      emailAlreadyInUse: 'This email address is already in use.',
+    },
   },
 };

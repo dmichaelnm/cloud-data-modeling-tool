@@ -59,5 +59,33 @@ export default {
         'können Sie sich mit Ihrem Google-Konto registrieren. Nach erfolgreicher Registrierung muss jedoch noch ein ' +
         'Administrator Ihr Konto freischalten, damit Sie sich anmelden können.',
     },
+    dialog: {
+      register: {
+        success: {
+          title: 'Registrierung erfolgreich',
+          message:
+            'Ihr Konto wurde erfolgreich registriert. Beachten Sie jedoch, dass Sie sich erst anmelden können, ' +
+            'wenn ein Administrator Ihr Konto freigeschaltet hat.',
+        },
+        exists: {
+          title: 'Konto existiert bereits',
+          message:
+            'Dieses Konto existiert bereits. Sofern es bereits freigeschaltet ist, können Sie sich über den ' +
+            'entsprechenden Provider (z.B. Google) anmelden.',
+        },
+        aborted: {
+          title: 'Registrierung abgebrochen',
+          message:
+            'Sie haben den Registrierungsprozess abgebrochen. Ihr Konto wurde nicht erstellt. Bitte versuchen ' +
+            'Sie es erneut.',
+        },
+      },
+    },
+    error: {
+      passwordConfirmationFailed: 'Die Kennwortbestätigung ist fehlgeschlagen.',
+      invalidEmail: 'Die Email-Adresse ist ungültig.',
+      invalidPassword: 'Das Kennwort entspricht nicht den Anforderungen.',
+      emailAlreadyInUse: 'Diese Email-Adresse wird bereits verwendet.',
+    },
   },
 };

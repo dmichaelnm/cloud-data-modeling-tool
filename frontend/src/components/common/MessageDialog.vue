@@ -10,7 +10,7 @@
     @update:modelValue="(val) => (_modelValue = val)"
   >
     <!-- Detailed Message Expansion Item -->
-    <q-expansion-item :label="$t('label.details')" dense>
+    <q-expansion-item :label="$t('label.details')" dense v-if="messageDialogOptions.details">
       <!-- Detailed Message Scroll Area -->
       <q-scroll-area style="height: 100px">
         <!-- Detailed Message -->
@@ -80,14 +80,14 @@ const _separatorColor = computed(() => {
 });
 
 /**
- * Triggers the close event handler for a dialog if it is defined.
+ * Handles the dialog close event by invoking the specified close handler, passing the given value.
  *
- * @param {string} value - The value to be passed to the close handler function.
- * @return {void} This function does not return a value.
+ * @param {string} value - The value to pass to the close handler when the dialog is closed.
+ * @return {Promise<void>} A promise that resolves when the close handler function has been executed.
  */
-function performDialogCloseEvent(value: string): void {
+async function performDialogCloseEvent(value: string): Promise<void> {
   if (messageDialogOptions.value.closeHandler) {
-    messageDialogOptions.value.closeHandler(value);
+    await messageDialogOptions.value.closeHandler(value);
   }
 }
 </script>

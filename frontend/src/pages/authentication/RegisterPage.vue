@@ -33,6 +33,7 @@
               <input-value
                 v-model="email"
                 :label="$t('label.email')"
+                :error-message="emailError"
                 auto-complete="username"
                 mandatory
               />
@@ -46,6 +47,7 @@
               <input-value
                 v-model="password"
                 :label="$t('label.password')"
+                :error-message="passwordError"
                 auto-complete="new-password"
                 type="password"
                 mandatory
@@ -57,6 +59,7 @@
               <input-value
                 v-model="confirmPassword"
                 :label="$t('label.passwordConfirm')"
+                :error-message="confirmPasswordError"
                 auto-complete="new-password"
                 type="password"
                 mandatory
@@ -64,7 +67,7 @@
             </div>
           </div>
           <!-- Register Button Row -->
-          <div class="row">
+          <div class="row" style="margin-top: 12px">
             <!-- Register Button Column -->
             <div class="col text-center">
               <!-- Register Button -->
@@ -102,42 +105,219 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useCommonComposables, useRunAsync } from 'src/scripts/composables/Common';
-import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
+import { useMessageDialog } from 'src/scripts/composables/Dialog';
+import * as cm from 'src/scripts/composables/Common';
+import * as dp from 'src/scripts/documents/DocumentProvider';
 import AuthenticationFrame from 'components/authentication/AuthenticationFrame.vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonLabel from 'components/common/ButtonLabel.vue';
 import ButtonGoogle from 'components/authentication/ButtonGoogle.vue';
 
-const common = useCommonComposables();
-const runAsync = useRunAsync();
+/**
+ * Function returning the most common composables like "router", "quasar", "i18n".
+ */
+const common = cm.useCommonComposables();
+/**
+ * Function for executing asynchronous tasks.
+ */
+const runAsync = cm.useRunAsync();
+/**
+ * Function to determine error codes from error instances of an unknown type.
+ */
+const determineErrorCode = cm.useDetermineErrorCode();
+/**
+ * Function to show a message dialog.
+ */
+const messageDialog = useMessageDialog();
 
+/**
+ * A reactive variable that holds the value of the user's first name.
+ */
 const firstname = ref('');
+/**
+ * A reactive variable that holds the value of the user's last name.
+ */
 const lastname = ref('');
+/**
+ * A reactive variable that holds the value of the user's email address.
+ */
 const email = ref('');
+/**
+ * A reactive reference variable representing the error message associated with email validation.
+ */
+const emailError = ref('');
+/**
+ * A reactive variable that holds the value of the user's chosen password.
+ */
 const password = ref('');
+/**
+ * A reactive reference variable representing the error message associated with password validation.
+ */
+const passwordError = ref('');
+/**
+ * A reactive variable that holds the value of the user's password confirmation.
+ */
 const confirmPassword = ref('');
+/**
+ * A reactive reference variable representing the error message associated with password confirmation.
+ */
+const confirmPasswordError = ref('');
 
+/**
+ * Handles the user registration process by validating the provided input
+ * and communicating with the backend to register an account. Displays
+ * relevant error messages or success dialogs based on the outcome.
+ *
+ * @return {void} This method does not return any value.
+ */
 function register(): void {
-  runAsync(async () => {
-    const documentProvider = getDocumentProvider();
-    await documentProvider.registerAccountWithEmailAndPassword(
-      `${firstname.value} ${lastname.value}`,
-      email.value,
-      password.value,
-      common.i18n.locale.value,
-      common.quasar.dark.isActive ? 'dark' : 'light',
-    );
-  });
+  // Reset all former error messages
+  resetError();
+  // Check the password confirmation
+  if (password.value !== confirmPassword.value) {
+    confirmPasswordError.value = common.i18n.t('authentication.error.passwordConfirmationFailed');
+    return;
+  }
+  // Starts the registration process
+  runAsync(
+    // Perform the registration process
+    async () => {
+      // Get document provider
+      const documentProvider = dp.getDocumentProvider();
+      // Register the account
+      return await documentProvider.registerAccountWithEmailAndPassword(
+        `${firstname.value} ${lastname.value}`,
+        email.value,
+        password.value,
+        common.i18n.locale.value,
+        common.quasar.dark.isActive ? 'dark' : 'light',
+      );
+    },
+    // Process errors
+    (error: unknown) => processError(error),
+    // Process result
+    (result: unknown) => {
+      processSuccess(result);
+    },
+  );
 }
 
+/**
+ * Registers a user account using Google authentication.
+ * This method handles resetting error states, initiating the registration process,
+ * managing asynchronous operations, and processing both success and error outcomes.
+ *
+ * @return {void} Does not return a value.
+ */
 function registerGoogle(): void {
-  runAsync(async () => {
-    const documentProvider = getDocumentProvider();
-    await documentProvider.registerAccountWithGoogle(
-      common.i18n.locale.value,
-      common.quasar.dark.isActive ? 'dark' : 'light',
+  // Reset error messages
+  resetError();
+  // Start the registration process
+  runAsync(
+    // Perform the registration process
+    async () => {
+      // Get document provider
+      const documentProvider = dp.getDocumentProvider();
+      // Register the account
+      return await documentProvider.registerAccountWithGoogle(
+        common.i18n.locale.value,
+        common.quasar.dark.isActive ? 'dark' : 'light',
+      );
+    },
+    // Process error
+    (error: unknown) => processError(error),
+    // Process result
+    (result: unknown) => {
+      processSuccess(result);
+    },
+  );
+}
+
+/**
+ * Handles the processing of successful account registration or login action.
+ * Updates the email cookie and displays an appropriate message dialog based on the account creation status.
+ *
+ * @param {unknown} result - The result of the account registration or login process. This is expected to be an object
+ *                           conforming to the structure of `dp.TAccountRegisterResult`.
+ * @return {void} No return value.
+ */
+function processSuccess(result: unknown): void {
+  const registerResult = result as dp.TAccountRegisterResult;
+  console.debug('Register result:', registerResult);
+  if (registerResult) {
+    // Update the email cookie with the current email address
+    common.quasar.cookies.set('email', registerResult.account.document.data.user.email);
+    if (registerResult.created) {
+      // Show success dialog
+      messageDialog(
+        'success',
+        common.i18n.t('authentication.dialog.register.success.title'),
+        common.i18n.t('authentication.dialog.register.success.message'),
+        undefined,
+        async () => {
+          // Redirect to the login page
+          await common.router.push('/auth/login');
+        },
+      );
+    } else {
+      // Show success dialog
+      messageDialog(
+        'warning',
+        common.i18n.t('authentication.dialog.register.exists.title'),
+        common.i18n.t('authentication.dialog.register.exists.message'),
+        undefined,
+        async () => {
+          // Redirect to the login page
+          await common.router.push('/auth/login');
+        },
+      );
+    }
+  }
+}
+
+/**
+ * Processes an error object, identifies the error type, and assigns a corresponding error
+ * message to the appropriate field. Returns a boolean indicating whether the error was
+ * successfully processed.
+ *
+ * @param {unknown} error - The error object to be processed, which may contain information
+ *                          about the specific error type.
+ * @return {boolean} Returns true if the error was recognized and processed, otherwise false.
+ */
+function processError(error: unknown): boolean {
+  const code = determineErrorCode(error);
+  if (code === 'auth/invalid-email') {
+    emailError.value = common.i18n.t('authentication.error.invalidEmail');
+    return true;
+  }
+  if (code === 'auth/password-does-not-meet-requirements') {
+    passwordError.value = common.i18n.t('authentication.error.invalidPassword');
+    return true;
+  }
+  if (code === 'auth/email-already-in-use') {
+    emailError.value = common.i18n.t('authentication.error.emailAlreadyInUse');
+    return true;
+  }
+  if (code === 'auth/popup-closed-by-user') {
+    messageDialog(
+      'warning',
+      common.i18n.t('authentication.dialog.register.aborted.title'),
+      common.i18n.t('authentication.dialog.register.aborted.message'),
     );
-  });
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Resets the error messages for email, password, and confirm password fields
+ * by clearing their respective values.
+ *
+ * @return {void} This method does not return a value.
+ */
+function resetError(): void {
+  emailError.value = '';
+  passwordError.value = '';
+  confirmPasswordError.value = '';
 }
 </script>
