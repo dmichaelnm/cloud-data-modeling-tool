@@ -102,10 +102,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useCommonComposables, useRunAsync } from 'src/scripts/composables/Common';
+import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 import AuthenticationFrame from 'components/authentication/AuthenticationFrame.vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonLabel from 'components/common/ButtonLabel.vue';
 import ButtonGoogle from 'components/authentication/ButtonGoogle.vue';
+
+const common = useCommonComposables();
+const runAsync = useRunAsync();
 
 const firstname = ref('');
 const lastname = ref('');
@@ -113,7 +118,26 @@ const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 
-function register(): void {}
+function register(): void {
+  runAsync(async () => {
+    const documentProvider = getDocumentProvider();
+    await documentProvider.registerAccountWithEmailAndPassword(
+      `${firstname.value} ${lastname.value}`,
+      email.value,
+      password.value,
+      common.i18n.locale.value,
+      common.quasar.dark.isActive ? 'dark' : 'light',
+    );
+  });
+}
 
-function registerGoogle(): void {}
+function registerGoogle(): void {
+  runAsync(async () => {
+    const documentProvider = getDocumentProvider();
+    await documentProvider.registerAccountWithGoogle(
+      common.i18n.locale.value,
+      common.quasar.dark.isActive ? 'dark' : 'light',
+    );
+  });
+}
 </script>

@@ -5,11 +5,14 @@ export default {
 
   button: {
     back: 'Back',
+    cancel: 'Cancel',
     close: 'Close',
+    ok: 'Okay',
   },
 
   label: {
     email: 'Email Address',
+    details: 'Details',
     firstname: 'First Name',
     lastname: 'Last Name',
     password: 'Password',
@@ -19,6 +22,15 @@ export default {
   message: {
     noSelection: 'No selection',
     mandatory: 'This input field must not be empty.',
+  },
+
+  dialog: {
+    unexpectedError: {
+      title: 'Unexpected Error',
+      message:
+        'An unexpected error has occurred. This should not have happened. Please contact your ' +
+        'administrator with detailed error information.',
+    },
   },
 
   options: {

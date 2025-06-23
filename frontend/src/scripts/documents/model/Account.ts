@@ -11,6 +11,9 @@ export interface IAccountData extends IDocumentData {
     language: string;
     theme: string;
   };
+  state: {
+    active: boolean;
+  };
 }
 
 export class Account extends ModelObject<IAccountData> {}

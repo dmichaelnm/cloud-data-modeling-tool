@@ -11,13 +11,10 @@
       <!-- Title Row -->
       <div class="row frame-row" v-if="title">
         <!-- Title Column -->
-        <div class="col dialog-title">{{ title }}</div>
+        <div class="col dialog-title" :style="`color: ${_color}`">{{ title }}</div>
       </div>
       <!-- Separator -->
-      <q-separator
-        v-if="title"
-        :style="`backgroundColor: ${_separatorColor}; height: ${_separatorSize}`"
-      />
+      <q-separator v-if="title" :style="`backgroundColor: ${_color}; height: ${_separatorSize}`" />
       <!-- Message Row -->
       <div class="row frame-row" v-if="message">
         <!-- Message Column -->
@@ -55,11 +52,7 @@
 @import 'src/css/quasar.variables';
 
 .dialog-title {
-  color: $light-text-highlighted;
-}
-
-.body--dark .dialog-title {
-  color: $dark-text-highlighted;
+  font-weight: bold;
 }
 </style>
 
@@ -87,16 +80,16 @@ const props = defineProps<{
   // Model value
   modelValue: boolean;
   // Optional dialog buttons
-  buttons?: TDialogButton[];
+  buttons?: TDialogButton[] | undefined;
   // Optional dialog title
   title?: string;
   // Optional dialog message
   message?: string;
   // Optional dialog width in pixels
   width?: number;
-  // Optional color for the separator
-  separatorColor?: string;
-  // Optional size for the separator (f.e. 2px)
+  // Optional color for the title and the separator
+  color?: string;
+  // Optional size for the separator
   separatorSize?: string;
   // Optional close handler function
   closeHandler?: (value: string) => Promise<boolean>;
@@ -137,24 +130,17 @@ const _buttons = computed(() => {
 });
 
 /**
- * Computed variable that determines the color used for the separator element.
- * The color is dynamically resolved based on the current theme (`light` or `dark`)
- * and an optional `separatorColor` property from the provided component props.
- *
- * - If `separatorColor` is explicitly provided, it takes precedence.
- * - For dark mode, a highlighted dark border color is used.
- * - For light mode, a highlighted light border color is used.
+ * A computed property that determines the color to be used based on the current theme mode
+ * (light mode or dark mode) or a color specified in the component's props.
  */
-const _separatorColor = computed(() => {
+const _color = computed(() => {
   // Get color for light mode
-  const lightBorderHighlighted = colors.getPaletteColor('light-border-highlighted');
+  const light = colors.getPaletteColor('light-border-highlighted');
   // Get color for dark mode
-  const darkBorderHighlighted = colors.getPaletteColor('dark-border-highlighted');
+  const dark = colors.getPaletteColor('dark-border-highlighted');
   // Return the color specified in properties or the default color depending on the current dark
   // mode state
-  return (props.separatorColor ?? common.quasar.dark.isActive)
-    ? darkBorderHighlighted
-    : lightBorderHighlighted;
+  return props.color ?? (common.quasar.dark.isActive ? dark : light);
 });
 
 /**

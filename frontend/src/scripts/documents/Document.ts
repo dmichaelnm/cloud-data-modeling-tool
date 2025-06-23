@@ -1,4 +1,6 @@
-export enum EDocumentType {}
+export enum EDocumentType {
+  Account = 'account',
+}
 
 export type TDocumentInfo = {
   uid: string;

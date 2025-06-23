@@ -5,11 +5,14 @@ export default {
 
   button: {
     back: 'Zurück',
+    cancel: 'Abbrechen',
     close: 'Schließen',
+    ok: 'Okay',
   },
 
   label: {
     email: 'Email-Adresse',
+    details: 'Details',
     firstname: 'Vorname',
     lastname: 'Nachname',
     password: 'Kennwort',
@@ -19,6 +22,15 @@ export default {
   message: {
     noSelection: 'Keine Auswahl',
     mandatory: 'Dieses Eingabefeld darf nicht leer sein.',
+  },
+
+  dialog: {
+    unexpectedError: {
+      title: 'Unerwarteter Fehler',
+      message:
+        'Ein unerwarteter Fehler ist aufgetreten. Dies hätte nicht passieren dürfen. Bitte wenden Sie sich mit ' +
+        'detailierten Fehlermeldung an Ihren Administrator.',
+    },
   },
 
   options: {
