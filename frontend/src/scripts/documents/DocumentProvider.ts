@@ -109,6 +109,13 @@ export interface IDocumentProvider {
   loginWithGoogle(): Promise<string>;
 
   /**
+   * Logs the user out of the application by terminating their session and clearing any authentication details.
+   *
+   * @return {Promise<void>} A promise that resolves when the logout process is completed. The promise does not return a value.
+   */
+  logout(): Promise<void>;
+
+  /**
    * Registers a callback function to be invoked whenever the account state changes.
    * This can be used to listen to changes in the currently active account or when the user logs out.
    *

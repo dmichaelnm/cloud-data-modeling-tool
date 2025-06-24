@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useMessageDialog } from 'src/scripts/composables/Dialog';
 import { DocumentError } from 'src/scripts/documents/DocumentError';
 import { FirebaseError } from 'firebase/app';
+import { useSessionStore } from 'stores/session-store';
 
 /**
  * Provides common composables used across the application.
@@ -12,12 +13,14 @@ import { FirebaseError } from 'firebase/app';
  * - `i18n`: Instance of the internationalization composable.
  * - `quasar`: Instance of the Quasar framework composable.
  * - `router`: Instance of the Vue Router composable.
+ * - `session: Instance of the session.
  */
 export function useCommonComposables() {
   return {
     i18n: useI18n(),
     quasar: useQuasar(),
     router: useRouter(),
+    session: useSessionStore(),
   };
 }
 

@@ -222,6 +222,14 @@ function processError(error: unknown): boolean {
     emailError.value = common.i18n.t('authentication.error.tooManyRequests');
     return true;
   }
+  if (code === 'auth/no-account-document') {
+    messageDialog(
+      'error',
+      common.i18n.t('authentication.dialog.login.unknown.title'),
+      common.i18n.t('authentication.dialog.login.unknown.message'),
+    );
+    return true;
+  }
   if (code === 'auth/popup-closed-by-user') {
     messageDialog(
       'warning',
