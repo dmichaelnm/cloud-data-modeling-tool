@@ -1,6 +1,8 @@
 export default {
   application: {
     title: 'Cloud Data Modeling Tool',
+    copyright: '&copy Copyright 2025 Dirk Michael',
+    version: 'Version {major}.{minor}.{patch} ({build})',
   },
 
   button: {

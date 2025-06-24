@@ -66,6 +66,10 @@ body.body--dark {
   color: #A0A0A0;
 }
 
+.text-small {
+  font-size: 10pt;
+}
+
 .body--dark .text-disabled {
   color: #505050;
 }
