@@ -51,15 +51,15 @@ export function useDetermineErrorCode(): (error: unknown) => string | undefined 
 export function useRunAsync(): (
   task: () => Promise<unknown>,
   onError?: (error: unknown) => boolean,
-  onResult?: (result: unknown) => void,
+  onResult?: (result: unknown) => void | Promise<void>,
 ) => void {
   const common = useCommonComposables();
   const messageDialog = useMessageDialog();
   return (task, onError, onResult) => {
     common.quasar.loading.show();
     task()
-      .then((result) => {
-        onResult?.(result);
+      .then(async (result) => {
+        await onResult?.(result);
       })
       .catch((error) => {
         console.error(error);

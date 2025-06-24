@@ -7,6 +7,7 @@ import { fbAuth, fbFirestore } from 'src/scripts/documents/firebase/Firebase';
 import { FirestoreDocument } from 'src/scripts/documents/firebase/FirestoreDocument';
 import { FirebaseError } from 'firebase/app';
 import { DocumentError } from 'src/scripts/documents/DocumentError';
+import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 
 /**
  * Provides an implementation for interacting with Firebase Firestore documents and managing
@@ -23,8 +24,30 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
    */
   onAccountStateChanged(callback: (account: ac.Account | null) => void): void {
     au.onAuthStateChanged(fbAuth, (user) => {
-      console.debug('FirebaseDocumentProvider.onAccountStateChanged', user);
-      callback(null);
+      if (user != null) {
+        // Get the account document
+        this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
+          .then((document) => {
+            // Check if the document exists and has an active account state
+            if (document && document.data.state.active) {
+              // Create the account object
+              const account = new ac.Account(document);
+              // Invoke callback function
+              callback(account);
+            } else {
+              // No account document
+              callback(null);
+            }
+          })
+          .catch((error: unknown) => {
+            // Unexpected error, no account document
+            console.error(error);
+            callback(null);
+          });
+      } else {
+        // No authenticated user
+        callback(null);
+      }
     });
   }
 
@@ -107,6 +130,48 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
    */
   async resetPassword(email: string): Promise<void> {
     await au.sendPasswordResetEmail(fbAuth, email);
+  }
+
+  /**
+   * Authenticates a user using their email and password and validates the user's account status.
+   *
+   * @param {string} email - The email address of the user attempting to log in.
+   * @param {string} password - The password associated with the provided email address.
+   * @return {Promise<void>} A promise that resolves if the login is successful and the account is active or rejects
+   *         with an error if the login fails or the account is inactive.
+   * @throws {DocumentError} If the account document does not exist or if the account is not active.
+   */
+  async loginWithEmailAndPassword(email: string, password: string): Promise<void> {
+    try {
+      // Sign in on Firebase
+      const credentials = await au.signInWithEmailAndPassword(fbAuth, email, password);
+      // Check credentials
+      await processLogin(credentials.user.uid);
+    } catch (error: unknown) {
+      throw processError(error);
+    }
+  }
+
+  /**
+   * Authenticates a user using their Google account.
+   * Opens a Google sign-in popup, retrieves user credentials, and processes the login.
+   * Throws an error if the login process fails.
+   *
+   * @return {Promise<string>} A promise that resolves with the email address of the user when the
+   *         login process is successfully completed.
+   */
+  async loginWithGoogle(): Promise<string> {
+    try {
+      // Authenticate with Google
+      const authProvider = new au.GoogleAuthProvider();
+      const credentials = await au.signInWithPopup(fbAuth, authProvider);
+      // Check credentials
+      await processLogin(credentials.user.uid);
+      // Return email address
+      return credentials.user.email as string;
+    } catch (error: unknown) {
+      throw processError(error);
+    }
   }
 
   /**
@@ -244,4 +309,30 @@ function processError(error: unknown): DocumentError {
   } else {
     return new DocumentError('unexpected', error?.toString() ?? 'Unknown error.');
   }
+}
+
+/**
+ * Processes the login for a user by checking their account document and its status.
+ *
+ * @param {string} uid - The unique identifier of the user whose login is being processed.
+ * @return {Promise<void>} A promise that resolves if the user account is active, or rejects with an error if the
+ *         account is inactive or does not exist.
+ */
+async function processLogin(uid: string): Promise<void> {
+  // Get provider
+  const provider = getDocumentProvider();
+  // Get the account document
+  const document = await provider.getDocument<ac.IAccountData>(dc.EDocumentType.Account, uid);
+  // Check if the account document exists
+  if (document) {
+    // Check if the account is unlocked
+    if (document.data.state.active) {
+      // Everything is okay
+      return;
+    }
+    // Account is not active yet
+    throw new DocumentError('auth/account-not-active', 'Account is not active yet.');
+  }
+  // No account document found
+  throw new DocumentError('auth/no-account-document', 'No account document found for user.');
 }

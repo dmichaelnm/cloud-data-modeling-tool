@@ -85,6 +85,30 @@ export interface IDocumentProvider {
   resetPassword(email: string): Promise<void>;
 
   /**
+   * Authenticates a user using their email address and password.
+   *
+   * @param {string} email - The email address of the user attempting to log in.
+   * @param {string} password - The password associated with the provided email address.
+   * @return {Promise<void>} A promise that resolves once the login operation is successfully completed or
+   * rejects with an error if the login fails.
+   */
+  loginWithEmailAndPassword(email: string, password: string): Promise<void>;
+
+  /**
+   * Authenticates the user using their Google account.
+   *
+   * This method initiates the OAuth 2.0 process to allow users to log in
+   * with their Google credentials. It handles the authentication flow
+   * and retrieves any necessary tokens or user information provided by
+   * Google's authentication service.
+   *
+   * @return {Promise<void>} A promise that resolves with the email address of the user when the
+   * login process is completed. The promise is rejected if the authentication fails or is canceled
+   * by the user.
+   */
+  loginWithGoogle(): Promise<string>;
+
+  /**
    * Registers a callback function to be invoked whenever the account state changes.
    * This can be used to listen to changes in the currently active account or when the user logs out.
    *

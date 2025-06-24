@@ -28,6 +28,8 @@ onBeforeMount(() => {
       common.router.push('/auth/login').catch((reason: any) => {
         throw new Error(`Failed to redirect to login page: ${reason}`);
       });
+    } else {
+      console.debug(account);
     }
   });
 });

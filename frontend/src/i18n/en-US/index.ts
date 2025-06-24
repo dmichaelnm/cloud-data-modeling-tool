@@ -65,6 +65,12 @@ export default {
         'an email with a link to a webpage where you can create a new password.',
     },
     dialog: {
+      login: {
+        aborted: {
+          title: 'Login Aborted',
+          message: 'You have aborted the login process. Please try again.',
+        },
+      },
       register: {
         success: {
           title: 'Registration Successful',
@@ -98,6 +104,9 @@ export default {
       invalidEmail: 'The email address is invalid.',
       invalidPassword: 'The password does not match the requirements.',
       emailAlreadyInUse: 'This email address is already in use.',
+      invalidCredentials: 'The provided credentials are invalid.',
+      accountLocked: 'Your account is currently not active.',
+      tooManyRequests: 'Too many failed attempts. Please wait a few minutes before trying again.',
     },
   },
 };

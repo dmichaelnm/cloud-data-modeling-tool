@@ -16,6 +16,7 @@
                 v-model="email"
                 :label="$t('label.email')"
                 :auto-focus="email === ''"
+                :error-message="emailError"
                 auto-complete="username"
                 mandatory
               />
@@ -34,7 +35,7 @@
             </div>
           </div>
           <!-- Login Button Row -->
-          <div class="row">
+          <div class="row" style="margin-top: 12px">
             <!-- Login Button Column -->
             <div class="col text-center">
               <!-- Login Button -->
@@ -85,25 +86,159 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
-import { useCommonComposables } from 'src/scripts/composables/Common';
+import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
+import { useMessageDialog } from 'src/scripts/composables/Dialog';
+import * as cm from 'src/scripts/composables/Common';
 import AuthenticationFrame from 'src/components/authentication/AuthenticationFrame.vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonLabel from 'components/common/ButtonLabel.vue';
 import ButtonGoogle from 'components/authentication/ButtonGoogle.vue';
 
-const common = useCommonComposables();
+/**
+ * Function returning the most common composables like "router", "quasar", "i18n".
+ */
+const common = cm.useCommonComposables();
+/**
+ * Function for executing asynchronous tasks.
+ */
+const runAsync = cm.useRunAsync();
+/**
+ * Function to determine error codes from error instances of an unknown type.
+ */
+const determineErrorCode = cm.useDetermineErrorCode();
+/**
+ * Function to show a message dialog.
+ */
+const messageDialog = useMessageDialog();
 
+/**
+ * A reactive variable that holds the value of the user's email address.
+ */
 const email = ref('');
+/**
+ * A reactive reference variable representing the error message associated with email validation.
+ */
+const emailError = ref('');
+/**
+ * A reactive variable that holds the value of the user's password.
+ */
 const password = ref('');
 
 /**
  * Lifecycle method that is called before this component is mounted.
  */
 onBeforeMount(() => {
+  // Set email address from cookie
   email.value = common.quasar.cookies.get('email') ?? '';
 });
 
-function login(): void {}
+/**
+ * Handles the user login process, including resetting error messages,
+ * initiating the login functionality asynchronously, and processing
+ * both error and success scenarios appropriately.
+ *
+ * @return {void} Does not return a value.
+ */
+function login(): void {
+  // Reset error messages
+  resetError();
+  // Start the login task
+  runAsync(
+    // Perform login task
+    async () => {
+      // Get document provider
+      const provider = getDocumentProvider();
+      // Login in with email and password
+      await provider.loginWithEmailAndPassword(email.value, password.value);
+    },
+    // Process error
+    (error: unknown) => processError(error),
+    // Process success
+    async () => await processSuccess(email.value),
+  );
+}
 
-function loginGoogle(): void {}
+/**
+ * Initiates the Google login process for the user by interacting with the document provider.
+ * This method resets error messages, performs the login asynchronously,
+ * and handles success or error responses accordingly.
+ *
+ * @return {void} This method does not return any value.
+ */
+function loginGoogle(): void {
+  // Reset error messages
+  resetError();
+  // Start the login task
+  runAsync(
+    // Perform login task
+    async () => {
+      // Get document provider
+      const provider = getDocumentProvider();
+      // Login in with Google
+      return await provider.loginWithGoogle();
+    },
+    // Process error
+    (error: unknown) => processError(error),
+    // Process success
+    (result: unknown) => processSuccess(result as string),
+  );
+}
+
+/**
+ * Processes a successful login by setting an email cookie and redirecting to the main page.
+ *
+ * @param {string} email - The email address to be stored in the cookie.
+ * @return {Promise<void>} A promise that resolves when the operation is complete.
+ */
+async function processSuccess(email: string): Promise<void> {
+  // Set email cookie
+  common.quasar.cookies.set('email', email, { expires: 28 });
+  // Redirect to the main page
+  await common.router.push('/');
+}
+
+/**
+ * Processes the given error to determine its type and handles it accordingly by updating error messages or
+ * displaying dialogs.
+ *
+ * @param {unknown} error The error object or value to be processed.
+ * @return {boolean} Returns true if the error was successfully processed and handled; otherwise, returns false.
+ */
+function processError(error: unknown): boolean {
+  const code = determineErrorCode(error);
+  if (code === 'auth/invalid-email') {
+    emailError.value = common.i18n.t('authentication.error.invalidEmail');
+    return true;
+  }
+  if (code === 'auth/invalid-credential') {
+    emailError.value = common.i18n.t('authentication.error.invalidCredentials');
+    return true;
+  }
+  if (code === 'auth/account-not-active') {
+    emailError.value = common.i18n.t('authentication.error.accountLocked');
+    return true;
+  }
+  if (code === 'auth/too-many-requests') {
+    emailError.value = common.i18n.t('authentication.error.tooManyRequests');
+    return true;
+  }
+  if (code === 'auth/popup-closed-by-user') {
+    messageDialog(
+      'warning',
+      common.i18n.t('authentication.dialog.login.aborted.title'),
+      common.i18n.t('authentication.dialog.login.aborted.message'),
+    );
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Resets the error message for an email field by clearing its value.
+ *
+ * @return {void} This method does not return a value.
+ */
+function resetError(): void {
+  emailError.value = '';
+}
 </script>

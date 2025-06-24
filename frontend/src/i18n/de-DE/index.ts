@@ -65,6 +65,12 @@ export default {
         'Email mit einem Link zu einer Webseite, auf der Sie ein neues Kennwort vergeben können.',
     },
     dialog: {
+      login: {
+        aborted: {
+          title: 'Anmeldung abgebrochen',
+          message: 'Sie haben den Anmeldeprozess abgebrochen. Bitte versuchen Sie es erneut.',
+        },
+      },
       register: {
         success: {
           title: 'Registrierung erfolgreich',
@@ -100,6 +106,10 @@ export default {
       invalidEmail: 'Die Email-Adresse ist ungültig.',
       invalidPassword: 'Das Kennwort entspricht nicht den Anforderungen.',
       emailAlreadyInUse: 'Diese Email-Adresse wird bereits verwendet.',
+      invalidCredentials: 'Die Anmeldeinformationen sind nicht korrekt.',
+      accountLocked: 'Ihr Konto ist aktuell nicht aktiv.',
+      tooManyRequests:
+        'Zuviele fehlgeschlagene Versuche. Warten Sie einige Minuten, bevor Sie es erneut versuchen.',
     },
   },
 };
