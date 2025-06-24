@@ -278,6 +278,7 @@ function createAccountData(
       id: credentials.user.uid,
       name: credentials.user.displayName as string,
       email: credentials.user.email as string,
+      picture: credentials.user.photoURL,
     },
     preferences: {
       language: languageCode,
