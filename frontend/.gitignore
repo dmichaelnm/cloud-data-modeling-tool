@@ -36,7 +36,10 @@ yarn-error.log*
 .vscode
 
 # Generated files
+/src/css/app.css
 /src/css/app.css.map
+/src/css/quasar.variables.css
+/src/css/quasar.variables.css.map
 
 # Secret information
 /src/scripts/config/FirebaseConfig.ts
