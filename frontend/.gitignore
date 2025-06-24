@@ -41,6 +41,5 @@ yarn-error.log*
 /src/css/quasar.variables.css
 /src/css/quasar.variables.css.map
 
-
 # Secret information
 /src/scripts/config/FirebaseConfig.ts
