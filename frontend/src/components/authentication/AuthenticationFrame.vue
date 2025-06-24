@@ -107,7 +107,7 @@ onBeforeMount(() => {
  */
 function toggleDarkMode(): void {
   common.quasar.dark.set(!common.quasar.dark.isActive);
-  common.quasar.cookies.set('dark', common.quasar.dark.isActive.toString());
+  common.quasar.cookies.set('dark', common.quasar.dark.isActive.toString(), { expires: 28 });
 }
 
 /**
@@ -118,7 +118,7 @@ function toggleDarkMode(): void {
  */
 function switchLanguage(): void {
   common.i18n.locale.value = languageCode.value;
-  common.quasar.cookies.set('language', languageCode.value);
+  common.quasar.cookies.set('language', languageCode.value, { expires: 28 });
 }
 
 /**

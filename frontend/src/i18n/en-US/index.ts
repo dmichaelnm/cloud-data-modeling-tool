@@ -58,6 +58,9 @@ export default {
         'Please enter your name, your email address, and the password for your new account. Alternatively, ' +
         'you can register with your Google account. However, after successful registration, an ' +
         'administrator must approve your account before you can log in.',
+      reset:
+        'If you want to reset your password, please enter your email address. You will then receive ' +
+        'an email with a link to a webpage where you can create a new password.',
     },
     dialog: {
       register: {
@@ -77,6 +80,14 @@ export default {
           title: 'Registration Aborted',
           message:
             'You have aborted the registration process. Your account was not created. Please try again.',
+        },
+      },
+      reset: {
+        success: {
+          title: 'Request sent successfully',
+          message:
+            'If there is an account associated with this email address, an email with a link to reset ' +
+            'the password has been sent to this address. Please also check your spam folder if necessary.',
         },
       },
     },

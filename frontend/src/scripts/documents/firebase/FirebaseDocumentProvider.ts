@@ -100,6 +100,16 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   }
 
   /**
+   * Sends a password-reset email to the specified user.
+   *
+   * @param {string} email - The email address of the user requesting a password reset.
+   * @return {Promise<void>} A promise that resolves when the password-reset email has been successfully sent.
+   */
+  async resetPassword(email: string): Promise<void> {
+    await au.sendPasswordResetEmail(fbAuth, email);
+  }
+
+  /**
    * Fetches and returns a document from Firestore based on the specified type, ID, and optional
    * parent document.
    *

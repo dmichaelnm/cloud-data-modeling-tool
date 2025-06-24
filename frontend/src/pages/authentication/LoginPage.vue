@@ -96,6 +96,9 @@ const common = useCommonComposables();
 const email = ref('');
 const password = ref('');
 
+/**
+ * Lifecycle method that is called before this component is mounted.
+ */
 onBeforeMount(() => {
   email.value = common.quasar.cookies.get('email') ?? '';
 });

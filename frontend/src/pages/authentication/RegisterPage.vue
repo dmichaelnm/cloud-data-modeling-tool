@@ -246,7 +246,9 @@ function processSuccess(result: unknown): void {
   console.debug('Register result:', registerResult);
   if (registerResult) {
     // Update the email cookie with the current email address
-    common.quasar.cookies.set('email', registerResult.account.document.data.user.email);
+    common.quasar.cookies.set('email', registerResult.account.document.data.user.email, {
+      expires: 28,
+    });
     if (registerResult.created) {
       // Show success dialog
       messageDialog(

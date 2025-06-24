@@ -58,6 +58,9 @@ export default {
         'Bitte geben Sie Ihren Namen, ihre Email-Adresse und das Kennwort für Ihr neues Konto ein. Alternativ ' +
         'können Sie sich mit Ihrem Google-Konto registrieren. Nach erfolgreicher Registrierung muss jedoch noch ein ' +
         'Administrator Ihr Konto freischalten, damit Sie sich anmelden können.',
+      reset:
+        'Wenn Sie Ihr Kennwort zurücksetzen möchten, geben Sie bitte Ihre Email-Adresse ein. Sie erhalten dann ' +
+        'Email mit einem Link zu einer Webseite, auf der Sie ein neues Kennwort vergeben können.',
     },
     dialog: {
       register: {
@@ -78,6 +81,15 @@ export default {
           message:
             'Sie haben den Registrierungsprozess abgebrochen. Ihr Konto wurde nicht erstellt. Bitte versuchen ' +
             'Sie es erneut.',
+        },
+      },
+      reset: {
+        success: {
+          title: 'Anfrage erfolgreich versendet',
+          message:
+            'Sofern es ein Konto mit dieser Email-Adresse gibt, wurde eine Email mit einem Link zum ' +
+            'Zurücksetzen des Kennworts an diese Adresse gesendet. Bitte prüfen Sie gegebenenfalls auch Ihren ' +
+            'Spam-Ordner.',
         },
       },
     },
