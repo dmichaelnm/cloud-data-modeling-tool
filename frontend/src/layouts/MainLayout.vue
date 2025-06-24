@@ -38,6 +38,9 @@ onBeforeMount(() => {
     } else {
       // Store the account on the session
       common.session.account = account;
+      // Apply theme and language
+      common.i18n.locale.value = account.document.data.preferences.language;
+      common.quasar.dark.set(account.document.data.preferences.theme === 'dark');
     }
   });
 });

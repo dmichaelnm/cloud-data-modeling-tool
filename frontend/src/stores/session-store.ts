@@ -13,7 +13,11 @@ export const useSessionStore = defineStore('session-store', {
     },
   },
 
-  actions: {},
+  actions: {
+    clear(): void {
+      this.account = null;
+    },
+  },
 });
 
 if (import.meta.hot) {

@@ -175,6 +175,16 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   }
 
   /**
+   * Logs out the currently authenticated user from the application.
+   * This method terminates the user's session with the authentication provider.
+   *
+   * @return {Promise<void>} A promise that resolves when the logout operation is complete.
+   */
+  async logout(): Promise<void> {
+    await au.signOut(fbAuth);
+  }
+
+  /**
    * Fetches and returns a document from Firestore based on the specified type, ID, and optional
    * parent document.
    *
