@@ -6,6 +6,7 @@ export interface IAccountData extends IDocumentData {
     id: string;
     email: string;
     name: string;
+    picture: string | null;
   };
   preferences: {
     language: string;
@@ -13,6 +14,7 @@ export interface IAccountData extends IDocumentData {
   };
   state: {
     active: boolean;
+    lastLogin: Date | null;
   };
 }
 
