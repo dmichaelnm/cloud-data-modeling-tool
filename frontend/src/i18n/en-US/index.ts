@@ -42,6 +42,17 @@ export default {
     },
   },
 
+  main: {
+    account: {
+      menu: {
+        darkMode: 'Dark Mode',
+        lightMode: 'Light Mode',
+        language: 'Language',
+        logout: 'Sign Out',
+      },
+    },
+  },
+
   authentication: {
     button: {
       login: 'Sign In',
@@ -69,6 +80,12 @@ export default {
         aborted: {
           title: 'Login Aborted',
           message: 'You have aborted the login process. Please try again.',
+        },
+        unknown: {
+          title: 'Unknown Email Address',
+          message:
+            'No account was found for this email address. You must first register with this email address ' +
+            'and have it activated before you can log in.',
         },
       },
       register: {

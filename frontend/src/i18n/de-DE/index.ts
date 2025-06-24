@@ -42,6 +42,17 @@ export default {
     },
   },
 
+  main: {
+    account: {
+      menu: {
+        darkMode: 'Dunkler Modus',
+        lightMode: 'Heller Modus',
+        language: 'Sprache',
+        logout: 'Abmelden',
+      },
+    },
+  },
+
   authentication: {
     button: {
       login: 'Anmelden',
@@ -69,6 +80,12 @@ export default {
         aborted: {
           title: 'Anmeldung abgebrochen',
           message: 'Sie haben den Anmeldeprozess abgebrochen. Bitte versuchen Sie es erneut.',
+        },
+        unknown: {
+          title: 'Unbekannte Email-Adresse',
+          message:
+            'Für diese Email-Adresse wurde kein Konto gefunden. Sie müssen sich erst mit dieser Email-Adresse ' +
+            'registrieren und sich freischalten lassen, bevor Sie sich anmelden können.',
         },
       },
       register: {
@@ -108,8 +125,7 @@ export default {
       emailAlreadyInUse: 'Diese Email-Adresse wird bereits verwendet.',
       invalidCredentials: 'Die Anmeldeinformationen sind nicht korrekt.',
       accountLocked: 'Ihr Konto ist aktuell nicht aktiv.',
-      tooManyRequests:
-        'Zuviele fehlgeschlagene Versuche. Warten Sie einige Minuten, bevor Sie es erneut versuchen.',
+      tooManyRequests: 'Zuviele fehlgeschlagene Versuche. Warten Sie einige Minuten.',
     },
   },
 };
