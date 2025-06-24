@@ -27,9 +27,14 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
       if (user != null) {
         // Get the account document
         this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
-          .then((document) => {
+          .then(async (document) => {
             // Check if the document exists and has an active account state
             if (document && document.data.state.active) {
+              // Update name, picture and login state
+              document.data.user.name = user.displayName as string;
+              document.data.user.picture = user.photoURL;
+              document.data.state.lastLogin = new Date();
+              await document.update();
               // Create the account object
               const account = new ac.Account(document);
               // Invoke callback function
@@ -278,6 +283,7 @@ function createAccountData(
       id: credentials.user.uid,
       name: credentials.user.displayName as string,
       email: credentials.user.email as string,
+      picture: credentials.user.photoURL as string,
     },
     preferences: {
       language: languageCode,
@@ -285,6 +291,7 @@ function createAccountData(
     },
     state: {
       active: false,
+      lastLogin: null,
     },
   };
 }
