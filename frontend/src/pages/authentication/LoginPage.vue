@@ -2,7 +2,7 @@
   <!-- Page -->
   <q-page class="flex flex-center">
     <!-- Authentication Frame -->
-    <authentication-frame :message="$t('authentication.message.login')">
+    <authentication-frame :message="$t('authentication.message.login')" :message-height="130">
       <!-- Form -->
       <q-form @submit="login">
         <!-- Form DIV -->

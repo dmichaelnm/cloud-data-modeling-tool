@@ -8,7 +8,9 @@
         {{ $t('application.title') }}
       </div>
       <!-- Specific Frame Message -->
-      <div id="authenticationMessage" class="frame-row">{{ message }}</div>
+      <div class="frame-row" :style="`height: ${_messageHeight}`">
+        {{ message }}
+      </div>
       <!-- Page Content DIV -->
       <div class="frame-row">
         <!-- Page Content Scope -->
@@ -53,7 +55,7 @@
               major: version.major,
               minor: version.minor,
               patch: version.patch,
-              build: version.build
+              build: version.build,
             })
           }}
         </div>
@@ -73,10 +75,6 @@
 
 #authenticationFrame {
   width: 500px;
-}
-
-#authenticationMessage {
-  height: 130px;
 }
 </style>
 
@@ -106,9 +104,21 @@ const languageCode = ref<string>('');
 /**
  * Properties used in this component.
  */
-defineProps<{
+const props = defineProps<{
+  // Message to be displayed in the authentication frame
   message: string;
+  // Height of the message row
+  messageHeight?: number;
 }>();
+
+/**
+ * Reactive computed property representing the height of a message.
+ *
+ * This computed property determines the height of a message based on the `props.messageHeight` value.
+ * If `props.messageHeight` is defined, it returns the height as a string with a `px` unit appended.
+ * Otherwise, it defaults to the string value `auto`, allowing the message height to adjust dynamically based on content.
+ */
+const _messageHeight = computed(() => (props.messageHeight ? `${props.messageHeight}px` : `auto`));
 
 /**
  * A computed property that determines the icon to be displayed based on the dark mode state.
