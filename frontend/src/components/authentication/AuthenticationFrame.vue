@@ -43,12 +43,12 @@
       <!-- Copyright / Version Row -->
       <div class="row">
         <!-- Copyright Column -->
-        <div class="col">
+        <div class="col-5">
           <!-- Copyright Notice -->
           <span class="text-small text-disabled" v-html="$t('application.copyright')" />
         </div>
         <!-- Version Column -->
-        <div class="col text-right text-small text-disabled">
+        <div class="col-7 text-right text-small text-disabled">
           <!-- Version Info -->
           {{
             $t('application.version', {
