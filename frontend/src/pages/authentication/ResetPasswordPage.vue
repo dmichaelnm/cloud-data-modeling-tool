@@ -16,7 +16,6 @@
                 v-model="email"
                 :label="$t('label.email')"
                 :error-message="emailError"
-                type="password"
                 mandatory
                 auto-focus
               />
