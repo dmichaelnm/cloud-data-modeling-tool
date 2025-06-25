@@ -14,7 +14,7 @@
     <!-- Label Section -->
     <q-item-section>
       <!-- Label -->
-      <q-item-label>{{ label }}</q-item-label>
+      <q-item-label class="menu-item">{{ label }}</q-item-label>
     </q-item-section>
     <!-- Submenu Icon Section -->
     <q-item-section side>
@@ -25,6 +25,18 @@
     <slot />
   </q-item>
 </template>
+
+<style lang="scss" scoped>
+@import 'src/css/quasar.variables';
+
+.menu-item {
+  color: $light-text-normal;
+}
+
+.body--dark .menu-item {
+  color: $dark-text-normal;
+}
+</style>
 
 <script setup lang="ts">
 /**
