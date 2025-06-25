@@ -25,24 +25,34 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   onAccountStateChanged(callback: (account: ac.Account | null) => void): void {
     au.onAuthStateChanged(fbAuth, (user) => {
       if (user != null) {
-        // Get the account document
-        this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
-          .then(async (document) => {
-            // Check if the document exists and has an active account state
-            if (document && document.data.state.active) {
-              // Update name, picture and login state
-              document.data.user.name = user.displayName as string;
-              document.data.user.picture = user.photoURL;
-              document.data.state.lastLogin = new Date();
-              await document.update();
-              // Create the account object
-              const account = new ac.Account(document);
-              // Invoke callback function
-              callback(account);
-            } else {
-              // No account document
-              callback(null);
-            }
+        // Reload the user object to get fresh values from Firebase
+        user
+          .reload()
+          .then(() => {
+            // Get the account document
+            this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
+              .then(async (document) => {
+                // Check if the document exists and has an active account state
+                if (document && document.data.state.active) {
+                  // Update name, picture and login state
+                  document.data.user.name = user.displayName as string;
+                  document.data.user.picture = user.photoURL;
+                  document.data.state.lastLogin = new Date();
+                  await document.update();
+                  // Create the account object
+                  const account = new ac.Account(document);
+                  // Invoke callback function
+                  callback(account);
+                } else {
+                  // No account document
+                  callback(null);
+                }
+              })
+              .catch((error: unknown) => {
+                // Unexpected error, no account document
+                console.error(error);
+                callback(null);
+              });
           })
           .catch((error: unknown) => {
             // Unexpected error, no account document
