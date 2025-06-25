@@ -128,4 +128,13 @@ export default {
       tooManyRequests: 'Zuviele fehlgeschlagene Versuche. Warten Sie einige Minuten.',
     },
   },
+
+  project: {
+    label: {
+      active: 'Aktives Projekt',
+    },
+    menu: {
+      new: 'Neues Projekt',
+    },
+  },
 };

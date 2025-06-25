@@ -3,6 +3,10 @@
   <q-toolbar class="header-toolbar">
     <!-- Application Title -->
     <div id="applicationTitle">{{ $t('application.title') }}</div>
+    <!-- Space DIV -->
+    <div style="width: 64px" />
+    <!-- Project Menu -->
+    <project-menu />
     <!-- Space -->
     <q-space />
     <!-- Account Name -->
@@ -50,6 +54,7 @@
 import { computed } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import AccountMenu from 'components/main/AccountMenu.vue';
+import ProjectMenu from 'components/main/ProjectMenu.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".

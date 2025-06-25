@@ -126,4 +126,13 @@ export default {
       tooManyRequests: 'Too many failed attempts. Please wait a few minutes before trying again.',
     },
   },
+
+  project: {
+    label: {
+      active: 'Active Project',
+    },
+    menu: {
+      new: 'New Project',
+    },
+  },
 };
