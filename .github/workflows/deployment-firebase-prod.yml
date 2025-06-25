@@ -50,7 +50,10 @@ jobs:
           cd ../../../..
           
       - name: Build Quasar Application
-        run: npx quasar build
+        run: |
+          cd frontend
+          npx quasar build
+          cd ..
 
       - name: Prepare Google Deployment Credentials
         run: |
