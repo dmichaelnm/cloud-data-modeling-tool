@@ -1,13 +1,18 @@
 <template>
   <!-- Layout -->
   <q-layout view="hHh LpR fFf">
+    <!-- Message Dialog -->
+    <message-dialog v-model="messageDialogOptions.visibility" />
     <!-- Header -->
     <q-header>
       <!-- Header Toolbar -->
       <header-toolbar />
     </q-header>
-    <!-- Message Dialog -->
-    <message-dialog v-model="messageDialogOptions.visibility" />
+    <!-- Footer -->
+    <q-footer>
+      <!-- Footer Line -->
+      <footer-line />
+    </q-footer>
   </q-layout>
 </template>
 
@@ -18,6 +23,7 @@ import { useCommonComposables } from 'src/scripts/composables/Common';
 import { messageDialogOptions } from 'src/scripts/composables/Dialog';
 import MessageDialog from 'components/common/MessageDialog.vue';
 import HeaderToolbar from 'components/main/HeaderToolbar.vue';
+import FooterLine from 'components/main/FooterLine.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".

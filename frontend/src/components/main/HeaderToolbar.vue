@@ -1,8 +1,12 @@
 <template>
   <!-- Toolbar -->
   <q-toolbar class="header-toolbar">
+    <!-- Application Title -->
+    <div id="applicationTitle">{{ $t('application.title') }}</div>
     <!-- Space -->
     <q-space />
+    <!-- Account Name -->
+    <div id="accountName">{{ _accountName }}</div>
     <!-- Account Menu Button -->
     <q-btn flat round>
       <!-- Avatar -->
@@ -11,8 +15,6 @@
         <span id="accountInitials" v-if="_pictureURL === ''">{{ _accountInitials }}</span>
         <!-- Profile Image -->
         <img :src="_pictureURL" alt="Profile Image" v-if="_pictureURL !== ''" />
-        <!-- Tooltip -->
-        <q-tooltip>{{ _accountName }}</q-tooltip>
       </q-avatar>
       <!-- Account Menu -->
       <q-menu anchor="bottom right" self="top right" style="width: 250px">
@@ -49,6 +51,26 @@
 
 <style lang="scss" scoped>
 @import 'src/css/quasar.variables';
+
+#applicationTitle {
+  color: $light-text-label;
+  font-size: 14pt;
+  font-variant: small-caps;
+}
+
+.body--dark #applicationTitle {
+  color: $dark-text-label;
+}
+
+#accountName {
+  padding: 0 8px;
+  color: $light-text-normal;
+}
+
+.body--dark #accountName {
+  padding: 0 8px;
+  color: $dark-text-normal;
+}
 
 #accountAvatar {
   background-color: $light-button-label-background;
