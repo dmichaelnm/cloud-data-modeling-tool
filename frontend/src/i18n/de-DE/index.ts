@@ -9,12 +9,16 @@ export default {
     back: 'Zurück',
     cancel: 'Abbrechen',
     close: 'Schließen',
+    create: 'Erstellen',
     ok: 'Okay',
+    save: 'Speichern',
   },
 
   label: {
     email: 'Email-Adresse',
+    customAttributes: 'Benutzerdefinierte Attribute',
     details: 'Details',
+    description: 'Beschreibung (optional)',
     firstname: 'Vorname',
     lastname: 'Nachname',
     password: 'Kennwort',
@@ -40,6 +44,10 @@ export default {
       enUS: 'Englisch (US)',
       deDE: 'Deutsch (DE)',
     },
+    projectRole: {
+      owner: 'Projekteigentümer',
+      manager: 'Projektleiter',
+    }
   },
 
   main: {
@@ -117,6 +125,12 @@ export default {
             'Spam-Ordner.',
         },
       },
+      selection: {
+        title: 'Konto auswählen',
+        message:
+          'Geben Sie hier die Email-Adresse des Kontos an, welches Sie auswählen möchten. Beachten Sie, dass ' +
+          'dieses Konto bereits registriert sein muss, um es auswählen zu können.',
+      },
     },
     error: {
       passwordConfirmationFailed: 'Die Kennwortbestätigung ist fehlgeschlagen.',
@@ -126,15 +140,36 @@ export default {
       invalidCredentials: 'Die Anmeldeinformationen sind nicht korrekt.',
       accountLocked: 'Ihr Konto ist aktuell nicht aktiv.',
       tooManyRequests: 'Zuviele fehlgeschlagene Versuche. Warten Sie einige Minuten.',
+      unknownEmail: 'Diese Email-Adresse ist unbekannt oder ungültig.',
     },
   },
 
   project: {
     label: {
       active: 'Aktives Projekt',
+      name: 'Name des Projekts',
     },
     menu: {
       new: 'Neues Projekt',
+    },
+    dialog: {
+      create: {
+        title: 'Neues Projekt',
+        message:
+          'In diesem Dialog können Sie ein neues Projekt anlegen. Bitte vergeben Sie einen Projektnamen und optional ' +
+          'eine Beschreibung. Sie haben außerdem die Möglichkeit, Projektmitglieder hinzuzufügen und diesen ' +
+          'entsprechende Rollen zuzuweisen, um die jeweiligen Zugriffsrechte festzulegen.',
+      },
+      tab: {
+        members: {
+          title: 'Projektmitglieder',
+          message:
+            'Hier können Sie Ihr Projektteam verwalten. Sie können hier einen expliziten Projektleiter festlegen,' +
+            'der im Wesentlichen die gleichen Rechte hat wie Sie als Projekteigentümer mit der Ausnahme, dass er das ' +
+            'Projekt nicht löschen darf. Weiterhin können Mitglieder Ihrem Projekt hinzufügen beziehungsweise diese ' +
+            'wieder aus dem Projekt entfernen und jedem Mitglied eine bestimmte Rolle zuweisen.',
+        },
+      },
     },
   },
 };

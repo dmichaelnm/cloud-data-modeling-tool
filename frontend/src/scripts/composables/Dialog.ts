@@ -9,6 +9,7 @@ export type TDialogButton = {
   label: string;
   color?: string | undefined;
   appearance?: 'push' | 'link' | undefined;
+  submit?: boolean;
 };
 
 /**

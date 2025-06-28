@@ -225,6 +225,45 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   }
 
   /**
+   * Finds and retrieves documents from a Firestore collection based on the specified type, parent document,
+   * and optional filter conditions.
+   *
+   * @param {dc.EDocumentType} type - The type of document to query from the Firestore collection.
+   * @param {dc.IDocument<dc.IDocumentData> | undefined} parent - The parent document, which determines the Firestore
+   *        path for the query. If undefined, the query is executed at the root collection.
+   * @param {...dp.TFilterCondition[]} filter - A list of filter conditions to apply to the query. Each filter includes
+   *        an attribute, operation, and value.
+   * @return {Promise<dc.IDocument<D>[]>} A promise that resolves to an array of documents of the specified type.
+   */
+  async findDocuments<D extends dc.IDocumentData>(
+    type: dc.EDocumentType,
+    parent: dc.IDocument<dc.IDocumentData> | undefined,
+    ...filter: dp.TFilterCondition[]
+  ): Promise<dc.IDocument<D>[]> {
+    // Create Firebase query constraints
+    const queryConstrains: fs.QueryConstraint[] = filter.map((cond) => {
+      return fs.where(cond.attribute, cond.operation, cond.value);
+    });
+    // Get the path to the collection
+    const path = getFirestorePath(type, parent);
+    // Get the collection
+    const collection = fs.collection(fbFirestore, path);
+    // Create the query
+    const query = fs.query(collection, ...queryConstrains);
+    // Execute query
+    const snapshots = await fs.getDocs(query);
+    // Create result array
+    const documents: dc.IDocument<D>[] = [];
+    // Iterate over all documents
+    for (const snapshot of snapshots.docs) {
+      // Create the document instance and push it to the result array
+      documents.push(new FirestoreDocument<D>({ snapshot: snapshot }, parent));
+    }
+    // Return the array
+    return documents;
+  }
+
+  /**
    * Creates a new document of the specified type with the given data. If `id` is provided,
    * the document is created with the specified `id`. Otherwise, a new document ID is generated.
    * Optionally associates the document with a parent document.

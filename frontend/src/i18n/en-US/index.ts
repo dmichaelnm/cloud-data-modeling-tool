@@ -9,12 +9,16 @@ export default {
     back: 'Back',
     cancel: 'Cancel',
     close: 'Close',
+    create: 'Create',
     ok: 'Okay',
+    save: 'Save',
   },
 
   label: {
     email: 'Email Address',
+    customAttributes: 'Custom Attributes',
     details: 'Details',
+    description: 'Description (optional)',
     firstname: 'First Name',
     lastname: 'Last Name',
     password: 'Password',
@@ -40,6 +44,10 @@ export default {
       enUS: 'English (US)',
       deDE: 'German (DE)',
     },
+    projectRole: {
+      owner: 'Project Owner',
+      manager: 'Project Manager',
+    }
   },
 
   main: {
@@ -115,6 +123,12 @@ export default {
             'the password has been sent to this address. Please also check your spam folder if necessary.',
         },
       },
+      selection: {
+        title: 'Select Account',
+        message:
+          'Enter the email address of the account you want to select here. Please note that this ' +
+          'account must already be registered for it to be selectable.',
+      },
     },
     error: {
       passwordConfirmationFailed: 'The password confirmation failed.',
@@ -124,15 +138,36 @@ export default {
       invalidCredentials: 'The provided credentials are invalid.',
       accountLocked: 'Your account is currently not active.',
       tooManyRequests: 'Too many failed attempts. Please wait a few minutes before trying again.',
+      unknownEmail: 'This email address is unknown or invalid.',
     },
   },
 
   project: {
     label: {
       active: 'Active Project',
+      name: 'Project Name',
     },
     menu: {
       new: 'New Project',
+    },
+    dialog: {
+      create: {
+        title: 'New Project',
+        message:
+          'In this dialog, you can create a new project. Please provide a project name and optionally a ' +
+          'description. You also have the option to add project members and assign them corresponding roles ' +
+          'to define the respective access rights.',
+      },
+      tab: {
+        members: {
+          title: 'Project Members',
+          message:
+            'Here you can manage your project team. You can explicitly assign a project manager here, ' +
+            'who essentially has the same rights as you as the project owner, with the exception that they ' +
+            'cannot delete the project. Furthermore, you can add or remove members to your project and assign ' +
+            'a specific role to each member.',
+        },
+      },
     },
   },
 };

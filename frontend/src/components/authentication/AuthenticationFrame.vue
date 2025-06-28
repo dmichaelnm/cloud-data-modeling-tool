@@ -90,7 +90,6 @@ import SelectValue from 'components/common/SelectValue.vue';
  * Function returning the most common composables like "router", "quasar", "i18n".
  */
 const common = useCommonComposables();
-
 /**
  * Function returning an array of possible languages.
  */

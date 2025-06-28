@@ -34,11 +34,16 @@ const common = useCommonComposables();
  * Lifecycle method that is called before this component is mounted.
  */
 onBeforeMount(() => {
+  common.quasar.loading.show();
+
   const provider = getDocumentProvider();
   provider.onAccountStateChanged((account) => {
     if (account === null) {
-      // Redirect to login page
-      common.router.push('/auth/login').catch((reason: any) => {
+      // Get the source path
+      let path = common.router.currentRoute.value.path;
+      // Keep the source path when an account was registered, otherwise redirect to the login page
+      path = path === '/auth/register' ? path : '/auth/login';
+      common.router.push(path).catch((reason: any) => {
         throw new Error(`Failed to redirect to login page: ${reason}`);
       });
     } else {
@@ -48,6 +53,7 @@ onBeforeMount(() => {
       common.i18n.locale.value = account.document.data.preferences.language;
       common.quasar.dark.set(account.document.data.preferences.theme === 'dark');
     }
+    common.quasar.loading.hide();
   });
 });
 </script>

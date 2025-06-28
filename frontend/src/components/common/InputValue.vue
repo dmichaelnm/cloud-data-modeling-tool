@@ -17,7 +17,13 @@
     outlined
     stack-label
     @update:modelValue="(val) => (_modelValue = val)"
-  />
+  >
+    <!-- Append Template -->
+    <template v-slot:append>
+      <!-- Append Template Slot -->
+      <slot name="append" />
+    </template>
+  </q-input>
 </template>
 
 <script setup lang="ts">

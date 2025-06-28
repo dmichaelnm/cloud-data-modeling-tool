@@ -54,7 +54,7 @@
 import { computed } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import AccountMenu from 'components/main/AccountMenu.vue';
-import ProjectMenu from 'components/main/ProjectMenu.vue';
+import ProjectMenu from 'components/project/ProjectMenu.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".

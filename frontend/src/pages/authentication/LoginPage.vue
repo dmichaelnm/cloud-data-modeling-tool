@@ -133,43 +133,47 @@ onBeforeMount(() => {
 });
 
 /**
- * Handles the user login process, including resetting error messages,
- * initiating the login functionality asynchronously, and processing
- * both error and success scenarios appropriately.
+ * Handles the user login process by performing asynchronous operations such as
+ * authentication and error/success handling.
  *
- * @return {void} Does not return a value.
+ * This method resets any existing error messages, performs the login operation
+ * with the provided email and password, and processes the result based on whether
+ * the login was successful or not.
+ *
+ * @return {Promise<void>} A promise that resolves when the login process is complete.
  */
-function login(): void {
+async function login(): Promise<void> {
   // Reset error messages
   resetError();
   // Start the login task
-  runAsync(
+  await runAsync<string>(
     // Perform login task
     async () => {
       // Get document provider
       const provider = getDocumentProvider();
       // Login in with email and password
       await provider.loginWithEmailAndPassword(email.value, password.value);
+      // Return email address
+      return email.value;
     },
     // Process error
     (error: unknown) => processError(error),
     // Process success
-    async () => await processSuccess(email.value),
+    async (result: string) => await processSuccess(result),
   );
 }
 
 /**
- * Initiates the Google login process for the user by interacting with the document provider.
- * This method resets error messages, performs the login asynchronously,
- * and handles success or error responses accordingly.
+ * Initiates the login process using Google as the authentication provider.
+ * Handles success and error scenarios through the `runAsync` method.
  *
- * @return {void} This method does not return any value.
+ * @return {Promise<void>} A promise that resolves when the Google login process is completed.
  */
-function loginGoogle(): void {
+async function loginGoogle(): Promise<void> {
   // Reset error messages
   resetError();
   // Start the login task
-  runAsync(
+  await runAsync<string>(
     // Perform login task
     async () => {
       // Get document provider
@@ -180,7 +184,7 @@ function loginGoogle(): void {
     // Process error
     (error: unknown) => processError(error),
     // Process success
-    (result: unknown) => processSuccess(result as string),
+    (result: string) => processSuccess(result),
   );
 }
 

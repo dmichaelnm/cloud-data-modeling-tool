@@ -61,6 +61,16 @@ body.body--dark {
   color: $dark-text-disabled;
 }
 
+.account-profile {
+  background-color: $light-button-label-background;
+  color: $light-button-label-color;
+}
+
+.body--dark .account-profile {
+  background-color: $dark-button-label-background;
+  color: $dark-button-label-color;
+}
+
 .q-menu {
   border-radius: 4px;
   background-color: $light-frame-background;
@@ -104,4 +114,21 @@ body.body--dark {
 
 .body--dark .q-field--highlighted .q-field__label {
   color: $dark-text-highlighted;
+}
+
+.q-tab__label {
+  font-weight: unset;
+}
+
+.q-tab-panels {
+  background-color: transparent;
+}
+
+.q-tab-panel {
+  padding: 16px 0;
+  color: $light-text-normal;
+}
+
+.body--dark .q-tab-panel {
+  color: $dark-text-normal;
 }
