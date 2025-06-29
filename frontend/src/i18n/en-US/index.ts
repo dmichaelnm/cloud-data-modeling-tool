@@ -47,7 +47,11 @@ export default {
     projectRole: {
       owner: 'Project Owner',
       manager: 'Project Manager',
-    }
+      maintainer: 'Maintainer',
+      deployer: 'Deployer',
+      developer: 'Developer',
+      visitor: 'Visitor',
+    },
   },
 
   main: {
@@ -166,8 +170,18 @@ export default {
             'who essentially has the same rights as you as the project owner, with the exception that they ' +
             'cannot delete the project. Furthermore, you can add or remove members to your project and assign ' +
             'a specific role to each member.',
+          messageMemberTable:
+            'In the following table, you can add or remove project members and assign them corresponding roles. ' +
+            'The roles determine the permissions that the members have within this project. Project owners and project ' +
+            'managers are separate roles. These cannot also be added additionally as project members.',
+          emptyTable:
+            'Currently, no additional project members have been assigned to this project.',
         },
       },
     },
+    error: {
+      memberAlreadyAdded: 'This account has already been added as a project member.',
+      isProjectOwner: 'This account is already the project owner.',
+      isProjectManager: 'This account is already the project manager.',    },
   },
 };

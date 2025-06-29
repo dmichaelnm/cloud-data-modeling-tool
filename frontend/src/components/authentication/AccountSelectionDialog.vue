@@ -27,7 +27,7 @@
           <!-- Apply Self Button -->
           <q-btn flat round dense @click="applySelf">
             <!-- Account Profile Picture -->
-            <account-profile v-model="common.session.accountDocument" />
+            <account-profile :document="common.session.accountDocument" />
           </q-btn>
         </template>
       </input-value>

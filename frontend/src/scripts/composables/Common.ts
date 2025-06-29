@@ -1,10 +1,29 @@
 import { useRouter } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useMessageDialog } from 'src/scripts/composables/Dialog';
 import { DocumentError } from 'src/scripts/documents/DocumentError';
 import { FirebaseError } from 'firebase/app';
 import { useSessionStore } from 'stores/session-store';
+import { TSelectOption } from 'src/scripts/composables/Options';
+
+export enum ETableColumnType {
+  None = 'none',
+  InputText = 'inputText',
+  InputNumber = 'inputNumber',
+  Select = 'select',
+  Checkbox = 'checkbox',
+}
+
+export type TTableColumn = QTableColumn & {
+  hide?: ((row: Record<string, any>) => boolean) | boolean;
+  icon?: ((row: Record<string, any>) => string) | string;
+  inputType?: ((row: Record<string, any>) => ETableColumnType) | ETableColumnType;
+  options?: TSelectOption[];
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+};
+
+export type TSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Provides common composables used across the application.

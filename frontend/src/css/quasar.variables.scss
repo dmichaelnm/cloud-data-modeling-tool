@@ -38,7 +38,7 @@ $light-text-highlighted: #0060BF;
 $light-header-toolbar-background: #FFFFFF;
 
 $dark-body-background: #101010;
-$dark-border-normal: #303030;
+$dark-border-normal: #404040;
 $dark-border-highlighted: #40A0FF;
 $dark-button-icon: #40A0FF;
 $dark-button-label-background: #40A0FF;
@@ -46,9 +46,13 @@ $dark-button-label-color: #202020;
 $dark-frame-background: #202020;
 $dark-text-normal: #B0B0B0;
 $dark-text-label: #F0F0F0;
-$dark-text-disabled: #505050;
+$dark-text-disabled: #707070;
 $dark-text-highlighted: #40A0FF;
 $dark-header-toolbar-background: #202020;
+
+.text-light-text-normal {
+  color: $light-text-normal;
+}
 
 .text-light-border-normal {
   color: $light-border-normal;
@@ -56,6 +60,10 @@ $dark-header-toolbar-background: #202020;
 
 .text-light-border-highlighted {
   color: $light-border-highlighted;
+}
+
+.text-dark-text-normal {
+  color: $dark-text-normal;
 }
 
 .text-dark-border-normal {

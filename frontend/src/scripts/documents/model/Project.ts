@@ -9,11 +9,19 @@ import { ModelObject } from 'src/scripts/documents/ModelObject';
  * participants in a project, helping to determine their permissions
  * and responsibilities.
  */
-export enum TProjectRole {
+export enum EProjectRole {
   // Project Owner
   Owner = 'owner',
   // Project Manager
   Manager = 'manager',
+  // Maintainer
+  Maintainer = 'maintainer',
+  // Deployer
+  Deployer = 'deployer',
+  // Developer
+  Developer = 'developer',
+  // Visitor
+  Visitor = 'visitor',
 }
 
 /**
@@ -21,7 +29,7 @@ export enum TProjectRole {
  */
 export type TProjectMember = {
   // Role within a project
-  role: TProjectRole;
+  role: EProjectRole;
   // ID of the account
   id: string;
   // Name of the member
@@ -57,7 +65,7 @@ export class Project extends ModelObject<IProjectData> {
    */
   getProjectOwner(): TProjectMember {
     return this.document.data.members.find(
-      (mbr) => mbr.role === TProjectRole.Owner,
+      (mbr) => mbr.role === EProjectRole.Owner,
     ) as TProjectMember;
   }
 
@@ -68,7 +76,7 @@ export class Project extends ModelObject<IProjectData> {
    */
   getProjectManager(): TProjectMember {
     return this.document.data.members.find(
-      (mbr) => mbr.role === TProjectRole.Manager,
+      (mbr) => mbr.role === EProjectRole.Manager,
     ) as TProjectMember;
   }
 }
@@ -104,7 +112,7 @@ export class ProjectEditorData extends dc.EditorData<IProjectData> {
     super(currentAccount, type, document, parent);
     // Initialize the project owner
     this.projectOwner = {
-      role: TProjectRole.Owner,
+      role: EProjectRole.Owner,
       id: this.currentAccount.id,
       name: this.currentAccount.data.user.name,
       description: null,

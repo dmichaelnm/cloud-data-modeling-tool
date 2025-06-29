@@ -35,17 +35,15 @@ export interface IAccountData extends IDocumentData {
 export class Account extends ModelObject<IAccountData> {
 
   /**
-   * Extracts and returns the initials of the account name from the user data.
-   * The initials are derived from the first letters of the name parts, split by spaces,
-   * and are converted to uppercase. The method returns up to two initials.
+   * Generates the initials for a given account name by extracting the first letter of each word.
+   * It combines the initials into a string and truncates to a maximum of two characters.
    *
-   * @return {string} The initials of the account name, up to two characters long.
+   * @param accountName The full name of the account as a string.
+   * @return A string containing up to two uppercase initials derived from the account name.
    */
-  getAccountInitials(): string {
-    // Get account name
-    const name = this.document.data.user.name;
+  static getAccountInitials(accountName: string): string {
     // Splitting the name by spaces
-    const nameParts = name.trim().split(/\s+/);
+    const nameParts = accountName.trim().split(/\s+/);
     // Get the first letter from each part and combine them
     const initials = nameParts.map((part) => part[0]?.toUpperCase()).join('');
     // Return the first to letters

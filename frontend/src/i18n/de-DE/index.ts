@@ -47,7 +47,11 @@ export default {
     projectRole: {
       owner: 'Projekteigentümer',
       manager: 'Projektleiter',
-    }
+      maintainer: 'Betreuer',
+      deployer: 'Bereitsteller',
+      developer: 'Entwickler',
+      visitor: 'Besucher',
+    },
   },
 
   main: {
@@ -168,8 +172,20 @@ export default {
             'der im Wesentlichen die gleichen Rechte hat wie Sie als Projekteigentümer mit der Ausnahme, dass er das ' +
             'Projekt nicht löschen darf. Weiterhin können Mitglieder Ihrem Projekt hinzufügen beziehungsweise diese ' +
             'wieder aus dem Projekt entfernen und jedem Mitglied eine bestimmte Rolle zuweisen.',
+          messageMemberTable:
+            'In der folgenden Tabelle können Sie Projektmitglieder hinzufügen oder entfernen und Ihnen entsprechende ' +
+            'Rollen zuweisen. Die Rollen bestimmen die Berechtigungen, die die Mitglieder innerhalb dieser Projektes ' +
+            'haben. Projekteigentümer und Projektmanager sind eigene Rollen. Diese können nicht zusätzlich auch als ' +
+            'Projektmitglieder hinzugefügt werden.',
+          emptyTable:
+            'Aktuell sind diesem Projekt noch keine zusätzlichen Projektmitglieder zugeordnet.',
         },
       },
+    },
+    error: {
+      memberAlreadyAdded: 'Dieses Konto wurde bereits als Projektmitglied hinzugefügt.',
+      isProjectOwner: 'Dieses Konto ist bereits Projekteigentümer.',
+      isProjectManager: 'Dieses Konto ist bereits Projektmanager.',
     },
   },
 };

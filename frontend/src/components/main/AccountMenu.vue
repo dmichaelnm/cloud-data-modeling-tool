@@ -2,7 +2,7 @@
   <!-- Account Menu Button -->
   <q-btn flat round>
     <!-- Account Profile Picture -->
-    <account-profile v-model="common.session.accountDocument" />
+    <account-profile :document="common.session.accountDocument" />
     <!-- Account Menu -->
     <q-menu anchor="bottom right" self="top right" style="width: 250px">
       <!-- Menu Item List -->
@@ -18,10 +18,10 @@
               <!-- Language Items -->
               <menu-item
                 v-for="lng in languageOptions()"
-                :key="lng.value"
+                :key="lng.value as string"
                 :label="lng.label"
                 :icon="lng.icon"
-                @click="switchLanguage(lng.value)"
+                @click="switchLanguage(lng.value as string)"
               />
             </q-list>
           </q-menu>

@@ -11,7 +11,7 @@
     <!-- Account Picture Template -->
     <template v-slot:prepend v-if="_modelValue">
       <!-- Account Profile Avatar -->
-      <account-profile v-model="_modelValue" />
+      <account-profile :document="_modelValue" />
     </template>
     <!-- Account Name Template -->
     <template v-slot:control>

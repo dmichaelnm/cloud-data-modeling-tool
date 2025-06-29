@@ -6,8 +6,8 @@
     :title="$t(`${_documentType}.dialog.${_operation}.title`)"
     :message="$t(`${_documentType}.dialog.${_operation}.message`)"
     :buttons="_dialogButtons"
-    :width="1200"
-    :height="600"
+    :width="_dialogWith"
+    :height="_dialogHeight"
     :submit-handler="performOperation"
     @update:model-value="(val) => (_modelValue = val)"
     @initialize="initDialog"
@@ -88,7 +88,7 @@
 </style>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import { useCommonComposables, useRunAsync } from 'src/scripts/composables/Common';
 import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 import { TDialogButton } from 'src/scripts/composables/Dialog';
@@ -114,6 +114,14 @@ const applicationDialog = ref<InstanceType<typeof ApplicationDialog> | null>(nul
  * A reactive reference variable that stores the identifier or name of the currently active tab.
  */
 const currentTab = ref<string>('');
+/**
+ * A reactive reference holding the current width of the browser window.
+ */
+const windowWidth = ref<number>(window.innerWidth);
+/**
+ * A reactive reference holding the current height of the browser window.
+ */
+const windowHeight = ref<number>(window.innerHeight);
 
 /**
  * Properties used in this component.
@@ -137,6 +145,8 @@ const props = defineProps<{
 const emits = defineEmits<{
   // Update model value
   (event: 'update:modelValue', value: boolean): void;
+  // Dialog resize event
+  (event: 'dialogResize', width: number, height: number): void;
 }>();
 
 /**
@@ -145,6 +155,20 @@ const emits = defineEmits<{
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value),
+});
+
+/**
+ * A computed property that calculates the width of a dialog box.
+ */
+const _dialogWith = computed(() => {
+  return Math.floor(windowWidth.value * 0.8);
+});
+
+/**
+ * A computed property that calculates the height of a dialog box.
+ */
+const _dialogHeight = computed(() => {
+  return Math.floor(windowHeight.value * 0.65);
 });
 
 /**
@@ -204,6 +228,13 @@ const _dialogButtons = computed<TDialogButton[]>(() => {
 });
 
 /**
+ * Lifecycle method that is called before this component is mounted.
+ */
+onBeforeUnmount(() => {
+  emits('dialogResize', _dialogWith.value, _dialogHeight.value);
+});
+
+/**
  * Initializes the dialog by setting the initial value of the current tab based on the tabs provided in the props.
  * If the `tabs` array in props is not empty, it assigns the first tab. Otherwise, it sets an empty string.
  *
@@ -245,4 +276,14 @@ async function performOperation(): Promise<boolean> {
     })) ?? false
   );
 }
+
+/**
+ * Adds an event listener to capture window resize events.
+ */
+window.addEventListener('resize', (event) => {
+  const window = event.target as Window;
+  windowWidth.value = window.innerWidth;
+  windowHeight.value = window.innerHeight;
+  emits('dialogResize', _dialogWith.value, _dialogHeight.value);
+});
 </script>

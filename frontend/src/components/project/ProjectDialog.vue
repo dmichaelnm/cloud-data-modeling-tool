@@ -4,13 +4,13 @@
     v-model="dialogVisible"
     :editor-data="editorData"
     :tabs="['members']"
-    :prepare-handler="prepare"
     support-custom-attributes
+    @dialog-resize="(_, height) => (dialogHeight = height)"
   >
     <!-- Project Member Tab Template -->
     <template v-slot:tab-members v-if="editorData">
       <!-- Main DIV -->
-      <div>
+      <div class="q-col-gutter-y-lg">
         <!-- Owner & Manager Row -->
         <div class="row q-col-gutter-x-sm">
           <!-- Owner Column -->
@@ -25,7 +25,24 @@
           <!-- Manager Column -->
           <div class="col-3">
             <!-- Manager Selection -->
-            <select-account v-model="projectManager" :label="$t('options.projectRole.manager')" />
+            <select-account
+              v-model="projectManager"
+              :label="$t('options.projectRole.manager')"
+              :validation-handler="validate"
+              @update:model-value="setProjectManager"
+            />
+          </div>
+        </div>
+        <!-- Project Member Row -->
+        <div class="row">
+          <!-- Project Member Column -->
+          <div class="col">
+            <!-- Project Member Table -->
+            <project-member-table
+              v-if="editorData"
+              v-model="editorData"
+              :height="_memberTableHeight"
+            />
           </div>
         </div>
       </div>
@@ -34,14 +51,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 import { EDocumentType, IDocument } from 'src/scripts/documents/Document';
-import { IProjectData, ProjectEditorData, TProjectRole } from 'src/scripts/documents/model/Project';
+import { IProjectData, ProjectEditorData, EProjectRole } from 'src/scripts/documents/model/Project';
 import { IAccountData } from 'src/scripts/documents/model/Account';
 import DocumentDialog from 'components/main/DocumentDialog.vue';
 import SelectAccount from 'components/authentication/SelectAccount.vue';
+import ProjectMemberTable from 'components/project/ProjectMemberTable.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
@@ -67,6 +85,21 @@ const projectOwner = ref<IDocument<IAccountData> | null>(null);
  * A reference variable used to store the manager of a project.
  */
 const projectManager = ref<IDocument<IAccountData> | null>(null);
+/**
+ * A reactive variable that stores the height of this dialog component.
+ */
+const dialogHeight = ref(0);
+
+/**
+ * A computed property that dynamically calculates the height of the member table.
+ * The height is determined based on the `dialogHeight` value, reduced by a fixed offset of 317.
+ * Logs the calculated height to the console for debugging.
+ */
+const _memberTableHeight = computed(() => {
+  const x = dialogHeight.value - 317;
+  console.log(x);
+  return x;
+});
 
 /**
  * Opens the project editor dialog.
@@ -100,36 +133,42 @@ async function open(document: IDocument<IProjectData> | null): Promise<void> {
 }
 
 /**
- * Prepares the editor data by setting the project owner and project manager details
- * based on the currently available values.
+ * Sets the project manager for the current project.
  *
+ * @param {IDocument<IAccountData> | null} manager - The manager to be assigned as the project manager.
+ *     Pass `null` to remove the current project manager.
  * @return {void} This method does not return a value.
  */
-function prepare(): void {
+function setProjectManager(manager: IDocument<IAccountData> | null): void {
   if (editorData.value) {
-    if (projectOwner.value) {
-      // Set project owner
-      editorData.value.projectOwner = {
-        role: TProjectRole.Owner,
-        id: projectOwner.value.id,
-        name: projectOwner.value.data.user.name,
-        picture: projectOwner.value.data.user.picture,
-        description: null,
-        active: true,
-      };
-    }
-    if (projectManager.value) {
+    if (manager) {
       // Set project manager
-      editorData.value.projectManager = {
-        role: TProjectRole.Manager,
-        id: projectManager.value.id,
-        name: projectManager.value.data.user.name,
-        picture: projectManager.value.data.user.picture,
+      editorData.value.projectOwner = {
+        role: EProjectRole.Manager,
+        id: manager.id,
+        name: manager.data.user.name,
+        picture: manager.data.user.picture,
         description: null,
         active: true,
       };
     }
   }
+}
+
+/**
+ * Validates whether the specified document can be added as a project member.
+ *
+ * @param {IDocument<IAccountData>} document - The document representing the account data to validate.
+ * @return {string | null} A localized error message if the document is already added as a member, otherwise null.
+ */
+function validate(document: IDocument<IAccountData>): string | null {
+  if (editorData.value) {
+    // Check if not already added as a project member
+    if (editorData.value.data.members.some((member) => member.id === document.id)) {
+      return common.i18n.t('project.error.memberAlreadyAdded');
+    }
+  }
+  return null;
 }
 
 /**

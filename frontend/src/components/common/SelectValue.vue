@@ -1,14 +1,18 @@
 <template>
   <!-- Select -->
   <q-select
+    ref="select"
     :model-value="_modelValue"
     :options="options"
+    :label="label"
     :borderless="borderless"
     :outlined="!borderless"
+    :autocomplete="autoComplete"
     dense
     options-dense
     emit-value
     map-options
+    stack-label
     @update:model-value="(val) => (_modelValue = val)"
   >
     <!-- Selected Icon Template -->
@@ -60,16 +64,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { TSelectOption } from 'src/scripts/composables/Options';
+import { computed, ref } from 'vue';
+import { TSelectOption } from 'src/scripts/composables/Options';
+import { QSelect } from 'quasar';
+
+/**
+ * A reactive reference to an instance of the QSelect component or null.
+ */
+const select = ref<InstanceType<typeof QSelect> | null>(null);
 
 /**
  * Properties used in this component.
  */
 const props = defineProps<{
+  // Model value
   modelValue: string | null;
+  // Option items
   options: TSelectOption[];
+  // Optional label
+  label?: string;
+  // Select component is borderless
   borderless?: boolean;
+  // Auto complete Attribute
+  autoComplete?: string;
 }>();
 
 /**
@@ -101,4 +118,19 @@ const _showIcon = computed(() => props.options.some((opt) => opt.icon));
 const _selectedOption = computed(() => {
   return props.options.find((opt) => opt.value === _modelValue.value);
 });
+
+/**
+ * Displays the popup menu associated with the current value of the select element.
+ * Triggers the popup to ensure options are visible to the user.
+ *
+ * @return {void} Does not return a value.
+ */
+function showPopup(): void {
+  select.value?.showPopup();
+}
+
+/**
+ * Defines the exposed methods of this component.
+ */
+defineExpose({ showPopup });
 </script>

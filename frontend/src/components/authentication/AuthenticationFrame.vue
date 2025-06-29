@@ -168,6 +168,9 @@ function switchLanguage(): void {
 function getDefaultLanguageCode(): string {
   const options = languageOptions();
   const option = options.find((opt) => opt.value === navigator.language);
-  return option?.value ?? 'en-US';
+  if (option?.value) {
+    return option.value as string;
+  }
+  return 'en-US';
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <!-- Avatar -->
-  <q-avatar class="account-profile">
+  <q-avatar class="account-profile" :size="size">
     <!-- Profile Picture -->
-    <img v-if="_profilePicture" :src="_profilePicture" alt="Profile Picture" />
+    <img v-if="_profilePicture" :src="_profilePicture" alt="Profile Picture" referrerpolicy="no-referrer"/>
     <!-- Initials -->
     <span v-if="!_profilePicture">{{ _accountInitials }}</span>
   </q-avatar>
@@ -12,13 +12,20 @@
 import { computed } from 'vue';
 import { IDocument } from 'src/scripts/documents/Document';
 import { Account, IAccountData } from 'src/scripts/documents/model/Account';
+import { TSize } from 'src/scripts/composables/Common';
 
 /**
  * Properties used in this component.
  */
 const props = defineProps<{
   // Model value
-  modelValue: IDocument<IAccountData> | null | undefined;
+  document?: IDocument<IAccountData> | null | undefined;
+  // Picture URL
+  accountPicture?: string;
+  // Account Name
+  accountName?: string;
+  // Optional Size
+  size?: TSize;
 }>();
 
 /**
@@ -27,13 +34,25 @@ const props = defineProps<{
  * it returns the picture URL. Otherwise, it returns an empty string.
  */
 const _profilePicture = computed(() => {
-  return props.modelValue ? props.modelValue.data.user.picture : undefined;
+  if (props.document) {
+    return props.document ? props.document.data.user.picture : undefined;
+  } else if (props.accountPicture) {
+    return props.accountPicture;
+  } else {
+    return undefined;
+  }
 });
 
 /**
  * A computed property that represents the initials of an account.
  */
 const _accountInitials = computed(() => {
-  return props.modelValue ? new Account(props.modelValue).getAccountInitials() : '?';
+  if (props.document) {
+    return props.document ? Account.getAccountInitials(props.document.data.user.name) : '?'
+  } else if (props.accountName) {
+    return Account.getAccountInitials(props.accountName);
+  } else {
+    return '?'
+  }
 });
 </script>
