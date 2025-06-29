@@ -52,6 +52,11 @@ export default {
       developer: 'Entwickler',
       visitor: 'Besucher',
     },
+    customAttributeType: {
+      string: 'Zeichenfolge',
+      number: 'Zahl',
+      boolean: 'Wahrheitswert',
+    },
   },
 
   main: {
@@ -61,6 +66,17 @@ export default {
         lightMode: 'Heller Modus',
         language: 'Sprache',
         logout: 'Abmelden',
+      },
+    },
+    dialog: {
+      tab: {
+        customAttributes: {
+          message:
+            'In der folgenden Übersicht sehen Sie die für dieses Artefakt erstellten benutzerdefinierten ' +
+            'Attribute. Falls Sie die entsprechenden Berechtigungen haben, können Sie hier auch neue Attribute ' +
+            'anlegen, bestehende Attribute bearbeiten oder auch Attribute entfernen.',
+          emptyTableMessage: 'Bisher wurden noch keine benutzerdefinierten Attribute erstellt.',
+        },
       },
     },
   },
@@ -179,6 +195,12 @@ export default {
             'Projektmitglieder hinzugefügt werden.',
           emptyTable:
             'Aktuell sind diesem Projekt noch keine zusätzlichen Projektmitglieder zugeordnet.',
+        },
+        customAttributes: {
+          message:
+            'In der folgenden Tabelle sehen Sie alle benutzerdefinierten Attribute für dieses Projekt. Falls Sie ' +
+            'der Projekteigentümer sind, können Sie auch neue Attribute hinzufügen, bestehende Attribute ändern oder ' +
+            'auch Attribute entfernen. Als Projektleiter können Sie den Inhalt der bestehenden Attribute ändern.',
         },
       },
     },

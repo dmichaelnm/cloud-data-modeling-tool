@@ -5,6 +5,7 @@
     :editor-data="editorData"
     :tabs="['members']"
     support-custom-attributes
+    custom-attributes-message-prefix="project.dialog.tab.customAttributes"
     @dialog-resize="(_, height) => (dialogHeight = height)"
   >
     <!-- Project Member Tab Template -->

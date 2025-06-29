@@ -51,10 +51,14 @@
               :label="$t(`${_documentType}.dialog.tab.${tab}.title`)"
             />
             <!-- Custom Attributes Tab Definition -->
-            <q-tab v-if="supportCustomAttributes" :label="$t('label.customAttributes')" />
+            <q-tab
+              v-if="supportCustomAttributes"
+              name="customAttributes"
+              :label="$t('label.customAttributes')"
+            />
           </q-tabs>
           <!-- Tab Panels -->
-          <q-tab-panels v-model="currentTab" animated keep-alive>
+          <q-tab-panels v-model="currentTab" keep-alive>
             <!-- Tab Panel -->
             <q-tab-panel v-for="tab in tabs" :key="tab" :name="tab">
               <div class="q-gutter-y-sm">
@@ -66,7 +70,13 @@
               </div>
             </q-tab-panel>
             <!-- Custom Attributes Tab Panel -->
-            <q-tab-panel v-if="supportCustomAttributes" name="customAttributes"></q-tab-panel>
+            <q-tab-panel v-if="supportCustomAttributes" name="customAttributes">
+              <!-- Custom Attributes Table -->
+              <custom-attributes-table
+                v-model="_editorData.data.customAttributes"
+                :message="`${customAttributesMessagePrefix}.message`"
+              />
+            </q-tab-panel>
           </q-tab-panels>
         </div>
       </div>
@@ -95,6 +105,7 @@ import { TDialogButton } from 'src/scripts/composables/Dialog';
 import * as dc from 'src/scripts/documents/Document';
 import ApplicationDialog from 'components/common/ApplicationDialog.vue';
 import InputValue from 'components/common/InputValue.vue';
+import CustomAttributesTable from 'components/main/CustomAttributesTable.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
@@ -135,6 +146,8 @@ const props = defineProps<{
   tabs: string[];
   // Flag for supporting custom attributes for this document
   supportCustomAttributes?: boolean;
+  // Prefix for special custom attributes messages
+  customAttributesMessagePrefix?: string;
   // Prepare-handler function
   prepareHandler?: () => Promise<void> | void;
 }>();

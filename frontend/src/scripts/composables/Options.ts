@@ -60,3 +60,19 @@ export function useRoleOptions(): () => TSelectOption[] {
     ];
   };
 }
+
+/**
+ * Provides a function that returns an array of options for custom attribute types.
+ *
+ * @return {function(): TSelectOption[]} A function that returns an array of custom attribute type options.
+ */
+export function useCustomAttributeTypeOptions(): () => TSelectOption[] {
+  const common = useCommonComposables();
+  return () => {
+    return [
+      { value: 'string', label: common.i18n.t('options.customAttributeType.string') },
+      { value: 'number', label: common.i18n.t('options.customAttributeType.number') },
+      { value: 'boolean', label: common.i18n.t('options.customAttributeType.boolean') },
+    ];
+  };
+}

@@ -121,6 +121,7 @@ export class ProjectEditorData extends dc.EditorData<IProjectData> {
     };
     // Initialize the project manager
     this.projectManager = { ...this.projectOwner };
+    this.projectManager.role = EProjectRole.Manager;
   }
 
   /**

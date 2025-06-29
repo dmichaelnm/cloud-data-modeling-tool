@@ -52,6 +52,11 @@ export default {
       developer: 'Developer',
       visitor: 'Visitor',
     },
+    customAttributeType: {
+      string: 'String',
+      number: 'Number',
+      boolean: 'Boolean',
+    },
   },
 
   main: {
@@ -61,6 +66,17 @@ export default {
         lightMode: 'Light Mode',
         language: 'Language',
         logout: 'Sign Out',
+      },
+    },
+    dialog: {
+      tab: {
+        customAttributes: {
+          message:
+            'In the following overview, you can see the custom attributes created for this artifact. ' +
+            'If you have the appropriate permissions, you can also create new attributes here, edit existing ' +
+            'attributes, or remove attributes.',
+          emptyTableMessage: 'No custom attributes have been created yet.',
+        },
       },
     },
   },
@@ -177,11 +193,18 @@ export default {
           emptyTable:
             'Currently, no additional project members have been assigned to this project.',
         },
+        customAttributes: {
+          message:
+            'In the following table, you can see all custom attributes for this project. If you are ' +
+            'the project owner, you can also add new attributes, modify existing attributes, or ' +
+            'remove attributes. As a project owner,',
+        },
       },
     },
     error: {
       memberAlreadyAdded: 'This account has already been added as a project member.',
       isProjectOwner: 'This account is already the project owner.',
-      isProjectManager: 'This account is already the project manager.',    },
+      isProjectManager: 'This account is already the project manager.',
+    },
   },
 };
