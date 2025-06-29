@@ -200,6 +200,15 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   }
 
   /**
+   * Retrieves the user ID of the currently authenticated user.
+   *
+   * @return {string | undefined} The user ID of the current user, or undefined if no user is authenticated.
+   */
+  getCurrentUserId(): string | undefined {
+    return fbAuth.currentUser?.uid;
+  }
+
+  /**
    * Fetches and returns a document from Firestore based on the specified type, ID, and optional
    * parent document.
    *

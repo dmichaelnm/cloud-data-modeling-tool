@@ -76,6 +76,11 @@ export default {
             'Attribute. Falls Sie die entsprechenden Berechtigungen haben, können Sie hier auch neue Attribute ' +
             'anlegen, bestehende Attribute bearbeiten oder auch Attribute entfernen.',
           emptyTableMessage: 'Bisher wurden noch keine benutzerdefinierten Attribute erstellt.',
+          label: {
+            key: 'Schlüssel',
+            type: 'Datentyp',
+            value: 'Wert',
+          }
         },
       },
     },
@@ -171,6 +176,8 @@ export default {
     },
     menu: {
       new: 'Neues Projekt',
+      ownProjects: 'Eigene Projekte',
+      memberships: 'Mitgliedschaften',
     },
     dialog: {
       create: {
@@ -195,6 +202,10 @@ export default {
             'Projektmitglieder hinzugefügt werden.',
           emptyTable:
             'Aktuell sind diesem Projekt noch keine zusätzlichen Projektmitglieder zugeordnet.',
+          name: 'Name des Mitglieds',
+          role: 'Rolle im Projekt',
+          active: 'Aktiv',
+          description: 'Beschreibung (optional)',
         },
         customAttributes: {
           message:

@@ -19,14 +19,14 @@
       },
       {
         name: 'name',
-        label: 'Name',
+        label: $t('project.dialog.tab.members.name'),
         align: 'left',
         headerStyle: 'width: 300px',
         field: (row) => row.name,
       },
       {
         name: 'role',
-        label: 'Rolle',
+        label: $t('project.dialog.tab.members.role'),
         align: 'left',
         headerStyle: 'width: 200px',
         inputType: ETableColumnType.Select,
@@ -35,7 +35,7 @@
       },
       {
         name: 'active',
-        label: 'Aktiv',
+        label: $t('project.dialog.tab.members.active'),
         align: 'center',
         headerStyle: 'width: 100px',
         inputType: ETableColumnType.Checkbox,
@@ -43,7 +43,7 @@
       },
       {
         name: 'description',
-        label: 'Beschreibung',
+        label: $t('project.dialog.tab.members.description'),
         align: 'left',
         inputType: ETableColumnType.InputText,
         field: (row) => row.description,

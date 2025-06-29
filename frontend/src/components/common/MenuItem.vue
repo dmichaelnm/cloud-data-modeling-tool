@@ -1,8 +1,10 @@
 <template>
+  <!-- Above Separator -->
+  <q-separator v-if="separator === 'above' || separator === 'both'" />
   <!-- Menu Item -->
   <q-item
-    :clickable="!readonly"
-    v-close-popup="!readonly && !hasSubMenu"
+    :clickable="!caption"
+    v-close-popup="!caption && !hasSubMenu"
     dense
     @click="emits('click')"
   >
@@ -14,7 +16,7 @@
     <!-- Label Section -->
     <q-item-section>
       <!-- Label -->
-      <q-item-label class="menu-item">{{ label }}</q-item-label>
+      <q-item-label :class="`menu-item ${caption ? 'caption' : ''}`">{{ label }}</q-item-label>
     </q-item-section>
     <!-- Submenu Icon Section -->
     <q-item-section side>
@@ -24,6 +26,8 @@
     <!-- Sub Item Slot -->
     <slot />
   </q-item>
+  <!-- Below Separator -->
+  <q-separator v-if="separator === 'below' || separator === 'both'" />
 </template>
 
 <style lang="scss" scoped>
@@ -36,9 +40,21 @@
 .body--dark .menu-item {
   color: $dark-text-normal;
 }
+
+.caption {
+  color: $light-text-label;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.body--dark .caption {
+  color: $dark-text-label;
+}
 </style>
 
 <script setup lang="ts">
+import { TSeparatorPosition } from 'src/scripts/composables/Options';
+
 /**
  * Properties used in this component.
  */
@@ -49,8 +65,10 @@ defineProps<{
   icon?: string | undefined;
   // Options submenu indicator
   hasSubMenu?: boolean;
-  // Read-Only Flag
-  readonly?: boolean;
+  // Caption
+  caption?: boolean;
+  // Separator
+  separator?: TSeparatorPosition;
 }>();
 
 /**

@@ -4,6 +4,7 @@
     v-model="dialogVisible"
     :editor-data="editorData"
     :tabs="['members']"
+    :post-operation-handler="onAfterOperation"
     support-custom-attributes
     custom-attributes-message-prefix="project.dialog.tab.customAttributes"
     @dialog-resize="(_, height) => (dialogHeight = height)"
@@ -55,9 +56,9 @@
 import { computed, ref } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
-import { EDocumentType, IDocument } from 'src/scripts/documents/Document';
-import { IProjectData, ProjectEditorData, EProjectRole } from 'src/scripts/documents/model/Project';
+import { EProjectRole, IProjectData, ProjectEditorData } from 'src/scripts/documents/model/Project';
 import { IAccountData } from 'src/scripts/documents/model/Account';
+import * as dc from 'src/scripts/documents/Document';
 import DocumentDialog from 'components/main/DocumentDialog.vue';
 import SelectAccount from 'components/authentication/SelectAccount.vue';
 import ProjectMemberTable from 'components/project/ProjectMemberTable.vue';
@@ -81,11 +82,11 @@ const dialogVisible = ref(false);
 /**
  * A reference variable used to store the owner of a project.
  */
-const projectOwner = ref<IDocument<IAccountData> | null>(null);
+const projectOwner = ref<dc.IDocument<IAccountData> | null>(null);
 /**
  * A reference variable used to store the manager of a project.
  */
-const projectManager = ref<IDocument<IAccountData> | null>(null);
+const projectManager = ref<dc.IDocument<IAccountData> | null>(null);
 /**
  * A reactive variable that stores the height of this dialog component.
  */
@@ -110,10 +111,10 @@ const _memberTableHeight = computed(() => {
  * @return {Promise<void>} A promise that resolves once the edito has been opened and necessary
  *                         data is loaded.
  */
-async function open(document: IDocument<IProjectData> | null): Promise<void> {
+async function open(document: dc.IDocument<IProjectData> | null): Promise<void> {
   editorData.value = new ProjectEditorData(
-    common.session.accountDocument as IDocument<IAccountData>,
-    EDocumentType.Project,
+    common.session.accountDocument as dc.IDocument<IAccountData>,
+    dc.EDocumentType.Project,
     document,
     undefined,
   );
@@ -121,12 +122,12 @@ async function open(document: IDocument<IProjectData> | null): Promise<void> {
   const provider = getDocumentProvider();
   // Initialize the project owner
   projectOwner.value = await provider.getDocument<IAccountData>(
-    EDocumentType.Account,
+    dc.EDocumentType.Account,
     editorData.value.projectOwner.id,
   );
   // Initialize the project manager
   projectManager.value = await provider.getDocument<IAccountData>(
-    EDocumentType.Account,
+    dc.EDocumentType.Account,
     editorData.value.projectManager.id,
   );
   // Show dialog
@@ -140,11 +141,11 @@ async function open(document: IDocument<IProjectData> | null): Promise<void> {
  *     Pass `null` to remove the current project manager.
  * @return {void} This method does not return a value.
  */
-function setProjectManager(manager: IDocument<IAccountData> | null): void {
+function setProjectManager(manager: dc.IDocument<IAccountData> | null): void {
   if (editorData.value) {
     if (manager) {
       // Set project manager
-      editorData.value.projectOwner = {
+      editorData.value.projectManager = {
         role: EProjectRole.Manager,
         id: manager.id,
         name: manager.data.user.name,
@@ -162,7 +163,7 @@ function setProjectManager(manager: IDocument<IAccountData> | null): void {
  * @param {IDocument<IAccountData>} document - The document representing the account data to validate.
  * @return {string | null} A localized error message if the document is already added as a member, otherwise null.
  */
-function validate(document: IDocument<IAccountData>): string | null {
+function validate(document: dc.IDocument<IAccountData>): string | null {
   if (editorData.value) {
     // Check if not already added as a project member
     if (editorData.value.data.members.some((member) => member.id === document.id)) {
@@ -170,6 +171,23 @@ function validate(document: IDocument<IAccountData>): string | null {
     }
   }
   return null;
+}
+
+/**
+ * Performs actions after a document operation is executed.
+ *
+ * @param {dc.EDocumentOperation} operation - The type of document operation that was performed.
+ * @param {dc.IDocument<dc.IProjectDocumentData>} document - The document affected by the operation.
+ * @return {void} This method does not return anything.
+ */
+function onAfterOperation(
+  operation: dc.EDocumentOperation,
+  document: dc.IDocument<dc.IProjectDocumentData>,
+): void {
+  if (operation === dc.EDocumentOperation.create) {
+    const projectDocument = document as dc.IDocument<IProjectData>;
+    common.session.projects.push(projectDocument);
+  }
 }
 
 /**

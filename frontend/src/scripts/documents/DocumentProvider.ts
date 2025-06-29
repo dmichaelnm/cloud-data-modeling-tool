@@ -163,6 +163,13 @@ export interface IDocumentProvider {
    * @return {void} Does not return a value.
    */
   onAccountStateChanged(callback: (account: Account | null) => void): void;
+
+  /**
+   * Retrieves the ID of the currently authenticated user.
+   *
+   * @return {string | undefined} The user ID if a user is authenticated, or undefined if no user is authenticated.
+   */
+  getCurrentUserId(): string | undefined;
 }
 
 /**

@@ -150,6 +150,11 @@ const props = defineProps<{
   customAttributesMessagePrefix?: string;
   // Prepare-handler function
   prepareHandler?: () => Promise<void> | void;
+  // Post-operation handler function
+  postOperationHandler?: (
+    operation: dc.EDocumentOperation,
+    document: dc.IDocument<dc.IProjectDocumentData>,
+  ) => void;
 }>();
 
 /**
@@ -282,7 +287,9 @@ async function performOperation(): Promise<boolean> {
         // Get document provider
         const provider = getDocumentProvider();
         // Create the document in Firestore
-        await provider.createDocument(dc.EDocumentType.Project, undefined, data);
+        const document = await provider.createDocument(dc.EDocumentType.Project, undefined, data);
+        // Call post operation handler
+        props.postOperationHandler?.(dc.EDocumentOperation.create, document);
       }
       // Process successful
       return true;

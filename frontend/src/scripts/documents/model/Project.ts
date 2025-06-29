@@ -1,6 +1,8 @@
 import * as dc from 'src/scripts/documents/Document';
+import { EDocumentType, IDocument } from 'src/scripts/documents/Document';
 import { IAccountData } from 'src/scripts/documents/model/Account';
 import { ModelObject } from 'src/scripts/documents/ModelObject';
+import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 
 /**
  * Enumeration representing roles within a project.
@@ -78,6 +80,22 @@ export class Project extends ModelObject<IProjectData> {
     return this.document.data.members.find(
       (mbr) => mbr.role === EProjectRole.Manager,
     ) as TProjectMember;
+  }
+
+  /**
+   * Loads and retrieves all project documents that the current user has access to.
+   *
+   * @return {Promise<IDocument<IProjectData>[]>} A promise that resolves to an array of project documents.
+   */
+  static async loadProjects(): Promise<IDocument<IProjectData>[]> {
+    // Get document provider
+    const provider = getDocumentProvider();
+    // Return all project documents with access
+    return await provider.findDocuments<IProjectData>(EDocumentType.Project, undefined, {
+      attribute: 'access',
+      operation: 'array-contains',
+      value: provider.getCurrentUserId(),
+    });
   }
 }
 

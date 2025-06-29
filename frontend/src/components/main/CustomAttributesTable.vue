@@ -5,7 +5,7 @@
     :columns="[
       {
         name: 'key',
-        label: 'Key',
+        label: $t('main.dialog.tab.customAttributes.label.key'),
         align: 'left',
         headerStyle: 'width: 200px',
         inputType: (row) => (row.locked ? cm.ETableColumnType.None : cm.ETableColumnType.InputText),
@@ -13,7 +13,7 @@
       },
       {
         name: 'type',
-        label: 'Type',
+        label: $t('main.dialog.tab.customAttributes.label.type'),
         align: 'left',
         headerStyle: 'width: 200px',
         inputType: (row) => (row.locked ? cm.ETableColumnType.None : cm.ETableColumnType.Select),
@@ -22,7 +22,7 @@
       },
       {
         name: 'value',
-        label: 'Value',
+        label: $t('main.dialog.tab.customAttributes.label.value'),
         align: 'left',
         inputType: (row) =>
           row.locked ? cm.ETableColumnType.None : getInputType(row as TCustomAttribute),

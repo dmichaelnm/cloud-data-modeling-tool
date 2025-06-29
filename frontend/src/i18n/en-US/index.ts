@@ -76,6 +76,11 @@ export default {
             'If you have the appropriate permissions, you can also create new attributes here, edit existing ' +
             'attributes, or remove attributes.',
           emptyTableMessage: 'No custom attributes have been created yet.',
+          label: {
+            key: 'Key',
+            type: 'Datatype',
+            value: 'Value',
+          },
         },
       },
     },
@@ -169,6 +174,8 @@ export default {
     },
     menu: {
       new: 'New Project',
+      ownProjects: 'Own Projects',
+      memberships: 'Memberships',
     },
     dialog: {
       create: {
@@ -192,6 +199,10 @@ export default {
             'managers are separate roles. These cannot also be added additionally as project members.',
           emptyTable:
             'Currently, no additional project members have been assigned to this project.',
+          name: 'Member Name',
+          role: 'Project Role',
+          active: 'Active',
+          description: 'Description (optional)',
         },
         customAttributes: {
           message:
