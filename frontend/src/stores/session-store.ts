@@ -7,12 +7,16 @@ export const useSessionStore = defineStore('session-store', {
   state: () => ({
     account: null as Account | null,
     projects: [] as IDocument<IProjectData>[],
+    activeProject: null as string | null,
   }),
 
   getters: {
     accountDocument(): IDocument<IAccountData> | null {
       return this.account ? (this.account.document as IDocument<IAccountData>) : null;
     },
+    projectDocument(): IDocument<IProjectData> | null {
+      return this.projects.find(project => project.id === this.activeProject) ?? null;
+    }
   },
 
   actions: {

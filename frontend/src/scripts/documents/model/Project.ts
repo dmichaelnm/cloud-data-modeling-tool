@@ -83,6 +83,26 @@ export class Project extends ModelObject<IProjectData> {
   }
 
   /**
+   * Retrieves the current role of the user within the project.
+   *
+   * This method determines the role of the currently logged-in user based on the document's membership data.
+   *
+   * @return {EProjectRole} The role of the current user in the project.
+   */
+  getCurrentRole(): EProjectRole {
+    // Get document provider
+    const provider = getDocumentProvider();
+    // Get current user ID
+    const userId = provider.getCurrentUserId();
+    // Get roles of the user ID
+    const roles = this.document.data.members
+      .filter((mbr) => mbr.id === userId)
+      .map((mbr) => mbr.role);
+    // Return first project tole
+    return roles[0] as EProjectRole;
+  }
+
+  /**
    * Loads and retrieves all project documents that the current user has access to.
    *
    * @return {Promise<IDocument<IProjectData>[]>} A promise that resolves to an array of project documents.

@@ -29,6 +29,8 @@ export interface IAccountData extends IDocumentData {
     active: boolean;
     // Timestamp of the last login
     lastLogin: Date | null;
+    // ID of the last active project
+    lastActiveProject: string | null;
   };
 }
 

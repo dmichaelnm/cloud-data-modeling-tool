@@ -306,8 +306,8 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
       const reference = fs.doc(fbFirestore, path, id);
       await fs.setDoc(reference, data);
     } else {
-      const reference = fs.collection(fbFirestore, path);
-      await fs.addDoc(reference, data);
+      const collection = fs.collection(fbFirestore, path);
+      const reference = await fs.addDoc(collection, data);
       id = reference.id;
     }
     return new FirestoreDocument(
@@ -360,6 +360,7 @@ function createAccountData(
     state: {
       active: false,
       lastLogin: null,
+      lastActiveProject: null
     },
   };
 }

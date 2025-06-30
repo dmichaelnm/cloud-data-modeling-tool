@@ -1,6 +1,6 @@
 <template>
   <!-- Project Dialog -->
-  <project-dialog ref="projectDialog" />
+  <project-dialog ref="projectDialog" @project-created="onProjectCreated"/>
   <!-- Project Label -->
   <div class="text-normal">{{ $t('project.label.active') }}</div>
   <!-- Project Menu DIV -->
@@ -16,7 +16,12 @@
         separator="above"
         caption
       />
-      <menu-item v-for="prj in _ownProjects" :key="prj.id" :label="prj.data.common.name" />
+      <menu-item
+        v-for="prj in _ownProjects"
+        :key="prj.id"
+        :label="prj.data.common.name"
+        @click="emits('projectSelected', prj)"
+      />
       <!-- Memberships -->
       <menu-item
         v-if="_memberships.length > 0"
@@ -24,7 +29,12 @@
         separator="above"
         caption
       />
-      <menu-item v-for="prj in _memberships" :key="prj.id" :label="prj.data.common.name" />
+      <menu-item
+        v-for="prj in _memberships"
+        :key="prj.id"
+        :label="prj.data.common.name"
+        @click="emits('projectSelected', prj)"
+      />
     </q-btn-dropdown>
   </div>
 </template>
@@ -69,8 +79,21 @@ const common = useCommonComposables();
  */
 const projectDialog = ref<InstanceType<typeof ProjectDialog> | null>(null);
 
+/**
+ * Emits events used for component communication.
+ */
+const emits = defineEmits<{
+  // Project selected
+  (event: 'projectSelected', project: IDocument<IProjectData> | null): void;
+}>();
+
+/**
+ * A computed property that determines the label of the currently active project.
+ */
 const _projectLabel = computed(() => {
-  return common.i18n.t('message.noSelection');
+  const projectId = common.session.activeProject;
+  const project = common.session.projects.find((prj) => prj.id === projectId);
+  return project ? project.data.common.name : common.i18n.t('message.noSelection');
 });
 
 /**
@@ -104,5 +127,17 @@ const _memberships = computed(() => {
  */
 function createProject(): void {
   projectDialog.value?.open(null);
+}
+
+/**
+ * Handles the event triggered when a new project is created.
+ * Emits an event to indicate that a project has been selected.
+ *
+ * @param {IDocument<IProjectData>} projectDocument - The document object containing project data.
+ * @return {void} Does not return a value.
+ */
+function onProjectCreated(projectDocument: IDocument<IProjectData>): void {
+  // Emit event for project selection
+  emits('projectSelected', projectDocument);
 }
 </script>

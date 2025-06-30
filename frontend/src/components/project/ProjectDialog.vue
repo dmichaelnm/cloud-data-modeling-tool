@@ -93,6 +93,14 @@ const projectManager = ref<dc.IDocument<IAccountData> | null>(null);
 const dialogHeight = ref(0);
 
 /**
+ * Emits events used for component communication.
+ */
+const emits = defineEmits<{
+  // Project created
+  (event: 'project-created', document: dc.IDocument<IProjectData>): void;
+}>();
+
+/**
  * A computed property that dynamically calculates the height of the member table.
  * The height is determined based on the `dialogHeight` value, reduced by a fixed offset of 317.
  * Logs the calculated height to the console for debugging.
@@ -185,8 +193,11 @@ function onAfterOperation(
   document: dc.IDocument<dc.IProjectDocumentData>,
 ): void {
   if (operation === dc.EDocumentOperation.create) {
+    // Add the new project to the list of projects
     const projectDocument = document as dc.IDocument<IProjectData>;
     common.session.projects.push(projectDocument);
+    // Emit event
+    emits('project-created', projectDocument);
   }
 }
 
