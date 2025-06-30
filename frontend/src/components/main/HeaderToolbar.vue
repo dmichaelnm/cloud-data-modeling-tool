@@ -14,7 +14,9 @@
       <!-- Account Name -->
       <div class="text-normal">{{ _accountName }}</div>
       <!-- Project Role -->
-      <div class="text-disabled text-small">{{ $t(`options.projectRole.${_projectRole}`) }}</div>
+      <div v-if="_projectRole" class="text-disabled text-small">
+        {{ $t(`options.projectRole.${_projectRole}`) }}
+      </div>
     </div>
     <!-- Account Menu -->
     <account-menu />
@@ -43,7 +45,6 @@
 .body--dark #applicationTitle {
   color: $dark-text-label;
 }
-
 </style>
 
 <script setup lang="ts">

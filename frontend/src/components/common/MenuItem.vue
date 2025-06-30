@@ -3,20 +3,24 @@
   <q-separator v-if="separator === 'above' || separator === 'both'" />
   <!-- Menu Item -->
   <q-item
-    :clickable="!caption"
-    v-close-popup="!caption && !hasSubMenu"
+    :clickable="!caption && !disabled"
+    v-close-popup="!caption && !hasSubMenu && !disabled"
     dense
     @click="emits('click')"
   >
     <!-- Icon Section -->
     <q-item-section side>
       <!-- Icon -->
-      <q-icon v-if="icon" :name="icon" size="xs" />
+      <q-icon v-if="icon || showEmptyIcon" :name="icon" size="xs" />
     </q-item-section>
     <!-- Label Section -->
     <q-item-section>
       <!-- Label -->
-      <q-item-label :class="`menu-item ${caption ? 'caption' : ''}`">{{ label }}</q-item-label>
+      <q-item-label
+        :class="`menu-item${disabled ? '-disabled' : ''} ${caption ? 'caption' : ''}`"
+      >
+        {{ label }}
+      </q-item-label>
     </q-item-section>
     <!-- Submenu Icon Section -->
     <q-item-section side>
@@ -39,6 +43,14 @@
 
 .body--dark .menu-item {
   color: $dark-text-normal;
+}
+
+.menu-item-disabled{
+  color: $light-text-disabled;
+}
+
+.body--dark .menu-item-disabled{
+  color: $dark-text-disabled;
 }
 
 .caption {
@@ -69,6 +81,10 @@ defineProps<{
   caption?: boolean;
   // Separator
   separator?: TSeparatorPosition;
+  // Show empty icon
+  showEmptyIcon?: boolean;
+  // Menu item disabled
+  disabled?: boolean;
 }>();
 
 /**

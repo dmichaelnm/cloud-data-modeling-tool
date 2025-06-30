@@ -173,7 +173,9 @@ export default {
       name: 'Project Name',
     },
     menu: {
-      new: 'New Project',
+      new: 'Create New Project',
+      edit: 'Edit Current Project',
+      delete: 'Delete Current Project',
       ownProjects: 'Own Projects',
       memberships: 'Memberships',
     },
@@ -184,6 +186,13 @@ export default {
           'In this dialog, you can create a new project. Please provide a project name and optionally a ' +
           'description. You also have the option to add project members and assign them corresponding roles ' +
           'to define the respective access rights.',
+      },
+      update: {
+        title: 'Edit Project',
+        message:
+          'In this dialog, you can edit the properties of the project as well as manage the project team, ' +
+          'by adding or removing members or adjusting the role of individual members. Furthermore, you have the option ' +
+          "to customize the project's custom attributes.",
       },
       tab: {
         members: {

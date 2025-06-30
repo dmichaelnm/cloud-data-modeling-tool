@@ -80,7 +80,7 @@ export default {
             key: 'Schlüssel',
             type: 'Datentyp',
             value: 'Wert',
-          }
+          },
         },
       },
     },
@@ -175,7 +175,9 @@ export default {
       name: 'Name des Projekts',
     },
     menu: {
-      new: 'Neues Projekt',
+      new: 'Neues Projekt erstellen',
+      edit: 'Aktuelles Projekt bearbeiten',
+      delete: 'Aktuelles Projekt löschen',
       ownProjects: 'Eigene Projekte',
       memberships: 'Mitgliedschaften',
     },
@@ -186,6 +188,13 @@ export default {
           'In diesem Dialog können Sie ein neues Projekt anlegen. Bitte vergeben Sie einen Projektnamen und optional ' +
           'eine Beschreibung. Sie haben außerdem die Möglichkeit, Projektmitglieder hinzuzufügen und diesen ' +
           'entsprechende Rollen zuzuweisen, um die jeweiligen Zugriffsrechte festzulegen.',
+      },
+      update: {
+        title: 'Projekt bearbeiten',
+        message:
+          'In diesem Dialog können Sie die Eigenschaften des Projekts bearbeiten als auch Projektteam verwalten, ' +
+          'indem Sie Mitglieder hinzufügen oder entfernen oder die Rolle einzelner Mitglieder anpassen. Weiterhin ' +
+          'haben Sie die Möglichkeit, die benutzerdefinierten Attribute des Projekts anzupassen.',
       },
       tab: {
         members: {

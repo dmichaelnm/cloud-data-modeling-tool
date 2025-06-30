@@ -1,14 +1,30 @@
 <template>
   <!-- Project Dialog -->
-  <project-dialog ref="projectDialog" @project-created="onProjectCreated"/>
+  <project-dialog ref="projectDialog" @project-created="onProjectCreated" />
   <!-- Project Label -->
   <div class="text-normal">{{ $t('project.label.active') }}</div>
   <!-- Project Menu DIV -->
   <div id="projectMenu">
     <!-- Project Menu Button -->
-    <q-btn-dropdown id="projectDropdown" :label="_projectLabel" flat no-caps>
+    <q-btn-dropdown
+      id="projectDropdown"
+      :label="_projectLabel"
+      flat
+      no-caps
+      menu-anchor="bottom left"
+      menu-self="top left"
+    >
       <!-- New Project Menu Item -->
       <menu-item :label="$t('project.menu.new')" icon="add" @click="createProject" />
+      <!-- Edit Current Project Menu Item -->
+      <menu-item
+        :label="$t('project.menu.edit')"
+        :disabled="!_canEdit"
+        show-empty-icon
+        @click="editCurrentProject"
+      />
+      <!-- Delete Current Project Menu Item -->
+      <menu-item :label="$t('project.menu.delete')" :disabled="!_canDelete" show-empty-icon />
       <!-- Own Projects -->
       <menu-item
         v-if="_ownProjects.length > 0"
@@ -20,6 +36,8 @@
         v-for="prj in _ownProjects"
         :key="prj.id"
         :label="prj.data.common.name"
+        :icon="common.session.activeProject === prj.id ? 'check' : ''"
+        show-empty-icon
         @click="emits('projectSelected', prj)"
       />
       <!-- Memberships -->
@@ -33,6 +51,8 @@
         v-for="prj in _memberships"
         :key="prj.id"
         :label="prj.data.common.name"
+        :icon="common.session.activeProject === prj.id ? 'check' : ''"
+        show-empty-icon
         @click="emits('projectSelected', prj)"
       />
     </q-btn-dropdown>
@@ -64,7 +84,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
-import { IProjectData, Project } from 'src/scripts/documents/model/Project';
+import { EProjectRole, IProjectData, Project } from 'src/scripts/documents/model/Project';
 import { IDocument } from 'src/scripts/documents/Document';
 import MenuItem from 'components/common/MenuItem.vue';
 import ProjectDialog from 'components/project/ProjectDialog.vue';
@@ -91,9 +111,8 @@ const emits = defineEmits<{
  * A computed property that determines the label of the currently active project.
  */
 const _projectLabel = computed(() => {
-  const projectId = common.session.activeProject;
-  const project = common.session.projects.find((prj) => prj.id === projectId);
-  return project ? project.data.common.name : common.i18n.t('message.noSelection');
+  const projectDocument = common.session.projectDocument;
+  return projectDocument ? projectDocument.data.common.name : common.i18n.t('message.noSelection');
 });
 
 /**
@@ -121,12 +140,53 @@ const _memberships = computed(() => {
 });
 
 /**
+ * A computed property that determines whether the current user can edit the active project.
+ */
+const _canEdit = computed(() => {
+  const projectDocument = common.session.projectDocument;
+  if (projectDocument) {
+    const project = new Project(projectDocument);
+    const role = project.getCurrentRole();
+    return role === EProjectRole.Owner || role === EProjectRole.Manager;
+  }
+  return false;
+});
+
+/**
+ * A computed property that determines whether the current user can delete the active project.
+ */
+const _canDelete = computed(() => {
+  const projectDocument = common.session.projectDocument;
+  if (projectDocument) {
+    const project = new Project(projectDocument);
+    const role = project.getCurrentRole();
+    return role === EProjectRole.Owner;
+  }
+  return false;
+});
+
+/**
  * Opens the project creation dialog if available.
  *
  * @return {void} This method does not return any value.
  */
 function createProject(): void {
   projectDialog.value?.open(null);
+}
+
+/**
+ * Edits the currently opened project in the session.
+ * If a project document is currently loaded, it opens the project dialog for editing
+ * with the existing project details preloaded.
+ *
+ * @return {void} This method does not return any value.
+ */
+function editCurrentProject(): void {
+  // Get the current project document
+  const projectDocument = common.session.projectDocument;
+  if (projectDocument) {
+    projectDialog.value?.open(projectDocument);
+  }
 }
 
 /**

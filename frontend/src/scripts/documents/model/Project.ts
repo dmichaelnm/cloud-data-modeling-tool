@@ -148,18 +148,28 @@ export class ProjectEditorData extends dc.EditorData<IProjectData> {
     parent?: dc.IDocument<dc.IProjectDocumentData>,
   ) {
     super(currentAccount, type, document, parent);
-    // Initialize the project owner
-    this.projectOwner = {
-      role: EProjectRole.Owner,
-      id: this.currentAccount.id,
-      name: this.currentAccount.data.user.name,
-      description: null,
-      picture: this.currentAccount.data.user.picture,
-      active: true,
-    };
-    // Initialize the project manager
-    this.projectManager = { ...this.projectOwner };
-    this.projectManager.role = EProjectRole.Manager;
+    if (document) {
+      const project = new Project(document);
+      this.projectOwner = project.getProjectOwner();
+      this.projectManager = project.getProjectManager();
+    } else {
+      this.projectOwner = {
+        role: EProjectRole.Owner,
+        id: currentAccount.data.user.id,
+        name: currentAccount.data.user.name,
+        picture: currentAccount.data.user.picture,
+        description: null,
+        active: true,
+      };
+      this.projectManager = {
+        role: EProjectRole.Manager,
+        id: currentAccount.data.user.id,
+        name: currentAccount.data.user.name,
+        picture: currentAccount.data.user.picture,
+        description: null,
+        active: true,
+      };
+    }
   }
 
   /**
@@ -173,11 +183,12 @@ export class ProjectEditorData extends dc.EditorData<IProjectData> {
   override initData(data: IProjectData): void {
     if (this.document) {
       // Initialize editor data from the project document
-      const project = new Project(this.document);
-      this.projectOwner = project.getProjectOwner();
-      this.projectManager = project.getProjectManager();
       data.access = [...this.document.data.access];
-      data.members = [...this.document.data.members.map((mbr) => ({ ...mbr }))];
+      data.members = [
+        ...this.document.data.members
+          .map((mbr) => ({ ...mbr }))
+          .filter((mbr) => mbr.role !== EProjectRole.Owner && mbr.role !== EProjectRole.Manager),
+      ];
     } else {
       // Initialize editor data with default values
       data.access = [];
