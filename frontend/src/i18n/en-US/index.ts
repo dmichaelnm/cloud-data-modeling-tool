@@ -26,6 +26,8 @@ export default {
   },
 
   message: {
+    alteredByAt: 'altered at {date} by {name}',
+    createdByAt: 'created at {date} by {name}',
     noSelection: 'No selection',
     mandatory: 'This input field must not be empty.',
   },

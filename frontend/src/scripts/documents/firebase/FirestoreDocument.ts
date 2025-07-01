@@ -48,6 +48,14 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
       throw new Error('Invalid firestore document configuration object.');
     }
     this.parent = parent;
+    if (this.data.meta?.created) {
+      const timestamp  = this.data.meta.created.time as unknown as fs.Timestamp;
+      this.data.meta.created.time = timestamp.toDate();
+    }
+    if (this.data.meta?.altered) {
+      const timestamp  = this.data.meta.altered.time as unknown as fs.Timestamp;
+      this.data.meta.altered.time = timestamp.toDate();
+    }
   }
 
   addDocument(document: dc.IDocument<dc.IDocumentData>) {

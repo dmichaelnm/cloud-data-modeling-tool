@@ -31,6 +31,7 @@
               v-model="projectManager"
               :label="$t('options.projectRole.manager')"
               :validation-handler="validate"
+              :read-only="_isProjectManager"
               @update:model-value="setProjectManager"
             />
           </div>
@@ -53,11 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useCommonComposables } from 'src/scripts/composables/Common';
-import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
-import { EProjectRole, IProjectData, ProjectEditorData } from 'src/scripts/documents/model/Project';
-import { IAccountData } from 'src/scripts/documents/model/Account';
+import {computed, ref} from 'vue';
+import {useCommonComposables} from 'src/scripts/composables/Common';
+import {getDocumentProvider} from 'src/scripts/documents/DocumentProvider';
+import {EProjectRole, IProjectData, Project, ProjectEditorData} from 'src/scripts/documents/model/Project';
+import {IAccountData} from 'src/scripts/documents/model/Account';
 import * as dc from 'src/scripts/documents/Document';
 import DocumentDialog from 'components/main/DocumentDialog.vue';
 import SelectAccount from 'components/authentication/SelectAccount.vue';
@@ -109,6 +110,14 @@ const _memberTableHeight = computed(() => {
   const x = dialogHeight.value - 317;
   console.log(x);
   return x;
+});
+
+const _isProjectManager = computed(() => {
+  if (editorData.value?.document) {
+    const project = new Project(editorData.value.document);
+    return project.getCurrentRole() === EProjectRole.Manager;
+  }
+  return false;
 });
 
 /**
@@ -204,5 +213,5 @@ function onAfterOperation(
 /**
  * Defines the methods to be exposed.
  */
-defineExpose({ open });
+defineExpose({open});
 </script>

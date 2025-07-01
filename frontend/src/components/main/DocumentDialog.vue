@@ -12,6 +12,33 @@
     @update:model-value="(val) => (_modelValue = val)"
     @initialize="initDialog"
   >
+    <!-- Message Template -->
+    <template v-slot:messageRow>
+      <!-- Message Column -->
+      <div class="col-8">{{ $t(`${_documentType}.dialog.${_operation}.message`) }}</div>
+      <!-- Meta Information Row -->
+      <div v-if="editorData?.document" class="col-4 text-right text-small text-disabled">
+        <!-- Created -->
+        <div v-if="editorData.document.data.meta">
+          {{
+            $t('message.createdByAt', {
+              date: editorData.document.data.meta.created.time.toLocaleString(common.session.account?.document.data.preferences.language),
+              name: editorData.document.data.meta.created.name
+            })
+          }}
+        </div>
+        <!-- Altered -->
+        <div v-if="editorData.document.data.meta?.altered">
+          {{
+            $t('message.alteredByAt', {
+              date: editorData.document.data.meta.altered.time.toLocaleString(common.session.account?.document.data.preferences.language),
+              name: editorData.document.data.meta.altered.name
+            })
+          }}
+        </div>
+      </div>
+    </template>
+
     <!-- Hidden button to force submit by pressing enter -->
     <button type="submit" style="display: none" />
     <!-- Dialog Content DIV -->
@@ -290,6 +317,22 @@ async function performOperation(): Promise<boolean> {
         const document = await provider.createDocument(dc.EDocumentType.Project, undefined, data);
         // Call post operation handler
         props.postOperationHandler?.(dc.EDocumentOperation.create, document);
+      } else if (_operation.value === dc.EDocumentOperation.update) {
+        // Get the document
+        const document = _editorData.value.document as dc.IDocument<dc.IProjectDocumentData>;
+        // Apply common values
+        document.data.common.name = _editorData.value.data.common.name;
+        document.data.common.description = _editorData.value.data.common.description;
+        // Apply custom attributes
+        document.data.customAttributes = [..._editorData.value.data.customAttributes.map((attr) => {
+          return {
+            ...attr,
+          };
+        })];
+        // Apply document type specific data
+        _editorData.value.updateDocumentData(document.data);
+        // Update the document
+        await document.update();
       }
       // Process successful
       return true;

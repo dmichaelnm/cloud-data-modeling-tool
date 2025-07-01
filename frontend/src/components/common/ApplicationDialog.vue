@@ -15,11 +15,14 @@
         <div class="col dialog-title" :style="`color: ${_color}`">{{ title }}</div>
       </div>
       <!-- Separator -->
-      <q-separator v-if="title" :style="`backgroundColor: ${_color}; height: ${_separatorSize}`" />
+      <q-separator v-if="title" :style="`backgroundColor: ${_color}; height: ${_separatorSize}`"/>
       <!-- Message Row -->
       <div class="row frame-row" v-if="message">
-        <!-- Message Column -->
-        <div class="col">{{ message }}</div>
+        <!-- Message Row Slot -->
+        <slot name="messageRow">
+          <!-- Message Column -->
+          <div class="col">{{ message }}</div>
+        </slot>
       </div>
       <!-- Dialog Content Row -->
       <div class="row frame-row" :style="`height: ${height + 'px' ?? 'auto'}`">

@@ -26,6 +26,8 @@ export default {
   },
 
   message: {
+    alteredByAt: 'geändert am {date} von {name}',
+    createdByAt: 'erstell am {date} von {name}',
     noSelection: 'Keine Auswahl',
     mandatory: 'Dieses Eingabefeld darf nicht leer sein.',
   },

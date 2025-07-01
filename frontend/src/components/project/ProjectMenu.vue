@@ -19,12 +19,12 @@
       <!-- Edit Current Project Menu Item -->
       <menu-item
         :label="$t('project.menu.edit')"
-        :disabled="!_canEdit"
+        v-if="_canEdit"
         show-empty-icon
         @click="editCurrentProject"
       />
       <!-- Delete Current Project Menu Item -->
-      <menu-item :label="$t('project.menu.delete')" :disabled="!_canDelete" show-empty-icon />
+      <menu-item :label="$t('project.menu.delete')" v-if="_canDelete" show-empty-icon />
       <!-- Own Projects -->
       <menu-item
         v-if="_ownProjects.length > 0"
