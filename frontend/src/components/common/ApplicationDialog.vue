@@ -37,10 +37,15 @@
           </q-form>
         </div>
       </div>
-      <!-- Dialog Button Row -->
+      <!-- Bottom Row -->
       <div class="row frame-row">
+        <!-- Left Bottom Column -->
+        <div class="col-6">
+          <!-- Left Bottom Slot -->
+          <slot name="bottomLeft" />
+        </div>
         <!-- Dialog Button Column -->
-        <div class="col text-right q-gutter-x-sm">
+        <div class="col-6 text-right q-gutter-x-sm">
           <!-- Dialog Buttons -->
           <button-label
             v-for="btn of _buttons"

@@ -13,11 +13,9 @@
     @initialize="initDialog"
   >
     <!-- Message Template -->
-    <template v-slot:messageRow>
-      <!-- Message Column -->
-      <div class="col-8">{{ $t(`${_documentType}.dialog.${_operation}.message`) }}</div>
+    <template v-slot:bottomLeft>
       <!-- Meta Information Row -->
-      <div v-if="editorData?.document" class="col-4 text-right text-small text-disabled">
+      <div v-if="editorData?.document" class="text-small text-disabled">
         <!-- Created -->
         <div v-if="editorData.document.data.meta">
           {{
