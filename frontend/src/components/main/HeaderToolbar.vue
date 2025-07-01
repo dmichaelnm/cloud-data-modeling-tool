@@ -12,9 +12,9 @@
     <!-- Account Name -->
     <div class="text-right" style="padding: 0 8px">
       <!-- Account Name -->
-      <div class="text-normal">{{ _accountName }}</div>
+      <div id="accountName">{{ _accountName }}</div>
       <!-- Project Role -->
-      <div v-if="_projectRole" class="text-disabled text-small">
+      <div v-if="_projectRole" id="accountRole">
         {{ $t(`options.projectRole.${_projectRole}`) }}
       </div>
     </div>
@@ -27,23 +27,32 @@
 @import 'src/css/quasar.variables';
 
 .header-toolbar {
-  background-color: $light-header-toolbar-background;
+  background-color: $light-header-background;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
 }
 
 .body--dark .header-toolbar {
-  background-color: $dark-header-toolbar-background;
+  background-color: $dark-header-background;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.9);
 }
 
 #applicationTitle {
-  color: $light-text-label;
+  color: $light-header-text-label;
   font-size: 14pt;
   font-variant: small-caps;
 }
 
 .body--dark #applicationTitle {
   color: $dark-text-label;
+}
+
+#accountName {
+  color: $light-header-text-label;
+}
+
+#accountRole {
+  color: $light-header-text-normal;
+  font-size: 10pt;
 }
 </style>
 

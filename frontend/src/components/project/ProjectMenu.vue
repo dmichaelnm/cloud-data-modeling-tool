@@ -2,7 +2,7 @@
   <!-- Project Dialog -->
   <project-dialog ref="projectDialog" @project-created="onProjectCreated" />
   <!-- Project Label -->
-  <div class="text-normal">{{ $t('project.label.active') }}</div>
+  <div class="text-header-normal">{{ $t('project.label.active') }}</div>
   <!-- Project Menu DIV -->
   <div id="projectMenu">
     <!-- Project Menu Button -->

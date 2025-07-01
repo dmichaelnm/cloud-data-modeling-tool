@@ -73,6 +73,10 @@ body.body--dark {
   font-size: 0.85rem;
 }
 
+.text-header-normal {
+  color: $light-header-text-normal;
+}
+
 .body--dark .text-disabled {
   color: $dark-text-disabled;
 }
