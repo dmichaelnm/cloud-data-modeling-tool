@@ -1,13 +1,8 @@
 <template>
   <!-- Account Menu Button -->
   <q-btn flat round>
-    <!-- Avatar -->
-    <q-avatar id="accountAvatar">
-      <!-- Account Initials -->
-      <span id="accountInitials" v-if="_pictureURL === ''">{{ _accountInitials }}</span>
-      <!-- Profile Image -->
-      <img :src="_pictureURL" alt="Profile Image" v-if="_pictureURL !== ''" />
-    </q-avatar>
+    <!-- Account Profile Picture -->
+    <account-profile :document="common.session.accountDocument" header/>
     <!-- Account Menu -->
     <q-menu anchor="bottom right" self="top right" style="width: 250px">
       <!-- Menu Item List -->
@@ -23,10 +18,10 @@
               <!-- Language Items -->
               <menu-item
                 v-for="lng in languageOptions()"
-                :key="lng.value"
+                :key="lng.value as string"
                 :label="lng.label"
                 :icon="lng.icon"
-                @click="switchLanguage(lng.value)"
+                @click="switchLanguage(lng.value as string)"
               />
             </q-list>
           </q-menu>
@@ -40,33 +35,13 @@
   </q-btn>
 </template>
 
-<style lang="scss" scoped>
-@import 'src/css/quasar.variables';
-
-#accountAvatar {
-  background-color: $light-button-label-background;
-  color: $light-button-label-color;
-}
-
-.body--dark #accountAvatar {
-  background-color: $dark-button-label-background;
-  color: $dark-button-label-color;
-}
-
-#accountInitials {
-  padding-top: 1px;
-  padding-right: 1px;
-  font-size: 12pt;
-}
-
-</style>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import { useLanguageOptions } from 'src/scripts/composables/Options';
 import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
 import MenuItem from 'components/common/MenuItem.vue';
+import AccountProfile from 'components/authentication/AccountProfile.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
@@ -76,36 +51,6 @@ const common = useCommonComposables();
  * Function returning an array of possible languages.
  */
 const languageOptions = useLanguageOptions();
-
-/**
- * A computed property that returns the URL of the user's picture.
- */
-const _pictureURL = computed(() => {
-  // Get the account document
-  const document = common.session.accountDocument;
-  // Return picture URL
-  return document ? (document.data.user.picture ?? '') : '';
-});
-
-/**
- * Computes the initials of the account name based on the user's name data from the account document.
- *
- * This variable uses a computed property to dynamically derive a string with up to the first two uppercase
- * initials of the user's name. If the name is unavailable or the document cannot be accessed, a fallback
- * character '?' is used.
- */
-const _accountInitials = computed(() => {
-  // Get the account document
-  const document = common.session.accountDocument;
-  // Get account name
-  const name = document ? (document.data.user.name ?? '?') : '?';
-  // Splitting the name by spaces
-  const nameParts = name.trim().split(/\s+/);
-  // Get the first letter from each part and combine them
-  const initials = nameParts.map((part) => part[0]?.toUpperCase()).join('');
-  // Return the first to letters
-  return initials.substring(0, Math.min(2, initials.length));
-});
 
 /**
  * A computed property that determines the label for the dark mode toggle
@@ -179,5 +124,4 @@ async function logout(): Promise<void> {
   const provider = getDocumentProvider();
   await provider.logout();
 }
-
 </script>

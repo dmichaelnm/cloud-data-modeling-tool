@@ -35,10 +35,12 @@ $light-text-normal: #505050;
 $light-text-label: #101010;
 $light-text-disabled: #A0A0A0;
 $light-text-highlighted: #0060BF;
-$light-header-toolbar-background: #FFFFFF;
+$light-header-background: #0060BF;
+$light-header-text-normal: #FFFFFF80;
+$light-header-text-label: #FFFFFFFF;
 
 $dark-body-background: #101010;
-$dark-border-normal: #303030;
+$dark-border-normal: #404040;
 $dark-border-highlighted: #40A0FF;
 $dark-button-icon: #40A0FF;
 $dark-button-label-background: #40A0FF;
@@ -46,9 +48,15 @@ $dark-button-label-color: #202020;
 $dark-frame-background: #202020;
 $dark-text-normal: #B0B0B0;
 $dark-text-label: #F0F0F0;
-$dark-text-disabled: #505050;
+$dark-text-disabled: #707070;
 $dark-text-highlighted: #40A0FF;
-$dark-header-toolbar-background: #202020;
+$dark-header-background: #002060;
+$dark-header-text-normal: #FFFFFF80;
+$dark-header-text-label: #FFFFFFFF;
+
+.text-light-text-normal {
+  color: $light-text-normal;
+}
 
 .text-light-border-normal {
   color: $light-border-normal;
@@ -56,6 +64,10 @@ $dark-header-toolbar-background: #202020;
 
 .text-light-border-highlighted {
   color: $light-border-highlighted;
+}
+
+.text-dark-text-normal {
+  color: $dark-text-normal;
 }
 
 .text-dark-border-normal {

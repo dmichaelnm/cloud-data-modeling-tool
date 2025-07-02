@@ -1,10 +1,26 @@
 // app global css in SCSS form
 @import 'quasar.variables';
 
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 2560px) {
+  html {
+    font-size: 16px;
+  }
+}
+
 body {
   background-color: $light-body-background;
   font-family: 'Roboto', sans-serif;
-  font-size: 11pt;
+  font-size: 1rem;
   color: $light-text-normal;
 }
 
@@ -46,7 +62,7 @@ body.body--dark {
 }
 
 .text-field {
-  font-size: 11pt;
+  font-size: 1rem;
 }
 
 .text-disabled {
@@ -54,11 +70,34 @@ body.body--dark {
 }
 
 .text-small {
-  font-size: 10pt;
+  font-size: 0.85rem;
+}
+
+.text-header-normal {
+  color: $light-header-text-normal;
 }
 
 .body--dark .text-disabled {
   color: $dark-text-disabled;
+}
+
+.account-profile {
+  background-color: $light-button-label-background;
+  color: $light-button-label-color;
+}
+
+.body--dark .account-profile {
+  background-color: $dark-button-label-background;
+  color: $dark-button-label-color;
+}
+
+.account-profile-header {
+  background-color: $light-frame-background;
+  color: $light-header-background;
+}
+
+.body--dark .account-profile-header {
+  color: $dark-header-background;
 }
 
 .q-menu {
@@ -104,4 +143,88 @@ body.body--dark {
 
 .body--dark .q-field--highlighted .q-field__label {
   color: $dark-text-highlighted;
+}
+
+.q-tab__label {
+  font-weight: unset;
+}
+
+.q-tab-panels {
+  background-color: transparent;
+}
+
+.q-tab-panel {
+  padding: 16px 0;
+  color: $light-text-normal;
+}
+
+.body--dark .q-tab-panel {
+  color: $dark-text-normal;
+}
+
+.q-table th {
+  font-size: 1rem;
+  color: $light-text-highlighted;
+  border-bottom: 1px solid $light-border-normal;
+}
+
+.q-table--dark .q-table th {
+  color: $dark-text-highlighted;
+  border-bottom: 1px solid $dark-border-normal;
+}
+
+.q-table tbody td {
+  font-size: 1rem;
+}
+
+.q-table--horizontal-separator tbody tr:not(:last-child) > td {
+  border-bottom: 1px solid $light-border-normal;
+}
+
+.body--dark .q-table--horizontal-separator tbody tr:not(:last-child) > td {
+  border-bottom: 1px solid $dark-border-normal;
+}
+
+thead tr:first-child th {
+  background-color: $light-frame-background;
+  position: sticky;
+  z-index: 1;
+}
+
+.body--dark thead tr:first-child th {
+  background-color: $dark-frame-background;
+}
+
+thead tr:first-child th {
+  top: 0;
+}
+
+.q-table__bottom {
+  border-top: 1px solid $light-border-normal;
+}
+
+.q-table--dark .q-table__bottom {
+  border-top: 1px solid $dark-border-normal;
+}
+
+
+.q-checkbox--dark .q-checkbox__inner--truthy {
+  color: $dark-text-highlighted;
+}
+
+.q-radio .q-radio__inner--truthy {
+  color: $light-text-highlighted;
+}
+
+.q-radio--dark .q-radio__inner--truthy {
+  color: $dark-text-highlighted;
+}
+
+.scrollbar  {
+  scrollbar-width: thin;
+  scrollbar-color: $light-border-normal $light-frame-background;
+}
+
+.body--dark .scrollbar  {
+  scrollbar-color: $dark-border-normal $dark-frame-background;
 }

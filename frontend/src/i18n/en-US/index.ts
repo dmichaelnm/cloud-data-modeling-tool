@@ -9,12 +9,16 @@ export default {
     back: 'Back',
     cancel: 'Cancel',
     close: 'Close',
+    create: 'Create',
     ok: 'Okay',
+    save: 'Save',
   },
 
   label: {
     email: 'Email Address',
+    customAttributes: 'Custom Attributes',
     details: 'Details',
+    description: 'Description (optional)',
     firstname: 'First Name',
     lastname: 'Last Name',
     password: 'Password',
@@ -22,6 +26,8 @@ export default {
   },
 
   message: {
+    alteredByAt: 'altered at {date} by {name}',
+    createdByAt: 'created at {date} by {name}',
     noSelection: 'No selection',
     mandatory: 'This input field must not be empty.',
   },
@@ -40,6 +46,19 @@ export default {
       enUS: 'English (US)',
       deDE: 'German (DE)',
     },
+    projectRole: {
+      owner: 'Project Owner',
+      manager: 'Project Manager',
+      maintainer: 'Maintainer',
+      deployer: 'Deployer',
+      developer: 'Developer',
+      visitor: 'Visitor',
+    },
+    customAttributeType: {
+      string: 'String',
+      number: 'Number',
+      boolean: 'Boolean',
+    },
   },
 
   main: {
@@ -49,6 +68,22 @@ export default {
         lightMode: 'Light Mode',
         language: 'Language',
         logout: 'Sign Out',
+      },
+    },
+    dialog: {
+      tab: {
+        customAttributes: {
+          message:
+            'In the following overview, you can see the custom attributes created for this artifact. ' +
+            'If you have the appropriate permissions, you can also create new attributes here, edit existing ' +
+            'attributes, or remove attributes.',
+          emptyTableMessage: 'No custom attributes have been created yet.',
+          label: {
+            key: 'Key',
+            type: 'Datatype',
+            value: 'Value',
+          },
+        },
       },
     },
   },
@@ -115,6 +150,12 @@ export default {
             'the password has been sent to this address. Please also check your spam folder if necessary.',
         },
       },
+      selection: {
+        title: 'Select Account',
+        message:
+          'Enter the email address of the account you want to select here. Please note that this ' +
+          'account must already be registered for it to be selectable.',
+      },
     },
     error: {
       passwordConfirmationFailed: 'The password confirmation failed.',
@@ -124,6 +165,81 @@ export default {
       invalidCredentials: 'The provided credentials are invalid.',
       accountLocked: 'Your account is currently not active.',
       tooManyRequests: 'Too many failed attempts. Please wait a few minutes before trying again.',
+      unknownEmail: 'This email address is unknown or invalid.',
+    },
+  },
+
+  project: {
+    label: {
+      active: 'Active Project',
+      name: 'Project Name',
+    },
+    menu: {
+      new: 'Create New Project',
+      edit: 'Edit Current Project',
+      delete: 'Delete Current Project',
+      view: 'View Current Project',
+      ownProjects: 'Own Projects',
+      memberships: 'Memberships',
+    },
+    dialog: {
+      create: {
+        title: 'New Project',
+        message:
+          'In this dialog, you can create a new project. Please provide a project name and optionally a ' +
+          'description. You also have the option to add project members and assign them corresponding roles ' +
+          'to define the respective access rights.',
+      },
+      update: {
+        title: 'Edit Project',
+        message:
+          'In this dialog, you can edit the properties of the project as well as manage the project team, ' +
+          'by adding or removing members or adjusting the role of individual members. Furthermore, you have the option ' +
+          "to customize the project's custom attributes.",
+      },
+      read: {
+        title: 'View Project',
+        message:
+          'Here you can see the properties of the project and all employees assigned to the project. However, due to ' +
+          'your role, you do not have permissions to make changes to the project.'
+      },
+      delete: {
+        title: 'Delete Project?',
+        message:
+          'Do you really want to delete this project "{name}"? All artifacts within the project will be ' +
+          'irretrievably lost. This action cannot be undone.',
+      },
+      tab: {
+        members: {
+          title: 'Project Members',
+          message:
+            'Here you can manage your project team. You can explicitly assign a project manager here, ' +
+            'who essentially has the same rights as you as the project owner, with the exception that they ' +
+            'cannot delete the project. Furthermore, you can add or remove members to your project and assign ' +
+            'a specific role to each member.',
+          messageMemberTable:
+            'In the following table, you can add or remove project members and assign them corresponding roles. ' +
+            'The roles determine the permissions that the members have within this project. Project owners and project ' +
+            'managers are separate roles. These cannot also be added additionally as project members.',
+          emptyTable:
+            'Currently, no additional project members have been assigned to this project.',
+          name: 'Member Name',
+          role: 'Project Role',
+          active: 'Active',
+          description: 'Description (optional)',
+        },
+        customAttributes: {
+          message:
+            'In the following table, you can see all custom attributes for this project. If you are ' +
+            'the project owner, you can also add new attributes, modify existing attributes, or ' +
+            'remove attributes. As a project owner,',
+        },
+      },
+    },
+    error: {
+      memberAlreadyAdded: 'This account has already been added as a project member.',
+      isProjectOwner: 'This account is already the project owner.',
+      isProjectManager: 'This account is already the project manager.',
     },
   },
 };

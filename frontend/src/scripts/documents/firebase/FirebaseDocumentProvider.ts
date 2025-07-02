@@ -25,24 +25,34 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   onAccountStateChanged(callback: (account: ac.Account | null) => void): void {
     au.onAuthStateChanged(fbAuth, (user) => {
       if (user != null) {
-        // Get the account document
-        this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
-          .then(async (document) => {
-            // Check if the document exists and has an active account state
-            if (document && document.data.state.active) {
-              // Update name, picture and login state
-              document.data.user.name = user.displayName as string;
-              document.data.user.picture = user.photoURL;
-              document.data.state.lastLogin = new Date();
-              await document.update();
-              // Create the account object
-              const account = new ac.Account(document);
-              // Invoke callback function
-              callback(account);
-            } else {
-              // No account document
-              callback(null);
-            }
+        // Reload the user object to get fresh values from Firebase
+        user
+          .reload()
+          .then(() => {
+            // Get the account document
+            this.getDocument<ac.IAccountData>(dc.EDocumentType.Account, user.uid)
+              .then(async (document) => {
+                // Check if the document exists and has an active account state
+                if (document && document.data.state.active) {
+                  // Update name, picture and login state
+                  document.data.user.name = user.displayName as string;
+                  document.data.user.picture = user.photoURL;
+                  document.data.state.lastLogin = new Date();
+                  await document.update();
+                  // Create the account object
+                  const account = new ac.Account(document);
+                  // Invoke callback function
+                  callback(account);
+                } else {
+                  // No account document
+                  callback(null);
+                }
+              })
+              .catch((error: unknown) => {
+                // Unexpected error, no account document
+                console.error(error);
+                callback(null);
+              });
           })
           .catch((error: unknown) => {
             // Unexpected error, no account document
@@ -190,6 +200,15 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
   }
 
   /**
+   * Retrieves the user ID of the currently authenticated user.
+   *
+   * @return {string | undefined} The user ID of the current user, or undefined if no user is authenticated.
+   */
+  getCurrentUserId(): string | undefined {
+    return fbAuth.currentUser?.uid;
+  }
+
+  /**
    * Fetches and returns a document from Firestore based on the specified type, ID, and optional
    * parent document.
    *
@@ -212,6 +231,45 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
       return new FirestoreDocument<D>({ snapshot: snapshot }, parent);
     }
     return null;
+  }
+
+  /**
+   * Finds and retrieves documents from a Firestore collection based on the specified type, parent document,
+   * and optional filter conditions.
+   *
+   * @param {dc.EDocumentType} type - The type of document to query from the Firestore collection.
+   * @param {dc.IDocument<dc.IDocumentData> | undefined} parent - The parent document, which determines the Firestore
+   *        path for the query. If undefined, the query is executed at the root collection.
+   * @param {...dp.TFilterCondition[]} filter - A list of filter conditions to apply to the query. Each filter includes
+   *        an attribute, operation, and value.
+   * @return {Promise<dc.IDocument<D>[]>} A promise that resolves to an array of documents of the specified type.
+   */
+  async findDocuments<D extends dc.IDocumentData>(
+    type: dc.EDocumentType,
+    parent: dc.IDocument<dc.IDocumentData> | undefined,
+    ...filter: dp.TFilterCondition[]
+  ): Promise<dc.IDocument<D>[]> {
+    // Create Firebase query constraints
+    const queryConstrains: fs.QueryConstraint[] = filter.map((cond) => {
+      return fs.where(cond.attribute, cond.operation, cond.value);
+    });
+    // Get the path to the collection
+    const path = getFirestorePath(type, parent);
+    // Get the collection
+    const collection = fs.collection(fbFirestore, path);
+    // Create the query
+    const query = fs.query(collection, ...queryConstrains);
+    // Execute query
+    const snapshots = await fs.getDocs(query);
+    // Create result array
+    const documents: dc.IDocument<D>[] = [];
+    // Iterate over all documents
+    for (const snapshot of snapshots.docs) {
+      // Create the document instance and push it to the result array
+      documents.push(new FirestoreDocument<D>({ snapshot: snapshot }, parent));
+    }
+    // Return the array
+    return documents;
   }
 
   /**
@@ -248,8 +306,8 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
       const reference = fs.doc(fbFirestore, path, id);
       await fs.setDoc(reference, data);
     } else {
-      const reference = fs.collection(fbFirestore, path);
-      await fs.addDoc(reference, data);
+      const collection = fs.collection(fbFirestore, path);
+      const reference = await fs.addDoc(collection, data);
       id = reference.id;
     }
     return new FirestoreDocument(
@@ -302,6 +360,7 @@ function createAccountData(
     state: {
       active: false,
       lastLogin: null,
+      lastActiveProject: null
     },
   };
 }
