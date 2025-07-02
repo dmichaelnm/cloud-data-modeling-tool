@@ -196,6 +196,12 @@ export default {
           'by adding or removing members or adjusting the role of individual members. Furthermore, you have the option ' +
           "to customize the project's custom attributes.",
       },
+      delete: {
+        title: 'Delete Project?',
+        message:
+          'Do you really want to delete this project "{name}"? All artifacts within the project will be ' +
+          'irretrievably lost. This action cannot be undone.',
+      },
       tab: {
         members: {
           title: 'Project Members',

@@ -198,6 +198,12 @@ export default {
           'indem Sie Mitglieder hinzufügen oder entfernen oder die Rolle einzelner Mitglieder anpassen. Weiterhin ' +
           'haben Sie die Möglichkeit, die benutzerdefinierten Attribute des Projekts anzupassen.',
       },
+      delete: {
+        title: 'Projekt löschen?',
+        message:
+          'Soll dieses Projekt "{name}" wirklich gelöscht werden. Alle Artefakte innerhalb des Projekte gehen ' +
+          'unwiderruflich verloren. Diese Aktion kann nicht mehr rückgängig gemacht werden.',
+      },
       tab: {
         members: {
           title: 'Projektmitglieder',

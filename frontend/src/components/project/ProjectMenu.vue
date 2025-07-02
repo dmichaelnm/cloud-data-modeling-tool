@@ -1,4 +1,6 @@
 <template>
+  <!-- Message Dialog -->
+  <message-dialog v-model="messageDialogOptions.visibility"/>
   <!-- Project Dialog -->
   <project-dialog ref="projectDialog" @project-created="onProjectCreated" />
   <!-- Project Label -->
@@ -15,7 +17,7 @@
       menu-self="top left"
     >
       <!-- New Project Menu Item -->
-      <menu-item :label="$t('project.menu.new')" icon="add" @click="createProject" />
+      <menu-item :label="$t('project.menu.new')" icon="add" @click="createProject"/>
       <!-- Edit Current Project Menu Item -->
       <menu-item
         :label="$t('project.menu.edit')"
@@ -24,7 +26,8 @@
         @click="editCurrentProject"
       />
       <!-- Delete Current Project Menu Item -->
-      <menu-item :label="$t('project.menu.delete')" v-if="_canDelete" show-empty-icon />
+      <menu-item :label="$t('project.menu.delete')" v-if="_canDelete" show-empty-icon
+                 @click="onConfirmProjectDeletion"/>
       <!-- Own Projects -->
       <menu-item
         v-if="_ownProjects.length > 0"
@@ -82,17 +85,27 @@
 </style>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useCommonComposables } from 'src/scripts/composables/Common';
-import { EProjectRole, IProjectData, Project } from 'src/scripts/documents/model/Project';
-import { IDocument } from 'src/scripts/documents/Document';
+import {computed, ref} from 'vue';
+import {useCommonComposables, useRunAsync} from 'src/scripts/composables/Common';
+import {EProjectRole, IProjectData, Project} from 'src/scripts/documents/model/Project';
+import {IDocument} from 'src/scripts/documents/Document';
 import MenuItem from 'components/common/MenuItem.vue';
 import ProjectDialog from 'components/project/ProjectDialog.vue';
+import {messageDialogOptions, useConfirmationDialog} from "src/scripts/composables/Dialog";
+import MessageDialog from "components/common/MessageDialog.vue";
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
  */
 const common = useCommonComposables();
+/**
+ * Function for executing asynchronous tasks.
+ */
+const runAsync = useRunAsync();
+/**
+ * Function to show a confirmation dialog.
+ */
+const confirmationDialog = useConfirmationDialog();
 
 /**
  * Ref variable for managing the reference to the ProjectDialog instance.
@@ -199,5 +212,40 @@ function editCurrentProject(): void {
 function onProjectCreated(projectDocument: IDocument<IProjectData>): void {
   // Emit event for project selection
   emits('projectSelected', projectDocument);
+}
+
+/**
+ * Handles the confirmation and later deletion of a project document.
+ *
+ * This method displays a confirmation dialog to the user when they attempt to delete a project.
+ * If the user confirms the deletion, the project document is deleted, the project is removed
+ * from the project list, and another project is activated.
+ *
+ * @return {void} Does not return a value.
+ */
+function onConfirmProjectDeletion(): void {
+  // Get the current project document
+  const projectDocument = common.session.projectDocument;
+  confirmationDialog(
+    common.i18n.t('project.dialog.delete.title'),
+    common.i18n.t('project.dialog.delete.message', {name: projectDocument?.data.common.name}),
+    undefined,
+    async (value) => {
+      // Check user confirmation
+      if (value === 'ok') {
+        await runAsync(async () => {
+          // Delete project document
+          await projectDocument?.delete();
+          // Remove the project from the project list
+          const index = common.session.projects.findIndex((prj) => prj.id === projectDocument?.id);
+          if (index > -1) {
+            common.session.projects.splice(index, 1);
+          }
+          // Force to activate another project
+          emits('projectSelected', null);
+        });
+      }
+    }
+  )
 }
 </script>
