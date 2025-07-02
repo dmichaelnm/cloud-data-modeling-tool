@@ -31,7 +31,7 @@
           wrap-cells
         >
           <!-- Template Selection Marker Column -->
-          <template v-slot:body-cell-_selection="props">
+          <template v-slot:body-cell-_selection="props" v-if="!readOnly">
             <!-- Table Cell -->
             <q-td :props="props">
               <!-- Selection Radio Button -->
@@ -59,7 +59,8 @@
                   <!-- Read Only Icon -->
                   <q-icon
                     v-if="readOnly"
-                    :name="`check_box_${props.value ? '' : '_outline_blank'}`"
+                    :name="`o_check_box${props.value ? '' : '_outline_blank'}`"
+                    size="sm"
                   />
                   <!-- Checkbox -->
                   <q-checkbox
@@ -129,9 +130,9 @@
       <!-- Table Buttons Column -->
       <div class="col">
         <!-- Add Row Button -->
-        <button-icon v-if="addRowHandler" icon="add" @click="onAddRow" />
+        <button-icon v-if="addRowHandler && !readOnly" icon="add" @click="onAddRow" />
         <!-- Remove Row Button -->
-        <button-icon v-if="removable && selectedRowIndex >= 0" icon="remove" @click="onRemoveRow" />
+        <button-icon v-if="removable && selectedRowIndex >= 0 && !readOnly" icon="remove" @click="onRemoveRow" />
       </div>
     </div>
   </div>
@@ -205,7 +206,7 @@ const props = defineProps<{
   // Rows are removable
   removable?: boolean;
   // Table is read-only
-  readOnly?: boolean;
+  readOnly?: boolean | undefined;
   // Rows per page (0: all rows)
   rowsPerPage?: number;
 }>();

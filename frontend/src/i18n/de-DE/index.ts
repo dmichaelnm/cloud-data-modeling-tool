@@ -180,6 +180,7 @@ export default {
       new: 'Neues Projekt erstellen',
       edit: 'Aktuelles Projekt bearbeiten',
       delete: 'Aktuelles Projekt löschen',
+      view: 'Aktuelles Projekt ansehen',
       ownProjects: 'Eigene Projekte',
       memberships: 'Mitgliedschaften',
     },
@@ -197,6 +198,12 @@ export default {
           'In diesem Dialog können Sie die Eigenschaften des Projekts bearbeiten als auch Projektteam verwalten, ' +
           'indem Sie Mitglieder hinzufügen oder entfernen oder die Rolle einzelner Mitglieder anpassen. Weiterhin ' +
           'haben Sie die Möglichkeit, die benutzerdefinierten Attribute des Projekts anzupassen.',
+      },
+      read: {
+        title: 'Projekt ansehen',
+        message:
+          'Hier sehen Sie die Eigenschaften des Projekts sowie alle dem Projekt zugeordneten Mitarbeiter. Aufgrund ' +
+          'Ihrer Rolle haben Sie jedoch keine Berechtigungen, Änderungen am Projekt vorzunehmen.'
       },
       delete: {
         title: 'Projekt löschen?',

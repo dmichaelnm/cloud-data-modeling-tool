@@ -1,6 +1,6 @@
 <template>
   <!-- Avatar -->
-  <q-avatar class="account-profile" :size="size">
+  <q-avatar :class="`account-profile${header ? '-header' : ''}`" :size="size">
     <!-- Profile Picture -->
     <img v-if="_profilePicture" :src="_profilePicture" alt="Profile Picture" referrerpolicy="no-referrer"/>
     <!-- Initials -->
@@ -26,6 +26,8 @@ const props = defineProps<{
   accountName?: string;
   // Optional Size
   size?: TSize;
+  // Header
+  header?: boolean;
 }>();
 
 /**

@@ -11,6 +11,7 @@
     :error="!!errorMessage && errorMessage !== ''"
     :error-message="errorMessage"
     :hide-bottom-space="hideBottomSpace"
+    :readonly="readOnly"
     lazy-rules="ondemand"
     input-class="text-label text-field"
     spellcheck="false"
@@ -57,6 +58,8 @@ const props = defineProps<{
   errorMessage?: string;
   // Hide the bottom space
   hideBottomSpace?: boolean;
+  // Read-only flag
+  readOnly?: boolean | undefined;
 }>();
 
 /**

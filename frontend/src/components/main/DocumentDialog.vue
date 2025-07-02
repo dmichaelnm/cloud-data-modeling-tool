@@ -3,8 +3,8 @@
   <application-dialog
     ref="applicationDialog"
     :model-value="_modelValue"
-    :title="$t(`${_documentType}.dialog.${_operation}.title`)"
-    :message="$t(`${_documentType}.dialog.${_operation}.message`)"
+    :title="$t(`${_documentType}.dialog.${operation}.title`)"
+    :message="$t(`${_documentType}.dialog.${operation}.message`)"
     :buttons="_dialogButtons"
     :width="_dialogWith"
     :height="_dialogHeight"
@@ -49,6 +49,7 @@
           <input-value
             v-model="_editorData.data.common.name"
             :label="$t(`${_documentType}.label.name`)"
+            :read-only="operation === dc.EDocumentOperation.read"
             mandatory
             auto-focus
           />
@@ -59,6 +60,7 @@
           <input-value
             v-model="_editorData.data.common.description"
             :label="$t('label.description')"
+            :read-only="operation === dc.EDocumentOperation.read"
           />
         </div>
       </div>
@@ -100,6 +102,7 @@
               <custom-attributes-table
                 v-model="_editorData.data.customAttributes"
                 :message="`${customAttributesMessagePrefix}.message`"
+                :read-only="operation === dc.EDocumentOperation.read"
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -180,6 +183,8 @@ const props = defineProps<{
     operation: dc.EDocumentOperation,
     document: dc.IDocument<dc.IProjectDocumentData>,
   ) => void;
+  // Document operation
+  operation: dc.EDocumentOperation;
 }>();
 
 /**
@@ -227,24 +232,13 @@ const _editorData = computed(() => props.editorData as dc.EditorData<dc.IProject
 const _documentType = computed(() => props.editorData?.type ?? dc.EDocumentType.Project);
 
 /**
- * A computed property that determines the current document operation
- * based on the presence of the `document` property in `editorData`.
- * If `editorData.document` exists, the operation will be set to
- * `EDocumentOperation.update`. Otherwise, it defaults to
- * `EDocumentOperation.create`.
- */
-const _operation = computed(() =>
-  props.editorData?.document ? dc.EDocumentOperation.update : dc.EDocumentOperation.create,
-);
-
-/**
  * A computed property that generates an array of dialog button configurations
  * based on the current operation type.
  * The generated buttons are designed to align with the specific document operation
  * being performed (e.g., create, update, or default behavior).
  */
 const _dialogButtons = computed<TDialogButton[]>(() => {
-  switch (_operation.value) {
+  switch (props.operation) {
     case dc.EDocumentOperation.create:
       return [
         {
@@ -292,7 +286,7 @@ async function performOperation(): Promise<boolean> {
     (await runAsync<boolean>(async () => {
       // Prepare editor data
       await props.prepareHandler?.();
-      if (_operation.value === dc.EDocumentOperation.create) {
+      if (props.operation === dc.EDocumentOperation.create) {
         // Create data object
         const data: dc.IProjectDocumentData = {
           common: {
@@ -315,7 +309,7 @@ async function performOperation(): Promise<boolean> {
         const document = await provider.createDocument(dc.EDocumentType.Project, undefined, data);
         // Call post operation handler
         props.postOperationHandler?.(dc.EDocumentOperation.create, document);
-      } else if (_operation.value === dc.EDocumentOperation.update) {
+      } else if (props.operation === dc.EDocumentOperation.update) {
         // Get the document
         const document = _editorData.value.document as dc.IDocument<dc.IProjectDocumentData>;
         // Apply common values

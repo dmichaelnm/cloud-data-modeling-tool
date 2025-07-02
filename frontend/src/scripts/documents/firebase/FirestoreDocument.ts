@@ -49,12 +49,16 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
     }
     this.parent = parent;
     if (this.data.meta?.created) {
-      const timestamp  = this.data.meta.created.time as unknown as fs.Timestamp;
-      this.data.meta.created.time = timestamp.toDate();
+      const timestamp = this.data.meta.created.time as unknown as fs.Timestamp;
+      if (timestamp.toDate) {
+        this.data.meta.created.time = timestamp.toDate();
+      }
     }
     if (this.data.meta?.altered) {
-      const timestamp  = this.data.meta.altered.time as unknown as fs.Timestamp;
-      this.data.meta.altered.time = timestamp.toDate();
+      const timestamp = this.data.meta.altered.time as unknown as fs.Timestamp;
+      if (timestamp.toDate) {
+        this.data.meta.altered.time = timestamp.toDate();
+      }
     }
   }
 

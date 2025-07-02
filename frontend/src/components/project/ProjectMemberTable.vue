@@ -9,6 +9,7 @@
   <application-table
     v-model="_modelValue.data.members"
     :height="height"
+    :read-only="readOnly"
     :columns="[
       {
         name: 'avatar',
@@ -110,6 +111,8 @@ const props = defineProps<{
   modelValue: ProjectEditorData;
   // Height
   height: number;
+  // Read-only flag
+  readOnly?: boolean;
 }>();
 
 /**

@@ -34,6 +34,7 @@
     :height="200"
     :add-row-handler="onAddRow"
     :validation-handler="validate"
+    :read-only="readOnly"
     selectable
     removable
   ></application-table>
@@ -64,6 +65,8 @@ const props = defineProps<{
   modelValue: TCustomAttribute[];
   // Optional specific message
   message?: string;
+  // Read-only flag
+  readOnly?: boolean | undefined;
 }>();
 
 /**

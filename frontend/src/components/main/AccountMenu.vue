@@ -2,7 +2,7 @@
   <!-- Account Menu Button -->
   <q-btn flat round>
     <!-- Account Profile Picture -->
-    <account-profile :document="common.session.accountDocument" />
+    <account-profile :document="common.session.accountDocument" header/>
     <!-- Account Menu -->
     <q-menu anchor="bottom right" self="top right" style="width: 250px">
       <!-- Menu Item List -->

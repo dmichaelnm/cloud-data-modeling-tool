@@ -23,11 +23,14 @@
         :label="$t('project.menu.edit')"
         v-if="_canEdit"
         show-empty-icon
-        @click="editCurrentProject"
+        @click="openCurrentProject(EDocumentOperation.update)"
       />
       <!-- Delete Current Project Menu Item -->
       <menu-item :label="$t('project.menu.delete')" v-if="_canDelete" show-empty-icon
                  @click="onConfirmProjectDeletion"/>
+      <!-- View Current Project Menu Item -->
+      <menu-item :label="$t('project.menu.view')" v-if="!_canEdit" show-empty-icon
+                 @click="openCurrentProject(EDocumentOperation.read)"/>
       <!-- Own Projects -->
       <menu-item
         v-if="_ownProjects.length > 0"
@@ -88,7 +91,7 @@
 import {computed, ref} from 'vue';
 import {useCommonComposables, useRunAsync} from 'src/scripts/composables/Common';
 import {EProjectRole, IProjectData, Project} from 'src/scripts/documents/model/Project';
-import {IDocument} from 'src/scripts/documents/Document';
+import {EDocumentOperation, IDocument} from 'src/scripts/documents/Document';
 import MenuItem from 'components/common/MenuItem.vue';
 import ProjectDialog from 'components/project/ProjectDialog.vue';
 import {messageDialogOptions, useConfirmationDialog} from "src/scripts/composables/Dialog";
@@ -184,21 +187,20 @@ const _canDelete = computed(() => {
  * @return {void} This method does not return any value.
  */
 function createProject(): void {
-  projectDialog.value?.open(null);
+  projectDialog.value?.open(null, EDocumentOperation.create);
 }
 
 /**
- * Edits the currently opened project in the session.
- * If a project document is currently loaded, it opens the project dialog for editing
- * with the existing project details preloaded.
+ * Opens the current project document within the application.
  *
- * @return {void} This method does not return any value.
+ * @param {EDocumentOperation} operation - The operation to perform on the current project document.
+ * @return {void} Does not return a value.
  */
-function editCurrentProject(): void {
+function openCurrentProject(operation: EDocumentOperation): void {
   // Get the current project document
   const projectDocument = common.session.projectDocument;
   if (projectDocument) {
-    projectDialog.value?.open(projectDocument);
+    projectDialog.value?.open(projectDocument, operation);
   }
 }
 

@@ -178,6 +178,7 @@ export default {
       new: 'Create New Project',
       edit: 'Edit Current Project',
       delete: 'Delete Current Project',
+      view: 'View Current Project',
       ownProjects: 'Own Projects',
       memberships: 'Memberships',
     },
@@ -195,6 +196,12 @@ export default {
           'In this dialog, you can edit the properties of the project as well as manage the project team, ' +
           'by adding or removing members or adjusting the role of individual members. Furthermore, you have the option ' +
           "to customize the project's custom attributes.",
+      },
+      read: {
+        title: 'View Project',
+        message:
+          'Here you can see the properties of the project and all employees assigned to the project. However, due to ' +
+          'your role, you do not have permissions to make changes to the project.'
       },
       delete: {
         title: 'Delete Project?',

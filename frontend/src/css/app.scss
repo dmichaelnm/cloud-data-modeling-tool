@@ -91,6 +91,15 @@ body.body--dark {
   color: $dark-button-label-color;
 }
 
+.account-profile-header {
+  background-color: $light-frame-background;
+  color: $light-header-background;
+}
+
+.body--dark .account-profile-header {
+  color: $dark-header-background;
+}
+
 .q-menu {
   border-radius: 4px;
   background-color: $light-frame-background;

@@ -5,6 +5,7 @@
     :editor-data="editorData"
     :tabs="['members']"
     :post-operation-handler="onAfterOperation"
+    :operation="dialogOperation"
     support-custom-attributes
     custom-attributes-message-prefix="project.dialog.tab.customAttributes"
     @dialog-resize="(_, height) => (dialogHeight = height)"
@@ -31,7 +32,7 @@
               v-model="projectManager"
               :label="$t('options.projectRole.manager')"
               :validation-handler="validate"
-              :read-only="_isProjectManager"
+              :read-only="_isProjectManager || dialogOperation === EDocumentOperation.read"
               @update:model-value="setProjectManager"
             />
           </div>
@@ -45,6 +46,7 @@
               v-if="editorData"
               v-model="editorData"
               :height="_memberTableHeight"
+              :read-only="dialogOperation === EDocumentOperation.read"
             />
           </div>
         </div>
@@ -63,6 +65,7 @@ import * as dc from 'src/scripts/documents/Document';
 import DocumentDialog from 'components/main/DocumentDialog.vue';
 import SelectAccount from 'components/authentication/SelectAccount.vue';
 import ProjectMemberTable from 'components/project/ProjectMemberTable.vue';
+import {EDocumentOperation} from "src/scripts/documents/Document";
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
@@ -79,7 +82,10 @@ const editorData = ref<ProjectEditorData>();
  * A reactive reference representing the visibility state of this dialog.
  */
 const dialogVisible = ref(false);
-
+/**
+ * A reactive variable that determines if a dialog should be in read-only mode.
+ */
+const dialogOperation = ref(EDocumentOperation.read);
 /**
  * A reference variable used to store the owner of a project.
  */
@@ -112,6 +118,10 @@ const _memberTableHeight = computed(() => {
   return x;
 });
 
+/**
+ * A computed property that determines whether the current user holds the role of a
+ * Project Manager in the context of the provided document data.
+ */
 const _isProjectManager = computed(() => {
   if (editorData.value?.document) {
     const project = new Project(editorData.value.document);
@@ -121,14 +131,14 @@ const _isProjectManager = computed(() => {
 });
 
 /**
- * Opens the project editor dialog.
+ * Opens a document and initializes the necessary data for the editor,
+ * including the project owner, project manager, and dialog settings.
  *
- * @param {IDocument<IProjectData> | null} document The project document to be opened, or null if a
- *        new project is created.
- * @return {Promise<void>} A promise that resolves once the edito has been opened and necessary
- *                         data is loaded.
+ * @param {dc.IDocument<IProjectData> | null} document - The document to open, or null if no document is provided.
+ * @param {dc.EDocumentOperation} operation - The operation to perform, such as viewing or editing the document.
+ * @return {Promise<void>} A Promise that resolves when the dialog and required data have been fully initialized.
  */
-async function open(document: dc.IDocument<IProjectData> | null): Promise<void> {
+async function open(document: dc.IDocument<IProjectData> | null, operation: dc.EDocumentOperation): Promise<void> {
   editorData.value = new ProjectEditorData(
     common.session.accountDocument as dc.IDocument<IAccountData>,
     dc.EDocumentType.Project,
@@ -147,6 +157,8 @@ async function open(document: dc.IDocument<IProjectData> | null): Promise<void> 
     dc.EDocumentType.Account,
     editorData.value.projectManager.id,
   );
+  // Set the operation of the project dialog
+  dialogOperation.value = operation
   // Show dialog
   dialogVisible.value = true;
 }
