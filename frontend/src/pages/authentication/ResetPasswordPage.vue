@@ -90,15 +90,16 @@ onBeforeMount(() => {
 });
 
 /**
- * Initiates a password reset process by sending a request to the document provider and handling the result.
+ * Resets the password for the user associated with the provided email.
+ * Initiates a password reset request through the document provider and processes the result or error accordingly.
  *
- * @return {void} This method does not return any value.
+ * @return {Promise<void>} A promise that resolves when the reset operation completes successfully or errors have been handled.
  */
-function reset(): void {
+async function reset(): Promise<void> {
   // Reset errors
   resetError();
   // Start the reset password request task
-  runAsync(
+  await runAsync(
     // Perform the reset password request task
     async () => {
       // Get document provider

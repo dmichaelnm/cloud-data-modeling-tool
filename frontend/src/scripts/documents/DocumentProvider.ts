@@ -13,6 +13,30 @@ export type TAccountRegisterResult = {
 };
 
 /**
+ * Represents a filter condition used for querying data.
+ *
+ * This type defines the structure of a single condition used
+ * to filter results based on a specific attribute, an operation,
+ * and a value. The operation determines the type of comparison
+ * applied between the attribute and the value.
+ */
+export type TFilterCondition = {
+  attribute: string;
+  operation:
+    | '=='
+    | '!='
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'array-contains'
+    | 'array-contains-any'
+    | 'in'
+    | 'not-in';
+  value: unknown;
+};
+
+/**
  * Provides an interface for managing documents and user accounts. This includes creating, retrieving documents,
  * and handling user registration and authentication.
  */
@@ -47,6 +71,21 @@ export interface IDocumentProvider {
     id: string,
     parent?: dc.IDocument<dc.IDocumentData>,
   ): Promise<dc.IDocument<D> | null>;
+
+  /**
+   * Finds and retrieves a list of documents of the specified type that match the given conditions.
+   *
+   * @param {dc.EDocumentType} type The type of the documents to search for.
+   * @param {dc.IDocument<dc.IDocumentData> | undefined} parent The parent document under which the search is performed,
+   *        or undefined if no parent is specified.
+   * @param {...TFilterCondition[]} conditions The filtering conditions to apply during the search.
+   * @return {Promise<dc.IDocument<D>[]>} A promise that resolves to an array of documents matching the specified criteria.
+   */
+  findDocuments<D extends dc.IDocumentData>(
+    type: dc.EDocumentType,
+    parent: dc.IDocument<dc.IDocumentData> | undefined,
+    ...conditions: TFilterCondition[]
+  ): Promise<dc.IDocument<D>[]>;
 
   /**
    * Registers a new user account using the provided email and password.
@@ -124,6 +163,13 @@ export interface IDocumentProvider {
    * @return {void} Does not return a value.
    */
   onAccountStateChanged(callback: (account: Account | null) => void): void;
+
+  /**
+   * Retrieves the ID of the currently authenticated user.
+   *
+   * @return {string | undefined} The user ID if a user is authenticated, or undefined if no user is authenticated.
+   */
+  getCurrentUserId(): string | undefined;
 }
 
 /**

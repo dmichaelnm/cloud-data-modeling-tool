@@ -1,10 +1,29 @@
 import { useRouter } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useMessageDialog } from 'src/scripts/composables/Dialog';
 import { DocumentError } from 'src/scripts/documents/DocumentError';
 import { FirebaseError } from 'firebase/app';
 import { useSessionStore } from 'stores/session-store';
+import { TSelectOption } from 'src/scripts/composables/Options';
+
+export enum ETableColumnType {
+  None = 'none',
+  InputText = 'inputText',
+  InputNumber = 'inputNumber',
+  Select = 'select',
+  Checkbox = 'checkbox',
+}
+
+export type TTableColumn = QTableColumn & {
+  hide?: ((row: Record<string, any>) => boolean) | boolean;
+  icon?: ((row: Record<string, any>) => string) | string;
+  inputType?: ((row: Record<string, any>) => ETableColumnType) | ETableColumnType;
+  options?: TSelectOption[];
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+};
+
+export type TSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Provides common composables used across the application.
@@ -44,47 +63,57 @@ export function useDetermineErrorCode(): (error: unknown) => string | undefined 
 }
 
 /**
- * Provides a utility function to handle asynchronous tasks with error and result handling,
- * while managing loading states and displaying error dialogs for unhandled errors.
+ * Provides a utility function to execute asynchronous tasks with error handling,
+ * loading state management, and optional callbacks for error and result handling.
  *
- * @return {function} A function that accepts an asynchronous task, an error handler,
- * and a result handler. The task is executed with loading state management. Any unhandled
- * errors are processed and displayed in an error dialog, if applicable.
+ * @return {Function} A function that takes an async task,
+ * optional error callback, and optional result callback.
+ * The returned function executes the task, showing a loading indicator,
+ * and handles errors or results appropriately. Returns a boolean or a Promise
+ * resolving to a boolean indicating task success or failure.
  */
-export function useRunAsync(): (
-  task: () => Promise<unknown>,
+export function useRunAsync(): <R>(
+  task: () => Promise<R>,
   onError?: (error: unknown) => boolean,
-  onResult?: (result: unknown) => void | Promise<void>,
-) => void {
+  onResult?: (result: R) => void | Promise<void>,
+) => Promise<R | undefined> {
+  // Get the necessary composable functions
   const common = useCommonComposables();
   const messageDialog = useMessageDialog();
-  return (task, onError, onResult) => {
+  // Return the function
+  return async (task, onError, onResult) => {
+    // Lock screen
     common.quasar.loading.show();
-    task()
-      .then(async (result) => {
-        await onResult?.(result);
-      })
-      .catch((error) => {
-        console.error(error);
-        if (!(onError?.(error) ?? false)) {
-          // Get the detailed error message
-          const details =
-            error instanceof Error
-              ? error.message
-              : typeof error === 'string'
-                ? error
-                : (error.toString() as string);
-          // Show error dialog
-          messageDialog(
-            'error',
-            common.i18n.t('dialog.unexpectedError.title'),
-            common.i18n.t('dialog.unexpectedError.message'),
-            details,
-          );
-        }
-      })
-      .finally(() => {
-        common.quasar.loading.hide();
-      });
+    try {
+      // Run the asynchronous task
+      const result = await task();
+      // Call the result-handler function
+      await onResult?.(result);
+      // Return the result
+      return result;
+    } catch (error: unknown) {
+      // Log the error in the console
+      console.error(error);
+      // Call the error-handler function and check if the error was processed by the handler
+      if (!(onError?.(error) ?? false)) {
+        // Get the detailed error message
+        const details =
+          error instanceof Error
+            ? error.message
+            : typeof error === 'string'
+              ? error
+              : 'Unknown error message.';
+        // Show error dialog
+        messageDialog(
+          'error',
+          common.i18n.t('dialog.unexpectedError.title'),
+          common.i18n.t('dialog.unexpectedError.message'),
+          details,
+        );
+      }
+    } finally {
+      // Unlock screen
+      common.quasar.loading.hide();
+    }
   };
 }

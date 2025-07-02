@@ -9,6 +9,7 @@ export type TDialogButton = {
   label: string;
   color?: string | undefined;
   appearance?: 'push' | 'link' | undefined;
+  submit?: boolean;
 };
 
 /**
@@ -115,7 +116,7 @@ export function useConfirmationDialog(): (
   title: string,
   message: string,
   details?: string,
-  closeHandler?: (value: string) => void,
+  closeHandler?: (value: string) => Promise<void> | void,
 ) => void {
   const common = useCommonComposables();
   return (title, message, details, closeHandler) => {

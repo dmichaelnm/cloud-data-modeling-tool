@@ -164,13 +164,13 @@ const confirmPassword = ref('');
 const confirmPasswordError = ref('');
 
 /**
- * Handles the user registration process by validating the provided input
- * and communicating with the backend to register an account. Displays
- * relevant error messages or success dialogs based on the outcome.
+ * Handles the user registration process, including validation of password confirmation,
+ * registration with the document provider, and error handling.
  *
- * @return {void} This method does not return any value.
+ * @return {Promise<void>} A promise that resolves when the registration process completes,
+ * or rejects if an error occurs during the process.
  */
-function register(): void {
+async function register(): Promise<void> {
   // Reset all former error messages
   resetError();
   // Check the password confirmation
@@ -179,7 +179,7 @@ function register(): void {
     return;
   }
   // Starts the registration process
-  runAsync(
+  await runAsync<dp.TAccountRegisterResult>(
     // Perform the registration process
     async () => {
       // Get document provider
@@ -196,24 +196,21 @@ function register(): void {
     // Process errors
     (error: unknown) => processError(error),
     // Process result
-    (result: unknown) => {
-      processSuccess(result);
-    },
+    (result: dp.TAccountRegisterResult) => processSuccess(result),
   );
 }
 
 /**
- * Registers a user account using Google authentication.
- * This method handles resetting error states, initiating the registration process,
- * managing asynchronous operations, and processing both success and error outcomes.
+ * Initiates the user registration process using Google credentials.
+ * This function resets previous errors, starts the registration flow, and handles the success or failure of the operation.
  *
- * @return {void} Does not return a value.
+ * @return {Promise<void>} A promise that resolves when the registration process is completed.
  */
-function registerGoogle(): void {
+async function registerGoogle(): Promise<void> {
   // Reset error messages
   resetError();
   // Start the registration process
-  runAsync(
+  await runAsync<dp.TAccountRegisterResult>(
     // Perform the registration process
     async () => {
       // Get document provider
@@ -227,9 +224,7 @@ function registerGoogle(): void {
     // Process error
     (error: unknown) => processError(error),
     // Process result
-    (result: unknown) => {
-      processSuccess(result);
-    },
+    (result: dp.TAccountRegisterResult) => processSuccess(result),
   );
 }
 
@@ -241,15 +236,13 @@ function registerGoogle(): void {
  *                           conforming to the structure of `dp.TAccountRegisterResult`.
  * @return {void} No return value.
  */
-function processSuccess(result: unknown): void {
-  const registerResult = result as dp.TAccountRegisterResult;
-  console.debug('Register result:', registerResult);
-  if (registerResult) {
+function processSuccess(result: dp.TAccountRegisterResult): void {
+  if (result) {
     // Update the email cookie with the current email address
-    common.quasar.cookies.set('email', registerResult.account.document.data.user.email, {
+    common.quasar.cookies.set('email', result.account.document.data.user.email, {
       expires: 28,
     });
-    if (registerResult.created) {
+    if (result.created) {
       // Show success dialog
       messageDialog(
         'success',

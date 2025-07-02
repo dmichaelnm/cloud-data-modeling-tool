@@ -90,7 +90,6 @@ import SelectValue from 'components/common/SelectValue.vue';
  * Function returning the most common composables like "router", "quasar", "i18n".
  */
 const common = useCommonComposables();
-
 /**
  * Function returning an array of possible languages.
  */
@@ -169,6 +168,9 @@ function switchLanguage(): void {
 function getDefaultLanguageCode(): string {
   const options = languageOptions();
   const option = options.find((opt) => opt.value === navigator.language);
-  return option?.value ?? 'en-US';
+  if (option?.value) {
+    return option.value as string;
+  }
+  return 'en-US';
 }
 </script>
