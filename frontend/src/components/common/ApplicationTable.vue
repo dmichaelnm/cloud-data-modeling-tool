@@ -155,14 +155,18 @@
         <!-- Move Down -->
         <button-icon
           v-if="sortable && !readOnly"
-          :class="selectedRowIndex > _modelValue.length - 2 ? 'invisible' : ''"
+          :class="
+            selectedRowIndex === -1 || selectedRowIndex > _modelValue.length - 2 ? 'invisible' : ''
+          "
           icon="keyboard_arrow_down"
           @click="onMoveDown"
         />
         <!-- Move To Bottom -->
         <button-icon
           v-if="sortable && !readOnly"
-          :class="selectedRowIndex > _modelValue.length - 3 ? 'invisible' : ''"
+          :class="
+            selectedRowIndex === -1 || selectedRowIndex > _modelValue.length - 3 ? 'invisible' : ''
+          "
           icon="keyboard_double_arrow_down"
           @click="onMoveToBottom"
         />
