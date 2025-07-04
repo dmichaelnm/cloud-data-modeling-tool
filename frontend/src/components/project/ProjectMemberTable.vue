@@ -55,6 +55,7 @@
     :add-row-handler="addRow"
     selectable
     removable
+    sortable
   >
     <!-- Template for member avatar -->
     <template v-slot:body-cell-avatar="{ props }">
