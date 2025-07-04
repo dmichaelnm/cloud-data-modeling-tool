@@ -329,8 +329,8 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
  * @return {string} The Firestore path as a string.
  */
 function getFirestorePath(type: dc.EDocumentType, parent?: dc.IDocument<dc.IDocumentData>): string {
-  const fsParent = parent as FirestoreDocument<dc.IDocumentData>;
-  return fsParent ? `${fsParent.path}/${type}` : `${type}`;
+  const fsParent = parent as FirestoreDocument<dc.IDocumentData> | undefined;
+  return fsParent ? `${fsParent.path}/${fsParent.id}/${type}` : `${type}`;
 }
 
 /**

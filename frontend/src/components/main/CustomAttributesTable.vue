@@ -31,12 +31,13 @@
     ]"
     :message="_message"
     :empty-table-message="$t('main.dialog.tab.customAttributes.emptyTableMessage')"
-    :height="200"
+    :height="height"
     :add-row-handler="onAddRow"
     :validation-handler="validate"
     :read-only="readOnly"
     selectable
     removable
+    sortable
   ></application-table>
 </template>
 
@@ -67,6 +68,8 @@ const props = defineProps<{
   message?: string;
   // Read-only flag
   readOnly?: boolean | undefined;
+  // Height of the table
+  height: number;
 }>();
 
 /**

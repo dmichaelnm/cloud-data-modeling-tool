@@ -20,8 +20,10 @@
         <div v-if="editorData.document.data.meta">
           {{
             $t('message.createdByAt', {
-              date: editorData.document.data.meta.created.time.toLocaleString(common.session.account?.document.data.preferences.language),
-              name: editorData.document.data.meta.created.name
+              date: editorData.document.data.meta.created.time.toLocaleString(
+                common.session.account?.document.data.preferences.language,
+              ),
+              name: editorData.document.data.meta.created.name,
             })
           }}
         </div>
@@ -29,8 +31,10 @@
         <div v-if="editorData.document.data.meta?.altered">
           {{
             $t('message.alteredByAt', {
-              date: editorData.document.data.meta.altered.time.toLocaleString(common.session.account?.document.data.preferences.language),
-              name: editorData.document.data.meta.altered.name
+              date: editorData.document.data.meta.altered.time.toLocaleString(
+                common.session.account?.document.data.preferences.language,
+              ),
+              name: editorData.document.data.meta.altered.name,
             })
           }}
         </div>
@@ -64,8 +68,18 @@
           />
         </div>
       </div>
+      <!-- Single Tab Row -->
+      <div class="row" v-if="_isSingleTab">
+        <!-- Single Tab Column -->
+        <div class="col q-col-gutter-y-sm">
+          <!-- Single Tab Message -->
+          <div>{{ $t(`${_documentType}.dialog.tab.${tabs[0]}.message`) }}</div>
+          <!-- Single Tab Slot -->
+          <slot :name="`tab-${tabs[0]}`" />
+        </div>
+      </div>
       <!-- Tab View Row -->
-      <div class="row">
+      <div class="row" v-if="!_isSingleTab">
         <!-- Tab View Column -->
         <div class="col">
           <!-- Tab Definitions -->
@@ -103,6 +117,7 @@
                 v-model="_editorData.data.customAttributes"
                 :message="`${customAttributesMessagePrefix}.message`"
                 :read-only="operation === dc.EDocumentOperation.read"
+                :height="_customAttributesTableHeight"
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -220,6 +235,12 @@ const _dialogHeight = computed(() => {
 });
 
 /**
+ * A computed property that calculates the height of the custom attributes table.
+ * The height is derived by subtracting a fixed value (250) from the dialog height.
+ */
+const _customAttributesTableHeight = computed(() => _dialogHeight.value - 250);
+
+/**
  * A computed property representing the editor data associated with the current component.
  * This property retrieves and casts the `editorData` from the component's props
  * to a specific type `dc.EditorData<dc.IProjectDocumentData>`.
@@ -230,6 +251,13 @@ const _editorData = computed(() => props.editorData as dc.EditorData<dc.IProject
  * Represents the computed type of the document based on the editor's data.
  */
 const _documentType = computed(() => props.editorData?.type ?? dc.EDocumentType.Project);
+
+/**
+ * A computed property that determines if there is only a single tab present.
+ * It evaluates the length of the `tabs` array in the given `props` object.
+ * Returns `true` if the length of `tabs` is exactly 1, otherwise `false`.
+ */
+const _isSingleTab = computed(() => props.tabs.length === 1 && !props.supportCustomAttributes);
 
 /**
  * A computed property that generates an array of dialog button configurations
@@ -281,6 +309,14 @@ function initDialog(): void {
   currentTab.value = props.tabs.length > 0 ? (props.tabs[0] as string) : '';
 }
 
+/**
+ * Performs a specific operation such as creating or updating a document based on the provided editor data and operation type.
+ *
+ * The method handles the preparation, data transformation, and interaction with the document provider to create or update documents.
+ * Additionally, it invokes the appropriate post-operation handler if defined.
+ *
+ * @return {Promise<boolean>} A promise that resolves to true if the operation was successful or false if it failed.
+ */
 async function performOperation(): Promise<boolean> {
   return (
     (await runAsync<boolean>(async () => {
@@ -306,7 +342,13 @@ async function performOperation(): Promise<boolean> {
         // Get document provider
         const provider = getDocumentProvider();
         // Create the document in Firestore
-        const document = await provider.createDocument(dc.EDocumentType.Project, undefined, data);
+        const document = await provider.createDocument(
+          _editorData.value.type,
+          undefined,
+          data,
+          _editorData.value.parent,
+        );
+        console.debug(document);
         // Call post operation handler
         props.postOperationHandler?.(dc.EDocumentOperation.create, document);
       } else if (props.operation === dc.EDocumentOperation.update) {
@@ -316,11 +358,13 @@ async function performOperation(): Promise<boolean> {
         document.data.common.name = _editorData.value.data.common.name;
         document.data.common.description = _editorData.value.data.common.description;
         // Apply custom attributes
-        document.data.customAttributes = [..._editorData.value.data.customAttributes.map((attr) => {
-          return {
-            ...attr,
-          };
-        })];
+        document.data.customAttributes = [
+          ..._editorData.value.data.customAttributes.map((attr) => {
+            return {
+              ...attr,
+            };
+          }),
+        ];
         // Apply document type specific data
         _editorData.value.updateDocumentData(document.data);
         // Update the document

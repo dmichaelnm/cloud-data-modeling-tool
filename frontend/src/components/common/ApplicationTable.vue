@@ -20,7 +20,7 @@
           :rows="_modelValue"
           :columns="_columns"
           :style="`max-height: ${height}px`"
-          :pagination="{ rowsPerPage: rowsPerPage ?? 0}"
+          :pagination="{ rowsPerPage: rowsPerPage ?? 0 }"
           :hide-pagination="!rowsPerPage"
           :rows-per-page-options="[]"
           :pagination-label="(f, e, t) => f + ' - ' + e + ' / ' + t"
@@ -132,7 +132,40 @@
         <!-- Add Row Button -->
         <button-icon v-if="addRowHandler && !readOnly" icon="add" @click="onAddRow" />
         <!-- Remove Row Button -->
-        <button-icon v-if="removable && selectedRowIndex >= 0 && !readOnly" icon="remove" @click="onRemoveRow" />
+        <button-icon
+          v-if="removable && !readOnly"
+          :class="selectedRowIndex < 0 ? 'invisible' : ''"
+          icon="remove"
+          @click="onRemoveRow"
+        />
+        <!-- Move To Top Button -->
+        <button-icon
+          v-if="sortable && !readOnly"
+          :class="selectedRowIndex < 2 ? 'invisible' : ''"
+          icon="keyboard_double_arrow_up"
+          @click="onMoveToTop"
+        />
+        <!-- Move Up -->
+        <button-icon
+          v-if="sortable && !readOnly"
+          :class="selectedRowIndex < 1 ? 'invisible' : ''"
+          icon="keyboard_arrow_up"
+          @click="onMoveUp"
+        />
+        <!-- Move Down -->
+        <button-icon
+          v-if="sortable && !readOnly"
+          :class="selectedRowIndex > _modelValue.length - 2 ? 'invisible' : ''"
+          icon="keyboard_arrow_down"
+          @click="onMoveDown"
+        />
+        <!-- Move To Bottom -->
+        <button-icon
+          v-if="sortable && !readOnly"
+          :class="selectedRowIndex > _modelValue.length - 3 ? 'invisible' : ''"
+          icon="keyboard_double_arrow_down"
+          @click="onMoveToBottom"
+        />
       </div>
     </div>
   </div>
@@ -205,6 +238,8 @@ const props = defineProps<{
   selectable?: boolean;
   // Rows are removable
   removable?: boolean;
+  // Rows are sortable;
+  sortable?: boolean;
   // Table is read-only
   readOnly?: boolean | undefined;
   // Rows per page (0: all rows)
@@ -500,6 +535,81 @@ function onRemoveRow(): void {
       selectedRowIndex.value = _modelValue.value.length - 1;
     }
   }
+}
+
+/**
+ * Moves the currently selected row to the top of the list.
+ * The rows above the selected row are shifted down by one position.
+ *
+ * @return {void} This function does not return a value.
+ */
+function onMoveToTop(): void {
+  // Remember the row to be moved
+  const row = _modelValue.value[selectedRowIndex.value];
+  // Move all rows above one position down
+  for (let i = selectedRowIndex.value; i > 0; i--) {
+    _modelValue.value[i] = _modelValue.value[i - 1] as Record<string, any>;
+  }
+  // Set the top row
+  _modelValue.value[0] = row as Record<string, any>;
+  // Set the newly selected row Index
+  selectedRowIndex.value = 0;
+}
+
+/**
+ * Moves the currently selected row one position up in the model's data structure.
+ * Updates the row order and adjusts the selected row index accordingly.
+ *
+ * @return {void} No return value.
+ */
+function onMoveUp(): void {
+  // Get the selected row index
+  const index = selectedRowIndex.value;
+  // Remember the row to be moved
+  const row = _modelValue.value[index];
+  // Move the above row to the current position
+  _modelValue.value[index] = _modelValue.value[index - 1] as Record<string, any>;
+  // Set the above position to the remembered row
+  _modelValue.value[index - 1] = row as Record<string, any>;
+  // Set the newly selected row Index
+  selectedRowIndex.value = index - 1;
+}
+
+/**
+ * Moves the currently selected row down by one position in the data model.
+ * Updates the data model and adjusts the selected row index accordingly.
+ *
+ * @return {void} Does not return a value.
+ */
+function onMoveDown(): void {
+  // Get the selected row index
+  const index = selectedRowIndex.value;
+  // Remember the row to be moved
+  const row = _modelValue.value[index];
+  // Move the below row to the current position
+  _modelValue.value[index] = _modelValue.value[index + 1] as Record<string, any>;
+  // Set the below position to the remembered row
+  _modelValue.value[index + 1] = row as Record<string, any>;
+  // Set the newly selected row Index
+  selectedRowIndex.value = index + 1;
+}
+
+/**
+ * Moves the currently selected row to the bottom of the data set while shifting other rows upwards.
+ *
+ * @return {void} This method does not return a value.
+ */
+function onMoveToBottom(): void {
+  // Remember the row to be moved
+  const row = _modelValue.value[selectedRowIndex.value];
+  // Move all rows below one position up
+  for (let i = selectedRowIndex.value; i < _modelValue.value.length - 1; i++) {
+    _modelValue.value[i] = _modelValue.value[i + 1] as Record<string, any>;
+  }
+  // Set the bottom row
+  _modelValue.value[_modelValue.value.length - 1] = row as Record<string, any>;
+  // Set the newly selected row Index
+  selectedRowIndex.value = _modelValue.value.length - 1;
 }
 
 /**

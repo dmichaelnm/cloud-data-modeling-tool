@@ -1,6 +1,6 @@
 <template>
   <!-- Message Dialog -->
-  <message-dialog v-model="messageDialogOptions.visibility"/>
+  <message-dialog v-model="messageDialogOptions.visibility" />
   <!-- Project Dialog -->
   <project-dialog ref="projectDialog" @project-created="onProjectCreated" />
   <!-- Project Label -->
@@ -17,7 +17,7 @@
       menu-self="top left"
     >
       <!-- New Project Menu Item -->
-      <menu-item :label="$t('project.menu.new')" icon="add" @click="createProject"/>
+      <menu-item :label="$t('project.menu.new')" icon="add" @click="createProject" />
       <!-- Edit Current Project Menu Item -->
       <menu-item
         :label="$t('project.menu.edit')"
@@ -26,11 +26,19 @@
         @click="openCurrentProject(EDocumentOperation.update)"
       />
       <!-- Delete Current Project Menu Item -->
-      <menu-item :label="$t('project.menu.delete')" v-if="_canDelete" show-empty-icon
-                 @click="onConfirmProjectDeletion"/>
+      <menu-item
+        :label="$t('project.menu.delete')"
+        v-if="_canDelete"
+        show-empty-icon
+        @click="onConfirmProjectDeletion"
+      />
       <!-- View Current Project Menu Item -->
-      <menu-item :label="$t('project.menu.view')" v-if="!_canEdit" show-empty-icon
-                 @click="openCurrentProject(EDocumentOperation.read)"/>
+      <menu-item
+        :label="$t('project.menu.view')"
+        v-if="!_canEdit && common.session.projects.length > 0"
+        show-empty-icon
+        @click="openCurrentProject(EDocumentOperation.read)"
+      />
       <!-- Own Projects -->
       <menu-item
         v-if="_ownProjects.length > 0"
@@ -88,14 +96,14 @@
 </style>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue';
-import {useCommonComposables, useRunAsync} from 'src/scripts/composables/Common';
-import {EProjectRole, IProjectData, Project} from 'src/scripts/documents/model/Project';
-import {EDocumentOperation, IDocument} from 'src/scripts/documents/Document';
+import { computed, ref } from 'vue';
+import { useCommonComposables, useRunAsync } from 'src/scripts/composables/Common';
+import { EProjectRole, IProjectData, Project } from 'src/scripts/documents/model/Project';
+import { EDocumentOperation, IDocument } from 'src/scripts/documents/Document';
+import { messageDialogOptions, useConfirmationDialog } from 'src/scripts/composables/Dialog';
 import MenuItem from 'components/common/MenuItem.vue';
 import ProjectDialog from 'components/project/ProjectDialog.vue';
-import {messageDialogOptions, useConfirmationDialog} from "src/scripts/composables/Dialog";
-import MessageDialog from "components/common/MessageDialog.vue";
+import MessageDialog from 'components/common/MessageDialog.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".
@@ -230,7 +238,7 @@ function onConfirmProjectDeletion(): void {
   const projectDocument = common.session.projectDocument;
   confirmationDialog(
     common.i18n.t('project.dialog.delete.title'),
-    common.i18n.t('project.dialog.delete.message', {name: projectDocument?.data.common.name}),
+    common.i18n.t('project.dialog.delete.message', { name: projectDocument?.data.common.name }),
     undefined,
     async (value) => {
       // Check user confirmation
@@ -247,7 +255,7 @@ function onConfirmProjectDeletion(): void {
           emits('projectSelected', null);
         });
       }
-    }
-  )
+    },
+  );
 }
 </script>
