@@ -43,4 +43,4 @@ jobs:
 
       - name: Remove files
         run: |
-          rm backend/"google-application-credentials.json
+          rm backend/google-application-credentials.json
