@@ -38,7 +38,7 @@ jobs:
       - name: Deploy Firebase Functions
         run: |
           cd backend
-          firebase deploy --only functions --non-interactive --project ${{vars.PROJECT_ID}}
+          firebase deploy --only functions --non-interactive --force --project ${{vars.PROJECT_ID}}
           cd ..
 
       - name: Remove files
