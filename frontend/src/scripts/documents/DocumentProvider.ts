@@ -170,6 +170,14 @@ export interface IDocumentProvider {
    * @return {string | undefined} The user ID if a user is authenticated, or undefined if no user is authenticated.
    */
   getCurrentUserId(): string | undefined;
+
+  /**
+   * Retrieves the authorization token.
+   *
+   * @return {Promise<string | undefined>} A promise that resolves to the authorization token as a string,
+   *         or undefined if no token is available.
+   */
+  getAuthorizationToken(): Promise<string | undefined>;
 }
 
 /**

@@ -6,6 +6,9 @@ import { DocumentError } from 'src/scripts/documents/DocumentError';
 import { FirebaseError } from 'firebase/app';
 import { useSessionStore } from 'stores/session-store';
 import { TSelectOption } from 'src/scripts/composables/Options';
+import { getDocumentProvider } from 'src/scripts/documents/DocumentProvider';
+import { functionsConfig } from 'src/scripts/config/Functions';
+import { axiosClient } from 'boot/axios';
 
 export enum ETableColumnType {
   None = 'none',
@@ -115,5 +118,56 @@ export function useRunAsync(): <R>(
       // Unlock screen
       common.quasar.loading.hide();
     }
+  };
+}
+
+/**
+ * Provides a function to execute a remote function with the specified name and payload.
+ *
+ * The returned function handles making an authenticated request to the specified remote function.
+ * It ensures that a valid authorization token is retrieved before making the request and handles
+ * HTTP response status codes appropriately.
+ *
+ * Errors are thrown in the event of missing authentication or failed requests.
+ *
+ * @return {Function} A function that, when called with a function name (string) and a payload (P),
+ * returns a Promise that resolves with the response data (R) or undefined if no response is received.
+ * The function has the following signature:
+ * `<P, R>(functionName: string, payload: P) => Promise<R | undefined>`.
+ */
+export function useRunFunction(): <P, R>(
+  functionName: string,
+  payload: P,
+) => Promise<R | undefined> {
+  const runAsync = useRunAsync();
+  return async <P, R>(functionName: string, payload: P) => {
+    return await runAsync<R>(async () => {
+      // Get document provider
+      const provider = getDocumentProvider();
+      // Get authorization token
+      const token = await provider.getAuthorizationToken();
+      // Check token
+      if (token) {
+        // Create URL for the request
+        const url = functionsConfig.url.replace('{function}', functionName);
+        // Send POST request
+        const response = await axiosClient.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        // Check response status
+        if (response.status === 200) {
+          // Response is okay
+          return response.data;
+        } else {
+          // Request has failed
+          throw new DocumentError('request-failed', `${response.status} ${response.statusText}`);
+        }
+      } else {
+        // No authorization token found
+        throw new DocumentError('no-auth-token', 'No authorization token found.');
+      }
+    });
   };
 }
