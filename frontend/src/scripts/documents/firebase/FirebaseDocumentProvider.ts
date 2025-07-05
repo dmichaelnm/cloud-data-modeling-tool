@@ -319,6 +319,20 @@ export class FirebaseDocumentProvider implements dp.IDocumentProvider {
       parent,
     );
   }
+
+  /**
+   * Retrieves the authorization token for the current authenticated user.
+   * If no user is authenticated, the method will return undefined.
+   *
+   * @return {Promise<string | undefined>} A promise that resolves to the user's authorization token
+   * if a user is authenticated, or undefined if no user is currently authenticated.
+   */
+  async getAuthorizationToken(): Promise<string | undefined> {
+    const user = fbAuth.currentUser;
+    if (user) {
+      return await user.getIdToken();
+    }
+  }
 }
 
 /**
@@ -360,7 +374,7 @@ function createAccountData(
     state: {
       active: false,
       lastLogin: null,
-      lastActiveProject: null
+      lastActiveProject: null,
     },
   };
 }
