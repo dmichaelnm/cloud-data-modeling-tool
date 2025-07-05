@@ -25,7 +25,7 @@ jobs:
 
       - name: Prepare Google Deployment Credentials
         run: |
-          cd backend/functions
+          cd backend
           echo "${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}" | base64 --decode > "google-application-credentials.json"
           cd ..
 
@@ -40,3 +40,7 @@ jobs:
           cd backend
           firebase deploy --only functions --non-interactive --project ${{vars.PROJECT_ID}}
           cd ..
+
+      - name: Remove files
+        run: |
+          rm backend/"google-application-credentials.json
