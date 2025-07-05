@@ -1,4 +1,4 @@
-name: Deployment - Production
+name: Deployment - Webapp - Production
 
 on:
   workflow_dispatch
@@ -48,7 +48,15 @@ jobs:
           echo "  measurementId: '${{secrets.FIREBASE_MEASUREMENT_ID}}'," >> FirebaseConfig.ts
           echo "  };" >> FirebaseConfig.ts
           cd ../../../..
-          
+
+      - name: Generate Functions Configuration File
+        run: |
+          cd frontend/src/scripts/config
+          echo "export const functionsConfig = {" > Functions.ts
+          echo "  url: '${{vars.FIREBASE_FUNCTIONS_URL}}'," >> Functions.ts
+          echo "};" >> Functions.ts
+          cd ../../../..
+
       - name: Build Quasar Application
         run: |
           cd frontend
@@ -78,3 +86,4 @@ jobs:
           rm frontend/google-application-credentials.json
           rm frontend/src/scripts/config/Version.ts
           rm frontend/src/scripts/config/FirebaseConfig.ts
+          rm frontend/src/scripts/config/Functions.ts
