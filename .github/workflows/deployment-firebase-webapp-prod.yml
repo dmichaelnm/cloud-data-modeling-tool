@@ -63,7 +63,7 @@ jobs:
           echo "export const providerConfig = {" > ProviderConfig.ts
           echo "  gcpServiceAccount: '${{secrets.GCP_SERVICE_ACCOUNT}}'," >> ProviderConfig.ts
           echo "  awsAccountId: '${{secrets.AWS_ACCOUNT_ID}}'," >> ProviderConfig.ts
-          echo "  awsRole: '$${{secrets.AWS_IAM_ROLE_ARN}}'," >> ProviderConfig.ts
+          echo "  awsRole: '${{secrets.AWS_IAM_ROLE_ARN}}'," >> ProviderConfig.ts
           echo "};" >> ProviderConfig.ts
           cd ../../../..          
 
