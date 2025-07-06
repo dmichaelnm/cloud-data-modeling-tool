@@ -27,11 +27,11 @@ jobs:
         run: |
           cd backend/functions/src/provider
           echo "export const awsCredentials = {" > awsSecret.ts
-          echo "  accessKeyId: '$${{secrets.AWS_ACCESS_KEY_ID}}'," >> awsSectet.ts
-          echo "  secretAccessKey: '$${{secrets.AWS_SECRET_ACCESS_KEY}}'," >> awsSectet.ts
-          echo "  role: '$${{secrets.AWS_IAM_ROLE_ARN}}'," >> awsSectet.ts
-          echo "  region: '$${{secrets.AWS_REGION}}'," >> awsSectet.ts
-          echo "};" >> awsSectet.ts
+          echo "  accessKeyId: '$${{secrets.AWS_ACCESS_KEY_ID}}'," >> awsSecret.ts
+          echo "  secretAccessKey: '$${{secrets.AWS_SECRET_ACCESS_KEY}}'," >> awsSecret.ts
+          echo "  role: '$${{secrets.AWS_IAM_ROLE_ARN}}'," >> awsSecret.ts
+          echo "  region: '$${{secrets.AWS_REGION}}'," >> awsSecret.ts
+          echo "};" >> awsSecret.ts
           cd ../../../..
 
       - name: Prepare Google Deployment Credentials
@@ -55,3 +55,4 @@ jobs:
       - name: Remove files
         run: |
           rm backend/google-application-credentials.json
+          rm backend/functions/src/provider/awsSecret.ts
