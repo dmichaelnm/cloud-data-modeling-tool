@@ -41,26 +41,26 @@
     </template>
     <!-- Option Template -->
     <template v-slot:option="props">
-      <!-- Option Slot -->
-      <slot name="option" v-bind="props">
-        <!-- Above Separator -->
-        <q-separator v-if="props.opt.separator === 'above' || props.opt.separator === 'both'" />
-        <!-- Option Item -->
-        <q-item clickable v-close-popup dense v-bind="props.itemProps">
-          <!-- Option Icon Section -->
-          <q-item-section side v-if="_showIcon">
-            <!-- Option Icon -->
-            <q-icon :name="props.opt.icon" />
-          </q-item-section>
-          <!-- Option Label Section -->
-          <q-item-section>
+      <!-- Above Separator -->
+      <q-separator v-if="props.opt.separator === 'above' || props.opt.separator === 'both'" />
+      <!-- Option Item -->
+      <q-item clickable v-close-popup dense v-bind="props.itemProps">
+        <!-- Option Icon Section -->
+        <q-item-section side v-if="_showIcon">
+          <!-- Option Icon -->
+          <q-icon :name="props.opt.icon" />
+        </q-item-section>
+        <!-- Option Label Section -->
+        <q-item-section>
+          <!-- Option Slot -->
+          <slot name="optionLabel" v-bind="props">
             <!-- Option Label -->
             <q-item-label class="text-normal text-field">{{ props.opt.label }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <!-- Below Separator -->
-        <q-separator v-if="props.opt.separator === 'below' || props.opt.separator === 'both'" />
-      </slot>
+          </slot>
+        </q-item-section>
+      </q-item>
+      <!-- Below Separator -->
+      <q-separator v-if="props.opt.separator === 'below' || props.opt.separator === 'both'" />
     </template>
   </q-select>
 </template>

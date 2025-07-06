@@ -32,7 +32,13 @@
         label="Region"
         :options="awsRegions()"
         mandatory
-      />
+      >
+        <!-- Option Template -->
+        <template v-slot:optionLabel="props">
+          <div>{{ props.opt.label }}</div>
+          <div class="text-small text-disabled">({{ props.opt.value }})</div>
+        </template>
+      </select-value>
     </div>
   </div>
   <!-- Application Account Message Row -->
