@@ -8,6 +8,8 @@
     :borderless="borderless"
     :outlined="!borderless"
     :autocomplete="autoComplete"
+    :readonly="readOnly"
+    :hide-dropdown-icon="readOnly"
     dense
     options-dense
     emit-value
@@ -87,6 +89,8 @@ const props = defineProps<{
   borderless?: boolean;
   // Auto complete Attribute
   autoComplete?: string;
+  // Read-only flag
+  readOnly?: boolean;
 }>();
 
 /**

@@ -1,6 +1,7 @@
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
 import { EProjectRole } from 'src/scripts/documents/model/Project';
+import { ECloudServiceProvider } from 'src/scripts/documents/model/CloudServiceProvider';
 
 /**
  * Represents the position of a separator in a select option menu.
@@ -73,6 +74,36 @@ export function useCustomAttributeTypeOptions(): () => TSelectOption[] {
       { value: 'string', label: common.i18n.t('options.customAttributeType.string') },
       { value: 'number', label: common.i18n.t('options.customAttributeType.number') },
       { value: 'boolean', label: common.i18n.t('options.customAttributeType.boolean') },
+    ];
+  };
+}
+
+/**
+ * Provides a function that returns an array of provider options.
+ * Each option includes a value, label, and icon.
+ *
+ * @return {function(): TSelectOption[]} A function that, when called, returns a list of provider options with
+ *         predefined values, labels, and icons.
+ */
+export function useProviderOptions(): () => TSelectOption[] {
+  const common = useCommonComposables();
+  return () => {
+    return [
+      {
+        value: ECloudServiceProvider.AWS,
+        label: common.i18n.t('options.provider.aws'),
+        icon: 'img:icons/provider/aws.png',
+      },
+      {
+        value: ECloudServiceProvider.GCP,
+        label: common.i18n.t('options.provider.gcp'),
+        icon: 'img:icons/provider/gcp.png',
+      },
+      {
+        value: ECloudServiceProvider.Snowflake,
+        label: common.i18n.t('options.provider.snowflake'),
+        icon: 'img:icons/provider/snowflake.png',
+      },
     ];
   };
 }

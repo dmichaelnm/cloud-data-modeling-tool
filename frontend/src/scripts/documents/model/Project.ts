@@ -103,6 +103,36 @@ export class Project extends ModelObject<IProjectData> {
   }
 
   /**
+   * Loads the project by clearing existing documents and fetching child documents from the backend.
+   *
+   * @return {Promise<void>} A promise that resolves when the project is successfully loaded.
+   */
+  async loadProject(): Promise<void> {
+    // Clear all child documents
+    this.document.clearDocuments();
+    // Load cloud service providers
+    await this.loadDocuments(EDocumentType.CloudServiceProvider);
+  }
+
+  /**
+   * Loads documents of a specified type from the backend and adds them as child documents.
+   *
+   * @param {EDocumentType} type - The type of documents to load.
+   * @return {Promise<void>} A promise that resolves when the documents have been successfully loaded and added.
+   */
+  async loadDocuments(type: EDocumentType): Promise<void> {
+    // Get document provider
+    const provider = getDocumentProvider();
+    // Load child documents of the specified type
+    const documents = await provider.findDocuments(type, this.document);
+    // Iterate over all documents
+    for (const document of documents) {
+      // Add as a child document
+      this.document.addDocument(document);
+    }
+  }
+
+  /**
    * Loads and retrieves all project documents that the current user has access to.
    *
    * @return {Promise<IDocument<IProjectData>[]>} A promise that resolves to an array of project documents.

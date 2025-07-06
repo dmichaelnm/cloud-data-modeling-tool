@@ -59,6 +59,11 @@ export default {
       number: 'Number',
       boolean: 'Boolean',
     },
+    provider: {
+      aws: 'Amazon Web Services',
+      gcp: 'Google Cloud Platform',
+      snowflake: 'Snowflake Database',
+    },
   },
 
   main: {
@@ -201,7 +206,7 @@ export default {
         title: 'View Project',
         message:
           'Here you can see the properties of the project and all employees assigned to the project. However, due to ' +
-          'your role, you do not have permissions to make changes to the project.'
+          'your role, you do not have permissions to make changes to the project.',
       },
       delete: {
         title: 'Delete Project?',
@@ -240,6 +245,69 @@ export default {
       memberAlreadyAdded: 'This account has already been added as a project member.',
       isProjectOwner: 'This account is already the project owner.',
       isProjectManager: 'This account is already the project manager.',
+    },
+  },
+  cloudServiceProvider: {
+    menu: {
+      new: 'Connect To Cloud-Service Provider',
+      edit: 'Edit',
+      delete: 'Delete',
+      view: 'View',
+    },
+    label: {
+      name: 'Cloud Service Provider Name',
+      provider: 'Cloud Service Provider',
+      serviceAccount: 'Service Account',
+    },
+    button: {
+      testConnection: 'Test Connection',
+    },
+    dialog: {
+      create: {
+        title: 'Create Cloud Service Provider',
+        message:
+          'Set up a connection to a cloud service provider here. This connection can be later used to access certain ' +
+          'services, such as a file storage like Amazon S3 or a database like Google BigQuery. Depending on the ' +
+          'provider, you can enter the appropriate information for authentication here.',
+      },
+      update: {
+        title: 'Edit Cloud Service Provider',
+        message:
+          'Here you can edit the properties of the cloud service provider and test whether the connection can be established. ' +
+          'However, it is no longer possible to change the cloud service provider itself.',
+      },
+      test: {
+        success: {
+          title: 'Connection successful',
+          message:
+            'The connection to the cloud service provider has been successfully established.',
+        },
+        error: {
+          title: 'Connection failed',
+          message:
+            'Unfortunately, the connection to the cloud service provider could not be established. More ' +
+            'detailed information can be found in the details.',
+        },
+      },
+      tab: {
+        selection: {
+          message:
+            'Select the desired provider from the list of currently supported cloud service providers.' +
+            ' Depending on the cloud service provider you have selected, you must provide the relevant ' +
+            'credentials to establish a connection. You can verify the correctness of your ' +
+            'credentials by clicking on "Test Connection".',
+          messageGcp:
+            'To connect to your project in Google Cloud Platform, the application needs the service account it ' +
+            'can authenticate with. This service account must have all necessary roles/permissions for read and write access ' +
+            "to the Google Cloud Storage and BigQuery services, grant access to this application's service account " +
+            '({account}), and assign the role "Service Account Token Creator".',
+        },
+      },
+    },
+  },
+  cloudService: {
+    menu: {
+      new: 'Connect To Cloud Service',
     },
   },
 };

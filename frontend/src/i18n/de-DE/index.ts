@@ -59,6 +59,11 @@ export default {
       number: 'Zahl',
       boolean: 'Wahrheitswert',
     },
+    provider: {
+      aws: 'Amazon Web Services',
+      gcp: 'Google Cloud Platform',
+      snowflake: 'Snowflake Database',
+    },
   },
 
   main: {
@@ -203,7 +208,7 @@ export default {
         title: 'Projekt ansehen',
         message:
           'Hier sehen Sie die Eigenschaften des Projekts sowie alle dem Projekt zugeordneten Mitarbeiter. Aufgrund ' +
-          'Ihrer Rolle haben Sie jedoch keine Berechtigungen, Änderungen am Projekt vorzunehmen.'
+          'Ihrer Rolle haben Sie jedoch keine Berechtigungen, Änderungen am Projekt vorzunehmen.',
       },
       delete: {
         title: 'Projekt löschen?',
@@ -243,6 +248,70 @@ export default {
       memberAlreadyAdded: 'Dieses Konto wurde bereits als Projektmitglied hinzugefügt.',
       isProjectOwner: 'Dieses Konto ist bereits Projekteigentümer.',
       isProjectManager: 'Dieses Konto ist bereits Projektmanager.',
+    },
+  },
+  cloudServiceProvider: {
+    menu: {
+      new: 'Cloud-Dienstleister anbinden',
+      edit: 'Bearbeiten',
+      delete: 'Löschen',
+      view: 'Anzeigen',
+    },
+    label: {
+      name: 'Name des Cloud-Dienstleiters',
+      provider: 'Cloud-Dienstleister',
+      serviceAccount: 'Dienstkonto',
+    },
+    button: {
+      testConnection: 'Verbindung testen',
+    },
+    dialog: {
+      create: {
+        title: 'Cloud-Dienst Provider erstellen',
+        message:
+          'Richten Sie hier eine Verbindung zu einem Cloud-Dienstleiter ein. Diese Verbindung kann später genutzt ' +
+          'werden, um bestimmte Dienste wie zum Beispiel einen Dateispeicher wie Amazon S3 oder einen Datenbank wie ' +
+          'Google BigQuery ansprechen zu können. Je nach Provider können Sie hier die entsprechenden Informationen ' +
+          'für die Authentifizierung hinterlegen.',
+      },
+      update: {
+        title: 'Cloud-Dienst Provider bearbeiten',
+        message:
+          'Hier können Sie die Eigenschaften des Cloud-Dienstleiters bearbeiten und testen, ob die Verbindung ' +
+          'hergestellt werden kann. Es ist jedoch nicht mehr möglich, den Cloud-Dienstleiters selbst zu ändern.',
+      },
+      test: {
+        success: {
+          title: 'Verbindung erfolgreich',
+          message: 'Die Verbindung zum Cloud-Dienstleister wurde erfolgreich hergestellt.',
+        },
+        error: {
+          title: 'Verbindung fehlgeschlagen',
+          message:
+            'Leider konnte die Verbindung zum Cloud-Dienstleister nicht hergestellt werden. Genauere ' +
+            'Informationen können Sie den Details entnehmen.',
+        },
+      },
+      tab: {
+        selection: {
+          message:
+            'Wählen Sie aus der Liste der aktuell unterstützten Cloud-Dienstleister den gewünschten Provider' +
+            'aus. Je nach dem, welchen Cloud-Dienstleister Sie ausgewählt haben, müssen Sie die entsprechenden ' +
+            'Anmeldeinformationen hinterlegen, um eine Verbindung herstellen zu können. Die Richtigkeit Ihrer ' +
+            'Anmeldeinformationen können Sie mit einem Klick auf "Verbindung testen" prüfen.',
+          messageGcp:
+            'Um eine Verbindung mit Ihrem Projekt in Google Cloud Platform herzustellen, benötigt die ' +
+            'Anwendung das Dienstkonto, mit welchem es sich authentifizieren kann. Dieses Dienstkonto muss alle ' +
+            'notwendigen Rollen/Berechtigungen für den lesenden bzw. schreibenden Zugriff auf die Dienste Google ' +
+            'Cloud Storage und BigQuery haben sowie dem Dienstkonto dieser Anwendung ({account}) Zugriff gewähren und ' +
+            'die Rolle "Ersteller von Dienstkonto-Tokens" zuweisen.',
+        },
+      },
+    },
+  },
+  cloudService: {
+    menu: {
+      new: 'Cloud-Dienst anbinden',
     },
   },
 };
