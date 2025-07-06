@@ -21,6 +21,7 @@ export enum ECloudServiceProvider {
  */
 export type TCredentialsAWS = {
   iamRoleARN: string;
+  region: string;
 };
 
 /**
@@ -86,6 +87,7 @@ export class CloudServiceProviderEditorData extends EditorData<ICloudServiceProv
       data.provider = ECloudServiceProvider.AWS;
       data.credentials = {
         iamRoleARN: '',
+        region: 'eu-central-1',
       } as TCredentialsAWS;
     }
   }

@@ -30,6 +30,7 @@ export default {
     createdByAt: 'created at {date} by {name}',
     noSelection: 'No selection',
     mandatory: 'This input field must not be empty.',
+    copyToClipboard: 'Copy To Clipboard',
   },
 
   dialog: {
@@ -63,6 +64,40 @@ export default {
       aws: 'Amazon Web Services',
       gcp: 'Google Cloud Platform',
       snowflake: 'Snowflake Database',
+    },
+    aws: {
+      region: {
+        usEast1: 'US East (N. Virginia)',
+        usEast2: 'US East (Ohio)',
+        usWest1: 'US West (N. California)',
+        usWest2: 'US West (Oregon)',
+        afSouth1: 'Africa (Cape Town)',
+        apEast1: 'Asia Pacific (Hong Kong)',
+        apSouth1: 'Asia Pacific (Mumbai)',
+        apSouth2: 'Asia Pacific (Hyderabad)',
+        apNortheast1: 'Asia Pacific (Tokyo)',
+        apNortheast2: 'Asia Pacific (Seoul)',
+        apNortheast3: 'Asia Pacific (Osaka)',
+        apSoutheast1: 'Asia Pacific (Singapore)',
+        apSoutheast2: 'Asia Pacific (Sydney)',
+        apSoutheast3: 'Asia Pacific (Jakarta)',
+        caCentral1: 'Canada (Central)',
+        cnNorth1: 'China (Beijing)',
+        cnNorthwest1: 'China (Ningxia)',
+        euCentral1: 'Europe (Frankfurt)',
+        euCentral2: 'Europe (Zurich)',
+        euNorth1: 'Europe (Stockholm)',
+        euWest1: 'Europe (Ireland)',
+        euWest2: 'Europe (London)',
+        euWest3: 'Europe (Paris)',
+        euSouth1: 'Europe (Milan)',
+        euSouth2: 'Europe (Zaragoza)',
+        meSouth1: 'Middle East (Bahrain)',
+        meCentral1: 'Middle East (UAE)',
+        saEast1: 'South America (São Paulo)',
+        usGovEast1: 'AWS GovCloud (US-East)',
+        usGovWest1: 'AWS GovCloud (US-West)',
+      },
     },
   },
 
@@ -258,6 +293,8 @@ export default {
       name: 'Cloud Service Provider Name',
       provider: 'Cloud Service Provider',
       serviceAccount: 'Service Account',
+      iamRoleARN: 'IAM Role ARN',
+      accountId: 'Account ID',
     },
     button: {
       testConnection: 'Test Connection',
@@ -300,8 +337,18 @@ export default {
             'To connect to your project in Google Cloud Platform, the application needs the service account it ' +
             'can authenticate with. This service account must have all necessary roles/permissions for read and write access ' +
             "to the Google Cloud Storage and BigQuery services, grant access to this application's service account " +
-            '({account}), and assign the role "Service Account Token Creator".',
-        },
+            'and assign the role "Service Account Token Creator".',
+          messageGcpAccountInfo:
+            'The following information can be used to create a corresponding service account in your own Google Cloud ' +
+            'Platform project for accessing the services used by this application.',
+          messageAws:
+            'To connect to your AWS account, the application needs the ARN ' +
+            '(Amazon Resource Name) of the role with which it can authenticate. This role must have all ' +
+            'necessary roles/permissions for read and write access to Amazon S3 ' +
+            "and Athena services, and grant access to the application's AWS account.",
+          messageAwsAccountInfo:
+            'The following information can be used to create the appropriate role in your own AWS account ' +
+            'to allow access to services by this application.',        },
       },
     },
   },

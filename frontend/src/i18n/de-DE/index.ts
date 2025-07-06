@@ -30,6 +30,7 @@ export default {
     createdByAt: 'erstell am {date} von {name}',
     noSelection: 'Keine Auswahl',
     mandatory: 'Dieses Eingabefeld darf nicht leer sein.',
+    copyToClipboard: 'In Zwischenablage kopieren',
   },
 
   dialog: {
@@ -63,6 +64,40 @@ export default {
       aws: 'Amazon Web Services',
       gcp: 'Google Cloud Platform',
       snowflake: 'Snowflake Database',
+    },
+    aws: {
+      region: {
+        usEast1: 'USA Ost (Nord-Virginia)',
+        usEast2: 'USA Ost (Ohio)',
+        usWest1: 'USA West (Nordkalifornien)',
+        usWest2: 'USA West (Oregon)',
+        afSouth1: 'Afrika (Kapstadt)',
+        apEast1: 'Asien-Pazifik (Hongkong)',
+        apSouth1: 'Asien-Pazifik (Mumbai)',
+        apSouth2: 'Asien-Pazifik (Hyderabad)',
+        apNortheast1: 'Asien-Pazifik (Tokio)',
+        apNortheast2: 'Asien-Pazifik (Seoul)',
+        apNortheast3: 'Asien-Pazifik (Osaka)',
+        apSoutheast1: 'Asien-Pazifik (Singapur)',
+        apSoutheast2: 'Asien-Pazifik (Sydney)',
+        apSoutheast3: 'Asien-Pazifik (Jakarta)',
+        caCentral1: 'Kanada (Zentral)',
+        cnNorth1: 'China (Peking)',
+        cnNorthwest1: 'China (Ningxia)',
+        euCentral1: 'Europa (Frankfurt)',
+        euCentral2: 'Europa (Zürich)',
+        euNorth1: 'Europa (Stockholm)',
+        euWest1: 'Europa (Irland)',
+        euWest2: 'Europa (London)',
+        euWest3: 'Europa (Paris)',
+        euSouth1: 'Europa (Mailand)',
+        euSouth2: 'Europa (Saragossa)',
+        meSouth1: 'Naher Osten (Bahrain)',
+        meCentral1: 'Naher Osten (Vereinigte Arabische Emirate)',
+        saEast1: 'Südamerika (São Paulo)',
+        usGovEast1: 'AWS GovCloud (USA Ost)',
+        usGovWest1: 'AWS GovCloud (USA West)',
+      },
     },
   },
 
@@ -261,6 +296,9 @@ export default {
       name: 'Name des Cloud-Dienstleiters',
       provider: 'Cloud-Dienstleister',
       serviceAccount: 'Dienstkonto',
+      iamRoleARN: 'ARN der IAM-Rolle',
+      region: 'Region',
+      accountId: 'Konto-ID',
     },
     button: {
       testConnection: 'Verbindung testen',
@@ -303,8 +341,19 @@ export default {
             'Um eine Verbindung mit Ihrem Projekt in Google Cloud Platform herzustellen, benötigt die ' +
             'Anwendung das Dienstkonto, mit welchem es sich authentifizieren kann. Dieses Dienstkonto muss alle ' +
             'notwendigen Rollen/Berechtigungen für den lesenden bzw. schreibenden Zugriff auf die Dienste Google ' +
-            'Cloud Storage und BigQuery haben sowie dem Dienstkonto dieser Anwendung ({account}) Zugriff gewähren und ' +
+            'Cloud Storage und BigQuery haben sowie dem Dienstkonto dieser Anwendung Zugriff gewähren und ' +
             'die Rolle "Ersteller von Dienstkonto-Tokens" zuweisen.',
+          messageGcpAccountInfo:
+            'Die folgenden Informationen können verwendet werden, um im eigenen Google Cloud Platform Projekt ein ' +
+            'entsprechendes Dienstkonto für den Zugriff auf die Dienste durch diese Anwendung zu erstellen.',
+          messageAws:
+            'Um eine Verbindung mit Ihrem AWS-Konto herzustellen, benötigt die Anwendung die ARN ' +
+            '(Amazon Resource Name) der Rolle, mit welchem es sich authentifizieren kann. Diese Rolle muss alle ' +
+            'notwendigen Rollen/Berechtigungen für den lesenden bzw. schreibenden Zugriff auf die Dienste Amazon S3 ' +
+            'und Athena haben sowie dem AWS-Konto der Anwendung Zugriff gewähren.',
+          messageAwsAccountInfo:
+            'Die folgenden Informationen können verwendet werden, um im eigenen AWS-Konto die ' +
+            'entsprechende Rolle für den Zugriff auf die Dienste durch diese Anwendung zu erstellen.',
         },
       },
     },

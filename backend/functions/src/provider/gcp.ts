@@ -1,4 +1,4 @@
-import {TCredentialsGCP} from '../types';
+import {TCredentialsGCP, TErrorMessage} from '../types';
 import {GoogleAuth} from 'google-auth-library';
 
 /**
@@ -9,17 +9,6 @@ import {GoogleAuth} from 'google-auth-library';
  */
 type TTokenResult = {
   accessToken: string;
-}
-
-/**
- * Represents an error message with a descriptive text.
- *
- * This type is used to encapsulate error information in a structured format,
- * primarily consisting of a single string message. It helps standardize
- * error handling and reporting across systems or components.
- */
-type TErrorMessage = {
-  message: string;
 }
 
 /**

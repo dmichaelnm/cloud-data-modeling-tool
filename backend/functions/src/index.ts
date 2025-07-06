@@ -3,8 +3,8 @@ import {Response} from 'express';
 import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
 import * as types from './types';
+import * as aws from './provider/aws';
 import * as gcp from './provider/gcp';
-
 
 /**
  * This variable specifies the geographical region setting
@@ -86,6 +86,10 @@ export const testConnection = onRequest(
       let result: string | null = null;
       // Evaluate provider
       switch (provider) {
+        case 'aws':
+          // Amazon Web Service
+          result = await aws.testConnection(payload.credentials as types.TCredentialsAWS);
+          break;
         case 'gcp':
           // Google Cloud Platform
           result = await gcp.testConnection(payload.credentials as types.TCredentialsGCP);

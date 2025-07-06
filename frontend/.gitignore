@@ -43,3 +43,4 @@ yarn-error.log*
 
 # Secret information
 /src/scripts/config/FirebaseConfig.ts
+/src/scripts/config/ProviderConfig.ts

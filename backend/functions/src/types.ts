@@ -1,8 +1,20 @@
 /**
+ * Represents an error message with a descriptive text.
+ *
+ * This type is used to encapsulate error information in a structured format,
+ * primarily consisting of a single string message. It helps standardize
+ * error handling and reporting across systems or components.
+ */
+export type TErrorMessage = {
+  message: string;
+}
+
+/**
  * Represents the credential configuration for accessing AWS resources.
  */
 export type TCredentialsAWS = {
   iamRoleARN: string;
+  region: string;
 };
 
 /**

@@ -1,6 +1,6 @@
 <template>
   <!-- Main DIV -->
-  <div class="q-col-gutter-y-sm">
+  <div class="q-col-gutter-y-lg">
     <!-- Cloud Service Provider Row -->
     <div class="row q-col-gutter-x-sm">
       <!-- Cloud Service Provider Column -->
@@ -15,20 +15,31 @@
         />
       </div>
     </div>
-    <!-- Amazon Web Service -->
-    <cloud-service-provider-aws
-      v-if="_modelValue.data.provider === csp.ECloudServiceProvider.AWS"
-    />
-    <!-- Google Cloud Platform -->
-    <cloud-service-provider-gcp
-      ref="gcpProvider"
-      v-if="_modelValue.data.provider === csp.ECloudServiceProvider.GCP"
-      v-model="_modelValue"
-    />
-    <!-- Snowflake Database -->
-    <cloud-service-provider-snowflake
-      v-if="_modelValue.data.provider === csp.ECloudServiceProvider.Snowflake"
-    />
+    <!-- Provider Component Row -->
+    <div class="row q-col-gutter-x-sm">
+      <!-- Provider Component Column -->
+      <div class="col">
+        <!-- Provider Component DIV -->
+        <div class="q-col-gutter-y-sm">
+          <!-- Amazon Web Service -->
+          <cloud-service-provider-aws
+            ref="awsProvider"
+            v-if="_modelValue.data.provider === csp.ECloudServiceProvider.AWS"
+            v-model="_modelValue"
+          />
+          <!-- Google Cloud Platform -->
+          <cloud-service-provider-gcp
+            ref="gcpProvider"
+            v-if="_modelValue.data.provider === csp.ECloudServiceProvider.GCP"
+            v-model="_modelValue"
+          />
+          <!-- Snowflake Database -->
+          <cloud-service-provider-snowflake
+            v-if="_modelValue.data.provider === csp.ECloudServiceProvider.Snowflake"
+          />
+        </div>
+      </div>
+    </div>
     <!-- Test Connection Row -->
     <div class="row q-col-gutter-x-sm">
       <!-- Test Connection Column -->
@@ -99,6 +110,12 @@ const messageDialog = useMessageDialog();
  * provider component in the application.
  */
 const gcpProvider = ref<InstanceType<typeof CloudServiceProviderGcp> | null>(null);
+/**
+ * Represents the AWS cloud service provider instance or a null reference.
+ * This variable is used to store a reactive reference to an instance of
+ * the `CloudServiceProviderAws` class or `null` if no instance is available.
+ */
+const awsProvider = ref<InstanceType<typeof CloudServiceProviderAws> | null>(null);
 
 /**
  * Properties used in this component.
@@ -143,6 +160,7 @@ function onProviderSelected(): void {
     case csp.ECloudServiceProvider.AWS:
       _modelValue.value.data.credentials = {
         iamRoleARN: '',
+        region: 'eu-central-1',
       } as csp.TCredentialsAWS;
       _modelValue.value.data.provider = csp.ECloudServiceProvider.AWS;
       break;
@@ -171,6 +189,9 @@ function onProviderSelected(): void {
  * @return {boolean} Returns true if the provider validation is successful; otherwise, false.
  */
 function validate(): boolean {
+  if (_modelValue.value.data.provider === csp.ECloudServiceProvider.AWS) {
+    return awsProvider.value?.validate() ?? false;
+  }
   if (_modelValue.value.data.provider === csp.ECloudServiceProvider.GCP) {
     return gcpProvider.value?.validate() ?? false;
   }

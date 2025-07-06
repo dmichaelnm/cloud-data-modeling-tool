@@ -5,15 +5,15 @@
     <div class="col">
       {{
         $t('cloudServiceProvider.dialog.tab.selection.messageGcp', {
-          account: functionsConfig.serviceAccount,
+          account: providerConfig.gcpServiceAccount,
         })
       }}
     </div>
   </div>
   <!-- Service Account Row -->
-  <div class="row">
+  <div class="row q-col-gutter-x-sm">
     <!-- Service Account Column -->
-    <div class="col-6">
+    <div class="col-4">
       <!-- Service Account Input -->
       <input-value
         v-model="(_modelValue.data.credentials as csp.TCredentialsGCP).serviceAccount"
@@ -24,11 +24,32 @@
       />
     </div>
   </div>
+  <!-- Application Account Message Row -->
+  <div class="row q-col-gutter-x-sm">
+    <!-- Application Account Message Column -->
+    <div class="col">
+      <!-- Application Account Message -->
+      {{ $t('cloudServiceProvider.dialog.tab.selection.messageGcpAccountInfo') }}
+    </div>
+  </div>
+  <!-- Application Account Info Row -->
+  <div class="row q-col-gutter-x-sm">
+    <!-- Service Account Column -->
+    <div class="col-4">
+      <!-- Service Account -->
+      <input-value
+        :model-value="providerConfig.gcpServiceAccount"
+        :label="$t('cloudServiceProvider.label.serviceAccount')"
+        read-only
+        show-copy-button
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { functionsConfig } from 'src/scripts/config/Functions';
+import { providerConfig } from 'src/scripts/config/ProviderConfig';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import * as csp from 'src/scripts/documents/model/CloudServiceProvider';
 import InputValue from 'components/common/InputValue.vue';
