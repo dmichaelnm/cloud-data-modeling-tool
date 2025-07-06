@@ -54,6 +54,7 @@ jobs:
           cd frontend/src/scripts/config
           echo "export const functionsConfig = {" > Functions.ts
           echo "  url: '${{vars.FIREBASE_FUNCTIONS_URL}}'," >> Functions.ts
+          echo "  serviceAccount: '${{vars.GCP_SERVICE_ACCOUNT}}'," >> Functions.ts
           echo "};" >> Functions.ts
           cd ../../../..
 
