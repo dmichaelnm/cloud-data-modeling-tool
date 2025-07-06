@@ -41,6 +41,7 @@ jobs:
           echo "  type: 'service_account'," >> gcpSecret.ts
           echo "  project_id: '${{vars.PROJECT_ID}}'," >> gcpSecret.ts
           echo "  private_key_id: '${{secrets.GCP_PRIVATE_KEY_ID}}'," >> gcpSecret.ts
+          echo "  // eslint-disable-next-line max-len" >> gcpSecret.ts
           echo "  private_key: '${{secrets.GCP_PRIVATE_KEY}}'," >> gcpSecret.ts
           echo "  client_email: '${{secrets.GCP_SERVICE_ACCOUNT}}'," >> gcpSecret.ts
           echo "  client_id: '${{secrets.GCP_CLIENT_ID}}'," >> gcpSecret.ts
