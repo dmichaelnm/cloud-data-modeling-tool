@@ -96,9 +96,16 @@ async function switchProject(projectDocument: IDocument<IProjectData> | null): P
       await accountDocument.update();
     }
     if (projectId !== null) {
-      // Load project
-    } else {
-      // No project to set
+      // Get the project document
+      projectDocument = common.session.projects.find((prj) => prj.id === projectId) ?? null;
+      if (projectDocument) {
+        // Load project
+        const project = new Project(projectDocument);
+        await project.loadProject();
+      } else {
+        // Project not found
+        projectId = null;
+      }
     }
     common.session.activeProject = projectId;
   });

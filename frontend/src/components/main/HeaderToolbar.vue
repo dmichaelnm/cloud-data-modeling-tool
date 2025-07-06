@@ -7,6 +7,8 @@
     <div style="width: 64px" />
     <!-- Project Menu -->
     <project-menu @project-selected="onProjectSelected" />
+    <!-- Cloud Service Menu -->
+    <cloud-service-menu v-if="common.session.activeProject !== null" />
     <!-- Space -->
     <q-space />
     <!-- Account Name -->
@@ -63,6 +65,7 @@ import { IDocument } from 'src/scripts/documents/Document';
 import { IProjectData, Project } from 'src/scripts/documents/model/Project';
 import AccountMenu from 'components/main/AccountMenu.vue';
 import ProjectMenu from 'components/project/ProjectMenu.vue';
+import CloudServiceMenu from 'components/cloudService/CloudServiceMenu.vue';
 
 /**
  * Function returning the most common composables like "router", "quasar", "i18n".

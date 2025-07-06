@@ -138,36 +138,49 @@ export function useRunAsync(): <R>(
 export function useRunFunction(): <P, R>(
   functionName: string,
   payload: P,
+  onError?: (error: unknown) => boolean,
+  onResult?: (result: R) => void | Promise<void>,
 ) => Promise<R | undefined> {
   const runAsync = useRunAsync();
-  return async <P, R>(functionName: string, payload: P) => {
-    return await runAsync<R>(async () => {
-      // Get document provider
-      const provider = getDocumentProvider();
-      // Get authorization token
-      const token = await provider.getAuthorizationToken();
-      // Check token
-      if (token) {
-        // Create URL for the request
-        const url = functionsConfig.url.replace('{function}', functionName);
-        // Send POST request
-        const response = await axiosClient.post(url, payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        // Check response status
-        if (response.status === 200) {
-          // Response is okay
-          return response.data;
+  return async <P, R>(
+    functionName: string,
+    payload: P,
+    onError?: (error: unknown) => boolean,
+    onResult?: (result: R) => void | Promise<void>,
+  ) => {
+    return await runAsync<R>(
+      async () => {
+        // Get document provider
+        const provider = getDocumentProvider();
+        // Get authorization token
+        const token = await provider.getAuthorizationToken();
+        // Check token
+        if (token) {
+          // Create URL for the request
+          const url = functionsConfig.url.replace('{function}', functionName);
+          // Send POST request
+          const response = await axiosClient.post(url, payload, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          // Check response status
+          if (response.status === 200) {
+            // Response is okay
+            return response.data;
+          } else {
+            // Request has failed
+            throw new DocumentError('request-failed', `${response.status} ${response.statusText}`);
+          }
         } else {
-          // Request has failed
-          throw new DocumentError('request-failed', `${response.status} ${response.statusText}`);
+          // No authorization token found
+          throw new DocumentError('no-auth-token', 'No authorization token found.');
         }
-      } else {
-        // No authorization token found
-        throw new DocumentError('no-auth-token', 'No authorization token found.');
-      }
-    });
+      },
+      // Delegate error handler
+      (error: unknown) => onError?.(error) ?? false,
+      // Delegate result handler
+      (result: R) => onResult?.(result),
+    );
   };
 }

@@ -1,6 +1,7 @@
 import { useCommonComposables } from 'src/scripts/composables/Common';
-import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
 import { EProjectRole } from 'src/scripts/documents/model/Project';
+import { ECloudServiceProvider } from 'src/scripts/documents/model/CloudServiceProvider';
+import * as flag from 'quasar-extras-svg-icons/country-flag-icons';
 
 /**
  * Represents the position of a separator in a select option menu.
@@ -36,8 +37,8 @@ export function useLanguageOptions(): () => TSelectOption[] {
   const common = useCommonComposables();
   return () => {
     return [
-      { value: 'en-US', label: common.i18n.t('options.language.enUS'), icon: flagUS },
-      { value: 'de-DE', label: common.i18n.t('options.language.deDE'), icon: flagDE },
+      { value: 'en-US', label: common.i18n.t('options.language.enUS'), icon: flag.flagUS },
+      { value: 'de-DE', label: common.i18n.t('options.language.deDE'), icon: flag.flagDE },
     ];
   };
 }
@@ -73,6 +74,199 @@ export function useCustomAttributeTypeOptions(): () => TSelectOption[] {
       { value: 'string', label: common.i18n.t('options.customAttributeType.string') },
       { value: 'number', label: common.i18n.t('options.customAttributeType.number') },
       { value: 'boolean', label: common.i18n.t('options.customAttributeType.boolean') },
+    ];
+  };
+}
+
+/**
+ * Provides a function that returns an array of provider options.
+ * Each option includes a value, label, and icon.
+ *
+ * @return {function(): TSelectOption[]} A function that, when called, returns a list of provider options with
+ *         predefined values, labels, and icons.
+ */
+export function useProviderOptions(): () => TSelectOption[] {
+  const common = useCommonComposables();
+  return () => {
+    return [
+      {
+        value: ECloudServiceProvider.AWS,
+        label: common.i18n.t('options.provider.aws'),
+        icon: 'img:icons/provider/aws.png',
+      },
+      {
+        value: ECloudServiceProvider.GCP,
+        label: common.i18n.t('options.provider.gcp'),
+        icon: 'img:icons/provider/gcp.png',
+      },
+      {
+        value: ECloudServiceProvider.Snowflake,
+        label: common.i18n.t('options.provider.snowflake'),
+        icon: 'img:icons/provider/snowflake.png',
+      },
+    ];
+  };
+}
+
+/**
+ * Provides a function to retrieve a list of AWS regions with their respective metadata, such as value, label, and icon.
+ *
+ * @return {function(): TSelectOption[]} A function that returns an array of options where each option represents an
+ *         AWS region, containing a value, a label, and optionally an icon.
+ */
+export function useAWSRegions(): () => TSelectOption[] {
+  const common = useCommonComposables();
+  return () => {
+    return [
+      {
+        value: 'us-east-1',
+        label: common.i18n.t('options.aws.region.usEast1'),
+        icon: flag.flagUS,
+      },
+      {
+        value: 'us-east-2',
+        label: common.i18n.t('options.aws.region.usEast2'),
+        icon: flag.flagUS,
+      },
+      {
+        value: 'us-west-1',
+        label: common.i18n.t('options.aws.region.usWest1'),
+        icon: flag.flagUS,
+      },
+      {
+        value: 'us-west-2',
+        label: common.i18n.t('options.aws.region.usWest2'),
+        icon: flag.flagUS,
+      },
+      {
+        value: 'af-south-1',
+        label: common.i18n.t('options.aws.region.afSouth1'),
+        icon: flag.flagZA,
+      },
+      {
+        value: 'ap-east-1',
+        label: common.i18n.t('options.aws.region.apEast1'),
+        icon: flag.flagHK,
+      },
+      {
+        value: 'ap-south-1',
+        label: common.i18n.t('options.aws.region.apSouth1'),
+        icon: flag.flagIN,
+      },
+      {
+        value: 'ap-south-2',
+        label: common.i18n.t('options.aws.region.apSouth2'),
+        icon: flag.flagIN,
+      },
+      {
+        value: 'ap-northeast-1',
+        label: common.i18n.t('options.aws.region.apNortheast1'),
+        icon: flag.flagJP,
+      },
+      {
+        value: 'ap-northeast-2',
+        label: common.i18n.t('options.aws.region.apNortheast2'),
+      },
+      {
+        value: 'ap-northeast-3',
+        label: common.i18n.t('options.aws.region.apNortheast3'),
+        icon: flag.flagJP,
+      },
+      {
+        value: 'ap-southeast-1',
+        label: common.i18n.t('options.aws.region.apSoutheast1'),
+        icon: flag.flagSG,
+      },
+      {
+        value: 'ap-southeast-2',
+        label: common.i18n.t('options.aws.region.apSoutheast2'),
+        icon: flag.flagAU,
+      },
+      {
+        value: 'ap-southeast-3',
+        label: common.i18n.t('options.aws.region.apSoutheast3'),
+        icon: flag.flagID,
+      },
+      {
+        value: 'ca-central-1',
+        label: common.i18n.t('options.aws.region.caCentral1'),
+        icon: flag.flagCA,
+      },
+      {
+        value: 'cn-north-1',
+        label: common.i18n.t('options.aws.region.cnNorth1'),
+        icon: flag.flagCN,
+      },
+      {
+        value: 'cn-northwest-1',
+        label: common.i18n.t('options.aws.region.cnNorthwest1'),
+        icon: flag.flagCN,
+      },
+      {
+        value: 'eu-central-1',
+        label: common.i18n.t('options.aws.region.euCentral1'),
+        icon: flag.flagDE,
+      },
+      {
+        value: 'eu-central-2',
+        label: common.i18n.t('options.aws.region.euCentral2'),
+        icon: flag.flagCH,
+      },
+      {
+        value: 'eu-north-1',
+        label: common.i18n.t('options.aws.region.euNorth1'),
+        icon: flag.flagSE,
+      },
+      {
+        value: 'eu-west-1',
+        label: common.i18n.t('options.aws.region.euWest1'),
+        icon: flag.flagIE,
+      },
+      {
+        value: 'eu-west-2',
+        label: common.i18n.t('options.aws.region.euWest2'),
+        icon: flag.flagGB,
+      },
+      {
+        value: 'eu-west-3',
+        label: common.i18n.t('options.aws.region.euWest3'),
+        icon: flag.flagFR,
+      },
+      {
+        value: 'eu-south-1',
+        label: common.i18n.t('options.aws.region.euSouth1'),
+        icon: flag.flagIT,
+      },
+      {
+        value: 'eu-south-2',
+        label: common.i18n.t('options.aws.region.euSouth2'),
+        icon: flag.flagES,
+      },
+      {
+        value: 'me-south-1',
+        label: common.i18n.t('options.aws.region.meSouth1'),
+        icon: flag.flagBH,
+      },
+      {
+        value: 'me-central-1',
+        label: common.i18n.t('options.aws.region.meCentral1'),
+        icon: flag.flagAE,
+      },
+      {
+        value: 'sa-east-1',
+        label: common.i18n.t('options.aws.region.saEast1'),
+        icon: flag.flagBR,
+      },
+      {
+        value: 'us-gov-east-1',
+        label: common.i18n.t('options.aws.region.usGovEast1'),
+        icon: flag.flagUS,
+      },
+      {
+        value: 'us-gov-west-1',
+        label: common.i18n.t('options.aws.region.usGovWest1'),
+        icon: flag.flagUS,
+      },
     ];
   };
 }

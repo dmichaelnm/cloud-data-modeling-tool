@@ -15,7 +15,7 @@
         <div class="col dialog-title" :style="`color: ${_color}`">{{ title }}</div>
       </div>
       <!-- Separator -->
-      <q-separator v-if="title" :style="`backgroundColor: ${_color}; height: ${_separatorSize}`"/>
+      <q-separator v-if="title" :style="`backgroundColor: ${_color}; height: ${_separatorSize}`" />
       <!-- Message Row -->
       <div class="row frame-row" v-if="message">
         <!-- Message Row Slot -->
@@ -25,7 +25,7 @@
         </slot>
       </div>
       <!-- Dialog Content Row -->
-      <div class="row frame-row" :style="`height: ${height + 'px' ?? 'auto'}`">
+      <div class="row frame-row" :style="`height: ${height + 'px'}`">
         <!-- Dialog Content Column -->
         <div class="col">
           <!-- Form -->

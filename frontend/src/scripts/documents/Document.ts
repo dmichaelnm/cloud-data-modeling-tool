@@ -12,6 +12,8 @@ export enum EDocumentType {
   Account = 'account',
   // Project document
   Project = 'project',
+  // Cloud Service Provider
+  CloudServiceProvider = 'cloudServiceProvider',
 }
 
 /**
@@ -160,6 +162,13 @@ export interface IDocument<D extends IDocumentData> {
   addDocument(document: IDocument<IDocumentData>): void;
 
   /**
+   * Removes all child documents from this document.
+   *
+   * @return {void} Does not return any value.
+   */
+  clearDocuments(): void;
+
+  /**
    * Deletes this document.
    *
    * @return {Promise<void>} A promise that resolves once the deletion is completed successfully,
@@ -192,7 +201,7 @@ export interface IDocument<D extends IDocumentData> {
    * @param {EDocumentType} type - The type of documents to retrieve.
    * @return {IDocument<IDocumentData>[]} An array of documents matching the specified type.
    */
-  getDocuments(type: EDocumentType): IDocument<IDocumentData>[];
+  getDocuments<T extends IProjectDocumentData>(type: EDocumentType): IDocument<T>[];
 
   /**
    * This method is triggered before a delete operation is carried out.

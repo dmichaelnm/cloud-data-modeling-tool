@@ -30,6 +30,7 @@ export default {
     createdByAt: 'created at {date} by {name}',
     noSelection: 'No selection',
     mandatory: 'This input field must not be empty.',
+    copyToClipboard: 'Copy To Clipboard',
   },
 
   dialog: {
@@ -58,6 +59,45 @@ export default {
       string: 'String',
       number: 'Number',
       boolean: 'Boolean',
+    },
+    provider: {
+      aws: 'Amazon Web Services',
+      gcp: 'Google Cloud Platform',
+      snowflake: 'Snowflake Database',
+    },
+    aws: {
+      region: {
+        usEast1: 'US East (N. Virginia)',
+        usEast2: 'US East (Ohio)',
+        usWest1: 'US West (N. California)',
+        usWest2: 'US West (Oregon)',
+        afSouth1: 'Africa (Cape Town)',
+        apEast1: 'Asia Pacific (Hong Kong)',
+        apSouth1: 'Asia Pacific (Mumbai)',
+        apSouth2: 'Asia Pacific (Hyderabad)',
+        apNortheast1: 'Asia Pacific (Tokyo)',
+        apNortheast2: 'Asia Pacific (Seoul)',
+        apNortheast3: 'Asia Pacific (Osaka)',
+        apSoutheast1: 'Asia Pacific (Singapore)',
+        apSoutheast2: 'Asia Pacific (Sydney)',
+        apSoutheast3: 'Asia Pacific (Jakarta)',
+        caCentral1: 'Canada (Central)',
+        cnNorth1: 'China (Beijing)',
+        cnNorthwest1: 'China (Ningxia)',
+        euCentral1: 'Europe (Frankfurt)',
+        euCentral2: 'Europe (Zurich)',
+        euNorth1: 'Europe (Stockholm)',
+        euWest1: 'Europe (Ireland)',
+        euWest2: 'Europe (London)',
+        euWest3: 'Europe (Paris)',
+        euSouth1: 'Europe (Milan)',
+        euSouth2: 'Europe (Zaragoza)',
+        meSouth1: 'Middle East (Bahrain)',
+        meCentral1: 'Middle East (UAE)',
+        saEast1: 'South America (São Paulo)',
+        usGovEast1: 'AWS GovCloud (US-East)',
+        usGovWest1: 'AWS GovCloud (US-West)',
+      },
     },
   },
 
@@ -201,7 +241,7 @@ export default {
         title: 'View Project',
         message:
           'Here you can see the properties of the project and all employees assigned to the project. However, due to ' +
-          'your role, you do not have permissions to make changes to the project.'
+          'your role, you do not have permissions to make changes to the project.',
       },
       delete: {
         title: 'Delete Project?',
@@ -240,6 +280,81 @@ export default {
       memberAlreadyAdded: 'This account has already been added as a project member.',
       isProjectOwner: 'This account is already the project owner.',
       isProjectManager: 'This account is already the project manager.',
+    },
+  },
+  cloudServiceProvider: {
+    menu: {
+      new: 'Connect To Cloud-Service Provider',
+      edit: 'Edit',
+      delete: 'Delete',
+      view: 'View',
+    },
+    label: {
+      name: 'Cloud Service Provider Name',
+      provider: 'Cloud Service Provider',
+      serviceAccount: 'Service Account',
+      iamRoleARN: 'IAM Role ARN',
+      accountId: 'Account ID',
+    },
+    button: {
+      testConnection: 'Test Connection',
+    },
+    dialog: {
+      create: {
+        title: 'Create Cloud Service Provider',
+        message:
+          'Set up a connection to a cloud service provider here. This connection can be later used to access certain ' +
+          'services, such as a file storage like Amazon S3 or a database like Google BigQuery. Depending on the ' +
+          'provider, you can enter the appropriate information for authentication here.',
+      },
+      update: {
+        title: 'Edit Cloud Service Provider',
+        message:
+          'Here you can edit the properties of the cloud service provider and test whether the connection can be established. ' +
+          'However, it is no longer possible to change the cloud service provider itself.',
+      },
+      test: {
+        success: {
+          title: 'Connection successful',
+          message:
+            'The connection to the cloud service provider has been successfully established.',
+        },
+        error: {
+          title: 'Connection failed',
+          message:
+            'Unfortunately, the connection to the cloud service provider could not be established. More ' +
+            'detailed information can be found in the details.',
+        },
+      },
+      tab: {
+        selection: {
+          message:
+            'Select the desired provider from the list of currently supported cloud service providers.' +
+            ' Depending on the cloud service provider you have selected, you must provide the relevant ' +
+            'credentials to establish a connection. You can verify the correctness of your ' +
+            'credentials by clicking on "Test Connection".',
+          messageGcp:
+            'To connect to your project in Google Cloud Platform, the application needs the service account it ' +
+            'can authenticate with. This service account must have all necessary roles/permissions for read and write access ' +
+            "to the Google Cloud Storage and BigQuery services, grant access to this application's service account " +
+            'and assign the role "Service Account Token Creator".',
+          messageGcpAccountInfo:
+            'The following information can be used to create a corresponding service account in your own Google Cloud ' +
+            'Platform project for accessing the services used by this application.',
+          messageAws:
+            'To connect to your AWS account, the application needs the ARN ' +
+            '(Amazon Resource Name) of the role with which it can authenticate. This role must have all ' +
+            'necessary roles/permissions for read and write access to Amazon S3 ' +
+            "and Athena services, and grant access to the application's AWS account.",
+          messageAwsAccountInfo:
+            'The following information can be used to create the appropriate role in your own AWS account ' +
+            'to allow access to services by this application.',        },
+      },
+    },
+  },
+  cloudService: {
+    menu: {
+      new: 'Connect To Cloud Service',
     },
   },
 };

@@ -24,7 +24,13 @@
     <!-- Append Template -->
     <template v-slot:append>
       <!-- Append Template Slot -->
-      <slot name="append" />
+      <slot name="append">
+        <!-- Show Copy Button -->
+        <q-btn round flat dense icon="content_copy" v-if="showCopyButton" @click="copyToClipboard">
+          <!-- Tooltip -->
+          <q-tooltip>{{ $t('message.copyToClipboard') }}</q-tooltip>
+        </q-btn>
+      </slot>
     </template>
   </q-input>
 </template>
@@ -60,6 +66,8 @@ const props = defineProps<{
   hideBottomSpace?: boolean;
   // Read-only flag
   readOnly?: boolean | undefined;
+  // Copy button flag
+  showCopyButton?: boolean;
 }>();
 
 /**
@@ -84,6 +92,15 @@ const _modelValue = computed({
  */
 function select(): void {
   input.value?.select();
+}
+
+/**
+ * Copies the current value of `_modelValue` to the clipboard using the Clipboard API.
+ *
+ * @return {Promise<void>} A promise that resolves when the text has been successfully copied to the clipboard.
+ */
+async function copyToClipboard(): Promise<void> {
+  await navigator.clipboard.writeText(_modelValue.value as string);
 }
 
 /**

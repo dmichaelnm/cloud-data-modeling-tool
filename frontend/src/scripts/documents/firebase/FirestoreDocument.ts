@@ -72,6 +72,10 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
     document.parent = this as unknown as dc.IDocument<dc.IDocumentData>;
   }
 
+  clearDocuments() {
+    this.documents.clear();
+  }
+
   findDocument(
     id: string,
     deepSearch: boolean = false,
@@ -99,10 +103,10 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
     return undefined;
   }
 
-  getDocuments(type: dc.EDocumentType): dc.IDocument<dc.IDocumentData>[] {
+  getDocuments<T extends dc.IProjectDocumentData>(type: dc.EDocumentType): dc.IDocument<T>[] {
     const typeMap = this.documents.get(type);
     if (typeMap) {
-      return Array.from(typeMap.values());
+      return Array.from(typeMap.values()) as dc.IDocument<T>[];
     }
     return [];
   }

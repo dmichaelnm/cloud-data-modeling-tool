@@ -2,6 +2,9 @@ import {onRequest, Request} from 'firebase-functions/v2/https';
 import {Response} from 'express';
 import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
+import * as types from './types';
+import * as aws from './provider/aws';
+import * as gcp from './provider/gcp';
 
 /**
  * This variable specifies the geographical region setting
@@ -22,7 +25,7 @@ admin.initializeApp();
  *
  * @param {Request} request - The HTTP request object containing headers and body.
  * @param {Response} response - The HTTP response object used to send back the response.
- * @param {function(admin.auth.DecodedIdToken): Promise<T>} task - A function that executes the desired task when a
+ * @param {function} task - A function that executes the desired task when a
  *        user is authenticated. Receives the decoded token as an argument and returns a promise.
  * @return {Promise<void>} A promise that resolves when the authorization and task execution are complete. Sends
  *         appropriate HTTP responses to the client.
@@ -69,11 +72,39 @@ async function authorize<T>(
   }
 }
 
-export const test = onRequest(
+// noinspection JSUnusedGlobalSymbols
+export const testConnection = onRequest(
   {region: region, cors: true},
   async (request, response) => {
     // Authorize the request
-    await authorize<string>(request, response, (user) => {
-      return user.email as string;
+    await authorize(request, response, async () => {
+      // Get request payload
+      const payload = request.body as types.TRequest;
+      // Get provider from payload
+      const provider = payload.provider;
+      // The result
+      let result: string | null = null;
+      // Evaluate provider
+      switch (provider) {
+        case 'aws':
+          // Amazon Web Service
+          result = await aws.testConnection(payload.credentials as types.TCredentialsAWS);
+          break;
+        case 'gcp':
+          // Google Cloud Platform
+          result = await gcp.testConnection(payload.credentials as types.TCredentialsGCP);
+          break;
+        default:
+          // Unknown provider
+          throw new Error(`Unknown provider: ${provider}`);
+      }
+      // Check the result
+      if (result) {
+        // Testing connection was not successful
+        response.json({status: 'error', message: result});
+      } else {
+        // Testing connection was successful
+        response.json({status: 'success'});
+      }
     });
   });
