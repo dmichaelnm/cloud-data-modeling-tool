@@ -1,5 +1,6 @@
 import {TCredentialsGCP, TErrorMessage} from '../types';
 import {GoogleAuth} from 'google-auth-library';
+import {gcpCredentials} from './gcpSecret';
 
 /**
  * Represents the result of a token generation process.
@@ -27,6 +28,7 @@ export async function getImpersonatedToken(credentials: TCredentialsGCP): Promis
   // Create the authentication client
   const authClient = new GoogleAuth({
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    credentials: gcpCredentials,
   });
   // Create the request client
   const client = await authClient.getClient();

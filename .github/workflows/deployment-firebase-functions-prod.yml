@@ -34,6 +34,20 @@ jobs:
           echo "};" >> awsSecret.ts
           cd ../../../..
 
+      - name: Create GCP Credentials File
+        run: |
+          cd backend/functions/src/provider
+          echo "export const gcpCredentials = {" > gcpSecret.ts
+          echo "  type: 'service_account'," >> gcpSecret.ts
+          echo "  project_id: '${{vars.PROJECT_ID}}'," >> gcpSecret.ts
+          echo "  private_key_id: '${{secrets.GCP_PRIVATE_KEY_ID}}'," >> gcpSecret.ts
+          echo "  private_key: '${{secrets.GCP_PRIVATE_KEY}}'," >> gcpSecret.ts
+          echo "  client_email: '${{secrets.GCP_SERVICE_ACCOUNT}}'," >> gcpSecret.ts
+          echo "  client_id: '${{secrets.GCP_CLIENT_ID}}'," >> gcpSecret.ts
+          echo "  universe_domain: 'googleapis.com'," >> gcpSecret.ts
+          echo "};" >> gcpSecret.ts
+          cd ../../../..      
+
       - name: Prepare Google Deployment Credentials
         run: |
           cd backend
