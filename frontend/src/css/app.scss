@@ -77,6 +77,11 @@ body.body--dark {
   color: $light-header-text-normal;
 }
 
+.text-monospace {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8rem !important;
+}
+
 .body--dark .text-disabled {
   color: $dark-text-disabled;
 }

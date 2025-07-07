@@ -3,12 +3,7 @@
   <div class="row">
     <!-- Message Column -->
     <div class="col">
-      {{
-        $t('cloudServiceProvider.dialog.tab.selection.messageAws', {
-          id: providerConfig.awsAccountId,
-          role: providerConfig.awsRole,
-        })
-      }}
+      {{ $t('cloudServiceProvider.dialog.tab.selection.messageAws') }}
     </div>
   </div>
   <!-- IAM Role ARN Row -->
@@ -56,7 +51,7 @@
       <!-- Account ID -->
       <input-value
         :model-value="providerConfig.awsAccountId"
-        :label="$t('cloudServiceProvider.label.accountId')"
+        :label="$t('cloudServiceProvider.label.account')"
         read-only
         show-copy-button
       />
@@ -66,7 +61,7 @@
       <!-- Role ARN -->
       <input-value
         :model-value="providerConfig.awsRole"
-        :label="$t('cloudServiceProvider.label.iamRoleARN ')"
+        :label="$t('cloudServiceProvider.label.iamRoleARN')"
         read-only
         show-copy-button
       />

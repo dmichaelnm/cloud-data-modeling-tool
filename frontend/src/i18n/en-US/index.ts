@@ -294,7 +294,8 @@ export default {
       provider: 'Cloud Service Provider',
       serviceAccount: 'Service Account',
       iamRoleARN: 'IAM Role ARN',
-      accountId: 'Account ID',
+      account: 'Account',
+      username: 'Username',
     },
     button: {
       testConnection: 'Test Connection',
@@ -348,7 +349,15 @@ export default {
             "and Athena services, and grant access to the application's AWS account.",
           messageAwsAccountInfo:
             'The following information can be used to create the appropriate role in your own AWS account ' +
-            'to allow access to services by this application.',        },
+            'to allow access to services by this application.',
+          messageSnowflake:
+            'To connect to your Snowflake database, you need to specify your Snowflake account here ' +
+            'and the database user to log in with. The database user must be ' +
+            'associated with the public key to allow external access.',
+          messageSnowflakeAccountInfo:
+            'Here you can see the public key. You can copy it and assign this ' +
+            'key to the above-mentioned database user in your Snowflake console.',
+        },
       },
     },
   },

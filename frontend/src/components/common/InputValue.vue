@@ -12,8 +12,9 @@
     :error-message="errorMessage"
     :hide-bottom-space="hideBottomSpace"
     :readonly="readOnly"
+    :input-class="`text-label text-field ${_class}`"
+    :rows="rows"
     lazy-rules="ondemand"
-    input-class="text-label text-field"
     spellcheck="false"
     no-error-icon
     dense
@@ -68,6 +69,10 @@ const props = defineProps<{
   readOnly?: boolean | undefined;
   // Copy button flag
   showCopyButton?: boolean;
+  // Class attribute
+  class?: string;
+  // Row count for the textarea type
+  rows?: number;
 }>();
 
 /**
@@ -84,6 +89,13 @@ const _modelValue = computed({
   get: () => props.modelValue,
   set: (value: string | number | null) => emits('update:modelValue', value),
 });
+
+/**
+ * A computed property that dynamically calculates and returns the `class` value
+ * based on the `class` property provided in `props`.
+ * This variable is commonly used to bind or observe changes to the `class` property.
+ */
+const _class = computed(() => props.class);
 
 /**
  * Selects the text content of an input field if it exists.
