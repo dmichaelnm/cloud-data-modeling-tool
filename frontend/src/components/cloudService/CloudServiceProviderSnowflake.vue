@@ -131,6 +131,8 @@ async function loadProjectPublicKey(): Promise<void> {
   publicKey.value = publicKey.value.replace('-----BEGIN PUBLIC KEY-----\n', '');
   // Remove Suffix
   publicKey.value = publicKey.value.replace('-----END PUBLIC KEY-----\n', '');
+  // Remove all line breaks
+  publicKey.value = publicKey.value.replace(/\n/g, '');
 }
 
 /**

@@ -28,7 +28,6 @@ export type TCredentialsGCP = {
 export type TCredentialsSnowflake = {
   account: string;
   username: string;
-  password: string;
 };
 
 /**
@@ -42,6 +41,7 @@ export type TCredentials = TCredentialsGCP | TCredentialsAWS | TCredentialsSnowf
  * Represents a request object containing provider details and credentials.
  */
 export type TProviderRequest = {
+  projectId: string;
   provider: string;
   credentials: TCredentials;
 };

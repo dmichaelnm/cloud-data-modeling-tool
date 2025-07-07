@@ -77,6 +77,7 @@ import ButtonLabel from 'components/common/ButtonLabel.vue';
  * the provider type and the credentials necessary for authentication.
  */
 type TRequest = {
+  projectId: string;
   provider: csp.ECloudServiceProvider;
   credentials: csp.TCredentials;
 };
@@ -221,6 +222,7 @@ async function testConnection(): Promise<void> {
     await runFunction<TRequest, TResult>(
       'testConnection',
       {
+        projectId: common.session.activeProject as string,
         provider: _modelValue.value.data.provider,
         credentials: _modelValue.value.data.credentials,
       },

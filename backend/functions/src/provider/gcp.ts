@@ -19,7 +19,7 @@ type TTokenResult = {
  * @return {Promise<string | undefined>} A promise that resolves to the generated access token or undefined if the
  *         token could not be retrieved.
  */
-export async function getImpersonatedToken(credentials: TCredentialsGCP): Promise<string | undefined> {
+async function getImpersonatedToken(credentials: TCredentialsGCP): Promise<string | undefined> {
   // Defined Scopes
   const scopes = [
     'https://www.googleapis.com/auth/devstorage.read_write',

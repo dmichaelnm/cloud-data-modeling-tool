@@ -1,14 +1,14 @@
 import {onRequest, Request} from 'firebase-functions/v2/https';
-import {Response} from 'express';
-import {TErrorMessage, TKeyPairRequest} from './types';
-import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
-import {gcpCredentials} from './provider/gcpSecret';
 import {generateKeyPairSync} from 'node:crypto';
+import {Response} from 'express';
+import {TKeyPairRequest} from './types';
 import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
 import * as types from './types';
 import * as aws from './provider/aws';
 import * as gcp from './provider/gcp';
+import * as sf from './provider/snowflake';
+import * as gsm from './gsm';
 
 /**
  * This variable specifies the geographical region setting
@@ -76,36 +76,6 @@ async function authorize<T>(
   }
 }
 
-/**
- * Retrieves the value of a secret from the Google Cloud Secret Manager service.
- *
- * @param {string} secretId - The ID of the secret to retrieve.
- * @return {Promise<string | null>} A promise that resolves to the secret value as a string if found, or null if
- *         the secret does not exist. Throws an error for other unexpected scenarios.
- */
-async function getSecret(secretId: string): Promise<string | null> {
-  // Create the secret manager client
-  const smClient = new SecretManagerServiceClient({credentials: gcpCredentials});
-  try {
-    // Try to get the public key for the project
-    const [version] = await smClient.accessSecretVersion({
-      name: `projects/${gcpCredentials.project_id}/secrets/${secretId}/versions/latest`,
-    });
-    // Return the secret
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return version.payload?.data?.toString('utf-8') ?? null;
-  } catch (error: unknown) {
-    const err = error as TErrorMessage;
-    if (err.code === 5 || (err.code === 7 && err.details?.includes('NOT_FOUND'))) {
-      // Secret not found
-      return null;
-    }
-    // Other error
-    throw error;
-  }
-}
-
 // noinspection JSUnusedGlobalSymbols
 /**
  * Retrieves or generates the public key associated with a specific project.
@@ -124,13 +94,10 @@ export const getProjectPublicKey = onRequest(
       const payload = request.body as TKeyPairRequest;
       // Get project ID
       const projectId = payload.projectId;
-      // Create the secret manager client
-      const smClient = new SecretManagerServiceClient({credentials: gcpCredentials});
       // Try to get the public key for the project
-      const secret = await getSecret(`${projectId}-public-key`);
-      //       // Initialize public key
-      let result: string;
+      const secret = await gsm.getSecret(`${projectId}-public-key`);
       // Check if the public key was found
+      let result: string;
       if (secret === null) {
         // Generate the key pair
         const {privateKey, publicKey} = generateKeyPairSync(
@@ -146,42 +113,12 @@ export const getProjectPublicKey = onRequest(
               format: 'pem',
             },
           });
-        // Create a secret for the public key
-        await smClient.createSecret({
-          parent: `projects/${gcpCredentials.project_id}`,
-          secretId: `${projectId}-public-key`,
-          secret: {
-            replication: {
-              automatic: {},
-            },
-          },
-        });
-        // Add the public key to the secret
-        await smClient.addSecretVersion({
-          parent: `projects/${gcpCredentials.project_id}/secrets/${projectId}-public-key`,
-          payload: {
-            data: Buffer.from(publicKey, 'utf-8'),
-          },
-        });
-        // Create a secret for the private key
-        await smClient.createSecret({
-          parent: `projects/${gcpCredentials.project_id}`,
-          secretId: `${projectId}-private-key`,
-          secret: {
-            replication: {
-              automatic: {},
-            },
-          },
-        });
-        // Add the public key to the secret
-        await smClient.addSecretVersion({
-          parent: `projects/${gcpCredentials.project_id}/secrets/${projectId}-private-key`,
-          payload: {
-            data: Buffer.from(privateKey, 'utf-8'),
-          },
-        });
+        // Create the secret for the public key
+        await gsm.addSecret(`${projectId}-public-key`, publicKey);
+        // Create the secret for the private key
+        await gsm.addSecret(`${projectId}-private-key`, privateKey);
         // Set the public key as the result
-        result = publicKey.toString();
+        result = publicKey;
       } else {
         // Apply public key
         result = secret;
@@ -215,6 +152,10 @@ export const testConnection = onRequest(
         case 'gcp':
           // Google Cloud Platform
           result = await gcp.testConnection(payload.credentials as types.TCredentialsGCP);
+          break;
+        case 'snowflake':
+          // Snowflake Database
+          result = await sf.testConnection(payload.projectId, payload.credentials as types.TCredentialsSnowflake);
           break;
         default:
           // Unknown provider
