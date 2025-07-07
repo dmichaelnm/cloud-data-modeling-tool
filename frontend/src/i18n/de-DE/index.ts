@@ -331,6 +331,13 @@ export default {
             'Informationen können Sie den Details entnehmen.',
         },
       },
+      delete: {
+        title: 'Cloud-Dienstleister löschen?',
+        message:
+          'Sind Sie sicher, dass Sie den Cloud-Dienstleister "{name}" löschen möchten? Alle abhängigen ' +
+          'Artefakte, wie z.B. untergeordnete Cloud-Dienste gehen dabei ebenfalls verloren. Diese Aktion kann ' +
+          'nicht rückgängig gemacht werden.',
+      },
       tab: {
         selection: {
           message:

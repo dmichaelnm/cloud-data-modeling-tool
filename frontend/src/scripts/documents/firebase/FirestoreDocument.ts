@@ -106,7 +106,9 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
   getDocuments<T extends dc.IProjectDocumentData>(type: dc.EDocumentType): dc.IDocument<T>[] {
     const typeMap = this.documents.get(type);
     if (typeMap) {
-      return Array.from(typeMap.values()) as dc.IDocument<T>[];
+      const documents = Array.from(typeMap.values()) as dc.IDocument<T>[];
+      documents.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+      return documents;
     }
     return [];
   }
@@ -124,6 +126,11 @@ export class FirestoreDocument<D extends dc.IDocumentData> implements dc.IDocume
 
   async delete(): Promise<void> {
     if (await this.onBeforeDelete()) {
+      for (const typeMap of this.documents.values()) {
+        for (const document of typeMap.values()) {
+          await document.delete();
+        }
+      }
       const reference = fs.doc(fbFirestore, this.path, this.id);
       await fs.deleteDoc(reference);
     }

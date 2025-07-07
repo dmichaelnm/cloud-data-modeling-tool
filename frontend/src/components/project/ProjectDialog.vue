@@ -217,6 +217,7 @@ function onAfterOperation(
     // Add the new project to the list of projects
     const projectDocument = document as dc.IDocument<IProjectData>;
     common.session.projects.push(projectDocument);
+    common.session.sortProjects();
     // Emit event
     emits('project-created', projectDocument);
   }

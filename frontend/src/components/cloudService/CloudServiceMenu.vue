@@ -34,6 +34,7 @@
             v-if="_canMaintainProvider"
             :label="$t('cloudServiceProvider.menu.delete')"
             show-empty-icon
+            @click="onConfirmProviderDeletion(prv)"
           />
           <menu-item
             v-if="!_canMaintainProvider"
@@ -54,7 +55,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useCommonComposables } from 'src/scripts/composables/Common';
+import { useCommonComposables, useRunAsync } from 'src/scripts/composables/Common';
+import { useConfirmationDialog } from 'src/scripts/composables/Dialog';
 import { EDocumentOperation, EDocumentType, IDocument } from 'src/scripts/documents/Document';
 import { ICloudServiceProviderData } from 'src/scripts/documents/model/CloudServiceProvider';
 import { EProjectRole, Project } from 'src/scripts/documents/model/Project';
@@ -65,6 +67,14 @@ import MenuItem from 'components/common/MenuItem.vue';
  * Function returning the most common composables like "router", "quasar", "i18n".
  */
 const common = useCommonComposables();
+/**
+ * Function to show a confirmation dialog.
+ */
+const confirmationDialog = useConfirmationDialog();
+/**
+ * Function for executing asynchronous tasks.
+ */
+const runAsync = useRunAsync();
 
 /**
  * A reactive reference to an instance of the CloudServiceProviderDialog component.
@@ -122,5 +132,39 @@ function openDialog(
 ): void {
   // Open Dialog
   cspDialog.value?.open(document, operation);
+}
+
+/**
+ * Handles the confirmation and deletion process of a cloud service provider document.
+ * Prompts the user with a confirmation dialog and, upon confirmation, deletes the specified document.
+ * If the document is associated with the current project, it is also removed from the project document.
+ *
+ * @param {IDocument<ICloudServiceProviderData>} document - The cloud service provider document to be deleted.
+ * @return {void} This function does not return a value.
+ */
+function onConfirmProviderDeletion(document: IDocument<ICloudServiceProviderData>): void {
+  // Show confirmation dialog
+  confirmationDialog(
+    common.i18n.t('cloudServiceProvider.dialog.delete.title'),
+    common.i18n.t('cloudServiceProvider.dialog.delete.message', {
+      name: document.data.common.name,
+    }),
+    undefined,
+    async (value) => {
+      // Check confirmation
+      if (value === 'ok') {
+        await runAsync(async () => {
+          // Delete the provider document
+          await document.delete();
+          // Get the current project document
+          const projectDocument = common.session.projectDocument;
+          if (projectDocument) {
+            // Remove it from the current project document
+            projectDocument.removeDocument(document.type, document.id);
+          }
+        });
+      }
+    },
+  );
 }
 </script>

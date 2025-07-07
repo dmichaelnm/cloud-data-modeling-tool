@@ -327,6 +327,13 @@ export default {
             'detailed information can be found in the details.',
         },
       },
+      delete: {
+        title: 'Delete Cloud Service Provider?',
+        message:
+          'Are you sure you want to delete the Cloud Service Provider "{name}"? All dependent ' +
+          'artifacts, such as subordinate cloud services, will also be lost. This action cannot ' +
+          'be undone.',
+      },
       tab: {
         selection: {
           message:
