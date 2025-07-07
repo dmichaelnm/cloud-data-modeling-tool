@@ -73,6 +73,8 @@ const props = defineProps<{
   class?: string;
   // Row count for the textarea type
   rows?: number;
+  // Content is only in uppercase
+  upperCase?: boolean;
 }>();
 
 /**
@@ -87,7 +89,11 @@ const emits = defineEmits<{
  */
 const _modelValue = computed({
   get: () => props.modelValue,
-  set: (value: string | number | null) => emits('update:modelValue', value),
+  set: (value: string | number | null) =>
+    emits(
+      'update:modelValue',
+      props.upperCase && typeof value === 'string' ? value?.toUpperCase() : value,
+    ),
 });
 
 /**

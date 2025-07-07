@@ -26,6 +26,7 @@
         :label="$t('cloudServiceProvider.label.username')"
         :error-message="usernameError"
         mandatory
+        upper-case
       />
     </div>
   </div>
@@ -44,7 +45,7 @@
       <!-- Public Key -->
       <input-value
         :model-value="publicKey"
-        :rows="10"
+        :rows="8"
         hide-bottom-space
         read-only
         show-copy-button
@@ -122,9 +123,14 @@ onBeforeMount(async () => {
  * @return {Promise<void>} A promise that resolves when the public key is successfully loaded and assigned.
  */
 async function loadProjectPublicKey(): Promise<void> {
+  // Get the public key from the backend
   publicKey.value = (await runFunction<{ projectId: string }, string>('getProjectPublicKey', {
     projectId: common.session.activeProject as string,
   })) as string;
+  // Remove Prefix
+  publicKey.value = publicKey.value.replace('-----BEGIN PUBLIC KEY-----\n', '');
+  // Remove Suffix
+  publicKey.value = publicKey.value.replace('-----END PUBLIC KEY-----\n', '');
 }
 
 /**

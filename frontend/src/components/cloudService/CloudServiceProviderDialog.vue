@@ -5,6 +5,7 @@
     :editor-data="editorData"
     :tabs="['selection']"
     :operation="dialogOperation"
+    :post-operation-handler="onPostOperation"
   >
     <!-- Cloud Service Selection Template -->
     <template v-slot:tab-selection>
@@ -20,10 +21,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { EDocumentOperation, EDocumentType, IDocument } from 'src/scripts/documents/Document';
 import { useCommonComposables } from 'src/scripts/composables/Common';
 import { IAccountData } from 'src/scripts/documents/model/Account';
 import { IProjectData } from 'src/scripts/documents/model/Project';
+import * as dc from 'src/scripts/documents/Document';
 import * as csp from 'src/scripts/documents/model/CloudServiceProvider';
 import CloudServiceProviderSelection from 'components/cloudService/CloudServiceProviderSelection.vue';
 import DocumentDialog from 'components/main/DocumentDialog.vue';
@@ -44,7 +45,7 @@ const dialogVisible = ref(false);
 /**
  * A reactive reference to the dialog operation.
  */
-const dialogOperation = ref(EDocumentOperation.read);
+const dialogOperation = ref(dc.EDocumentOperation.read);
 
 /**
  * Opens a dialog with the specified document and operation.
@@ -55,20 +56,42 @@ const dialogOperation = ref(EDocumentOperation.read);
  * @return {void} This method does not return a value.
  */
 function open(
-  document: IDocument<csp.ICloudServiceProviderData> | null,
-  operation: EDocumentOperation,
+  document: dc.IDocument<csp.ICloudServiceProviderData> | null,
+  operation: dc.EDocumentOperation,
 ): void {
   // Create editor data instance
   editorData.value = new csp.CloudServiceProviderEditorData(
-    common.session.accountDocument as IDocument<IAccountData>,
-    EDocumentType.CloudServiceProvider,
+    common.session.accountDocument as dc.IDocument<IAccountData>,
+    dc.EDocumentType.CloudServiceProvider,
     document,
-    common.session.projectDocument as IDocument<IProjectData>,
+    common.session.projectDocument as dc.IDocument<IProjectData>,
   );
   // Set the operation of the project dialog
   dialogOperation.value = operation;
   // Show dialog
   dialogVisible.value = true;
+}
+
+/**
+ * Handles post-operation actions after a document operation is performed.
+ *
+ * @param {EDocumentOperation} operation The type of document operation performed (e.g., create, update, delete).
+ * @param {IDocument<IProjectDocumentData>} document The document on which the operation was performed.
+ * @return {void} No value is returned.
+ */
+function onPostOperation(
+  operation: dc.EDocumentOperation,
+  document: dc.IDocument<dc.IProjectDocumentData>,
+): void {
+  // If the document was newly created, it must be added to the project
+  if (operation === dc.EDocumentOperation.create) {
+    // Get the current project document
+    const projectDocument = common.session.projectDocument;
+    if (projectDocument) {
+      // Add the cloud service provider document to the project document
+      projectDocument.addDocument(document);
+    }
+  }
 }
 
 /**
