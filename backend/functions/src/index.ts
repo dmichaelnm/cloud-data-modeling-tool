@@ -1,5 +1,9 @@
 import {onRequest, Request} from 'firebase-functions/v2/https';
 import {Response} from 'express';
+import {TErrorMessage, TKeyPairRequest} from './types';
+import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
+import {gcpCredentials} from './provider/gcpSecret';
+import {generateKeyPairSync} from 'node:crypto';
 import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
 import * as types from './types';
@@ -72,14 +76,132 @@ async function authorize<T>(
   }
 }
 
+/**
+ * Retrieves the value of a secret from the Google Cloud Secret Manager service.
+ *
+ * @param {string} secretId - The ID of the secret to retrieve.
+ * @return {Promise<string | null>} A promise that resolves to the secret value as a string if found, or null if
+ *         the secret does not exist. Throws an error for other unexpected scenarios.
+ */
+async function getSecret(secretId: string): Promise<string | null> {
+  // Create the secret manager client
+  const smClient = new SecretManagerServiceClient({credentials: gcpCredentials});
+  try {
+    // Try to get the public key for the project
+    const [version] = await smClient.accessSecretVersion({
+      name: `projects/${gcpCredentials.project_id}/secrets/${secretId}/versions/latest`,
+    });
+    // Return the secret
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return version.payload?.data?.toString('utf-8') ?? null;
+  } catch (error: unknown) {
+    const err = error as TErrorMessage;
+    if (err.code === 5 || (err.code === 7 && err.details?.includes('NOT_FOUND'))) {
+      // Secret not found
+      return null;
+    }
+    // Other error
+    throw error;
+  }
+}
+
 // noinspection JSUnusedGlobalSymbols
+/**
+ * Retrieves or generates the public key associated with a specific project.
+ *
+ * This function handles requests for getting a public key by either fetching
+ * an existing one from the secret manager or generating a new RSA key pair if
+ * the key does not already exist. The new key pair is securely stored in a
+ * secret manager with separate entries for the public and private keys.
+ */
+export const getProjectPublicKey = onRequest(
+  {region: region, cors: true},
+  async (request, response) => {
+    // Authorize the request
+    await authorize<string>(request, response, async () => {
+      // Get request body
+      const payload = request.body as TKeyPairRequest;
+      // Get project ID
+      const projectId = payload.projectId;
+      // Create the secret manager client
+      const smClient = new SecretManagerServiceClient({credentials: gcpCredentials});
+      // Try to get the public key for the project
+      const secret = await getSecret(`${projectId}-public-key`);
+      //       // Initialize public key
+      let result: string;
+      // Check if the public key was found
+      if (secret === null) {
+        // Generate the key pair
+        const {privateKey, publicKey} = generateKeyPairSync(
+          'rsa',
+          {
+            modulusLength: 2048,
+            publicKeyEncoding: {
+              type: 'spki',
+              format: 'pem',
+            },
+            privateKeyEncoding: {
+              type: 'pkcs8',
+              format: 'pem',
+            },
+          });
+        // Create a secret for the public key
+        await smClient.createSecret({
+          parent: `projects/${gcpCredentials.project_id}`,
+          secretId: `${projectId}-public-key`,
+          secret: {
+            replication: {
+              automatic: {},
+            },
+          },
+        });
+        // Add the public key to the secret
+        await smClient.addSecretVersion({
+          parent: `projects/${gcpCredentials.project_id}/secrets/${projectId}-public-key`,
+          payload: {
+            data: Buffer.from(publicKey, 'utf-8'),
+          },
+        });
+        // Create a secret for the private key
+        await smClient.createSecret({
+          parent: `projects/${gcpCredentials.project_id}`,
+          secretId: `${projectId}-private-key`,
+          secret: {
+            replication: {
+              automatic: {},
+            },
+          },
+        });
+        // Add the public key to the secret
+        await smClient.addSecretVersion({
+          parent: `projects/${gcpCredentials.project_id}/secrets/${projectId}-private-key`,
+          payload: {
+            data: Buffer.from(privateKey, 'utf-8'),
+          },
+        });
+        // Set the public key as the result
+        result = publicKey.toString();
+      } else {
+        // Apply public key
+        result = secret;
+      }
+      // Return the public key
+      return result;
+    });
+  });
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * Handles a request to test the connection for a specified cloud provider.
+ */
 export const testConnection = onRequest(
   {region: region, cors: true},
   async (request, response) => {
     // Authorize the request
     await authorize(request, response, async () => {
       // Get request payload
-      const payload = request.body as types.TRequest;
+      const payload = request.body as types.TProviderRequest;
       // Get provider from payload
       const provider = payload.provider;
       // The result
