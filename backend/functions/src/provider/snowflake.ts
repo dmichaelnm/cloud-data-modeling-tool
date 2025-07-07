@@ -19,20 +19,15 @@ async function createConnection(
   username: string
 ): Promise<sf.Connection> {
   // Get the private key for the project
-  let privateKey = await gsm.getSecret(`${projectId}-private-key`);
+  const privateKey = await gsm.getSecret(`${projectId}-private-key`);
   // Check the private key
   if (privateKey === null) {
     // No private found
     throw new Error('Private key not found');
   }
-  // Replace Prefix
-  privateKey = privateKey.replace('-----BEGIN PRIVATE KEY-----', '');
-  // Replace Suffix
-  privateKey = privateKey.replace('-----END PRIVATE KEY-----', '');
-  // Replace all line breaks
-  privateKey = privateKey.replace(/\n/g, '');
   // Create the connection object
   const connection = sf.createConnection({
+    authenticator: 'SNOWFLAKE_JWT',
     account: account,
     username: username,
     privateKey: privateKey,
