@@ -26,24 +26,27 @@
             ref="awsProvider"
             v-if="_modelValue.data.provider === csp.ECloudServiceProvider.AWS"
             v-model="_modelValue"
+            :read-only="operation === EDocumentOperation.read"
           />
           <!-- Google Cloud Platform -->
           <cloud-service-provider-gcp
             ref="gcpProvider"
             v-if="_modelValue.data.provider === csp.ECloudServiceProvider.GCP"
             v-model="_modelValue"
+            :read-only="operation === EDocumentOperation.read"
           />
           <!-- Snowflake Database -->
           <cloud-service-provider-snowflake
             ref="snowflakeProvider"
             v-if="_modelValue.data.provider === csp.ECloudServiceProvider.Snowflake"
             v-model="_modelValue"
+            :read-only="operation === EDocumentOperation.read"
           />
         </div>
       </div>
     </div>
     <!-- Test Connection Row -->
-    <div class="row q-col-gutter-x-sm">
+    <div class="row q-col-gutter-x-sm" v-if="operation !== EDocumentOperation.read">
       <!-- Test Connection Column -->
       <div class="col">
         <!-- Test Connection Button -->

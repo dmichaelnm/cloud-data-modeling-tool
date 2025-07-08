@@ -15,6 +15,7 @@
         v-model="(_modelValue.data.credentials as csp.TCredentialsSnowflake).account"
         :label="$t('cloudServiceProvider.label.account')"
         :error-message="accountError"
+        :read-only="readOnly"
         mandatory
       />
     </div>
@@ -25,13 +26,14 @@
         v-model="(_modelValue.data.credentials as csp.TCredentialsSnowflake).username"
         :label="$t('cloudServiceProvider.label.username')"
         :error-message="usernameError"
+        :read-only="readOnly"
         mandatory
         upper-case
       />
     </div>
   </div>
   <!-- Application Account Message Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Application Account Message Column -->
     <div class="col">
       <!-- Application Account Message -->
@@ -39,7 +41,7 @@
     </div>
   </div>
   <!-- Application Account Info Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Public Key Column -->
     <div class="col-4">
       <!-- Public Key -->
@@ -91,6 +93,8 @@ const usernameError = ref('');
 const props = defineProps<{
   // Model value
   modelValue: csp.CloudServiceProviderEditorData;
+  // Read-only flag
+  readOnly?: boolean;
 }>();
 
 /**
@@ -113,7 +117,9 @@ const _modelValue = computed({
  * Lifecycle method that is called before this component is mounted.
  */
 onBeforeMount(async () => {
-  await loadProjectPublicKey();
+  if (!props.readOnly) {
+    await loadProjectPublicKey();
+  }
 });
 
 /**

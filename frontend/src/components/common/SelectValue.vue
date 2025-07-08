@@ -90,7 +90,7 @@ const props = defineProps<{
   // Auto complete Attribute
   autoComplete?: string;
   // Read-only flag
-  readOnly?: boolean;
+  readOnly?: boolean | undefined;
 }>();
 
 /**

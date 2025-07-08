@@ -15,6 +15,7 @@
         v-model="(_modelValue.data.credentials as csp.TCredentialsAWS).iamRoleARN"
         :label="$t('cloudServiceProvider.label.iamRoleARN')"
         :error-message="iamRoleARNError"
+        :read-only="readOnly"
         mandatory
         auto-focus
       />
@@ -26,6 +27,7 @@
         v-model="(_modelValue.data.credentials as csp.TCredentialsAWS).region"
         label="Region"
         :options="awsRegions()"
+        :read-only="readOnly"
         mandatory
       >
         <!-- Option Template -->
@@ -37,7 +39,7 @@
     </div>
   </div>
   <!-- Application Account Message Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Application Account Message Column -->
     <div class="col">
       <!-- Application Account Message -->
@@ -45,7 +47,7 @@
     </div>
   </div>
   <!-- Application Account Info Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Account ID Column -->
     <div class="col-4">
       <!-- Account ID -->
@@ -98,6 +100,8 @@ const iamRoleARNError = ref('');
 const props = defineProps<{
   // Model value
   modelValue: csp.CloudServiceProviderEditorData;
+  // Read-only flag
+  readOnly?: boolean;
 }>();
 
 /**

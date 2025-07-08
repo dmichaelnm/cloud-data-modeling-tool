@@ -314,6 +314,12 @@ export default {
           'Here you can edit the properties of the cloud service provider and test whether the connection can be established. ' +
           'However, it is no longer possible to change the cloud service provider itself.',
       },
+      read: {
+        title: 'Show Cloud Provider',
+        message:
+          'Here you can see the properties of the connected cloud provider. However, due to your role in this ' +
+          'project you cannot make any changes.'
+      },
       test: {
         success: {
           title: 'Connection successful',

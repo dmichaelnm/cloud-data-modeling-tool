@@ -15,13 +15,14 @@
         v-model="(_modelValue.data.credentials as csp.TCredentialsGCP).serviceAccount"
         :label="$t('cloudServiceProvider.label.serviceAccount')"
         :error-message="serviceAccountError"
+        :read-only="readOnly"
         mandatory
         auto-focus
       />
     </div>
   </div>
   <!-- Application Account Message Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Application Account Message Column -->
     <div class="col">
       <!-- Application Account Message -->
@@ -29,7 +30,7 @@
     </div>
   </div>
   <!-- Application Account Info Row -->
-  <div class="row q-col-gutter-x-sm">
+  <div class="row q-col-gutter-x-sm" v-if="!readOnly">
     <!-- Service Account Column -->
     <div class="col-4">
       <!-- Service Account -->
@@ -66,6 +67,8 @@ const serviceAccountError = ref('');
 const props = defineProps<{
   // Model value
   modelValue: csp.CloudServiceProviderEditorData;
+  // Read-only flag
+  readOnly?: boolean;
 }>();
 
 /**

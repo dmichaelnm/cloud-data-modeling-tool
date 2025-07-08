@@ -40,6 +40,7 @@
             v-if="!_canMaintainProvider"
             :label="$t('cloudServiceProvider.menu.view')"
             show-empty-icon
+            @click="openDialog(prv, EDocumentOperation.read)"
           />
           <menu-item
             v-if="_canMaintainProvider"

@@ -306,7 +306,7 @@ export default {
     },
     dialog: {
       create: {
-        title: 'Cloud-Dienst Provider erstellen',
+        title: 'Cloud-Dienstleister erstellen',
         message:
           'Richten Sie hier eine Verbindung zu einem Cloud-Dienstleiter ein. Diese Verbindung kann später genutzt ' +
           'werden, um bestimmte Dienste wie zum Beispiel einen Dateispeicher wie Amazon S3 oder einen Datenbank wie ' +
@@ -314,10 +314,16 @@ export default {
           'für die Authentifizierung hinterlegen.',
       },
       update: {
-        title: 'Cloud-Dienst Provider bearbeiten',
+        title: 'Cloud-Dienstleister bearbeiten',
         message:
           'Hier können Sie die Eigenschaften des Cloud-Dienstleiters bearbeiten und testen, ob die Verbindung ' +
           'hergestellt werden kann. Es ist jedoch nicht mehr möglich, den Cloud-Dienstleiters selbst zu ändern.',
+      },
+      read: {
+        title: 'Cloud-Dienstleister anzeigen',
+        message:
+          'Hier sehen Sie die Eigenschaften des angebundenen Cloud-Dienstleiters. Aufgrund Ihrer Rolle in ' +
+          'diesem Projekt können Sie jedoch keine Änderungen vornehmen.',
       },
       test: {
         success: {
