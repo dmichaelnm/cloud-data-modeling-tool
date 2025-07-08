@@ -141,11 +141,15 @@ export class Project extends ModelObject<IProjectData> {
     // Get document provider
     const provider = getDocumentProvider();
     // Return all project documents with access
-    return await provider.findDocuments<IProjectData>(EDocumentType.Project, undefined, {
+    const documents = await provider.findDocuments<IProjectData>(EDocumentType.Project, undefined, {
       attribute: 'access',
       operation: 'array-contains',
       value: provider.getCurrentUserId(),
     });
+    // Sort documents alphabetically by their name
+    documents.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+    // Return documents
+    return documents;
   }
 }
 

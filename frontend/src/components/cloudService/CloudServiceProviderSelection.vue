@@ -35,7 +35,9 @@
           />
           <!-- Snowflake Database -->
           <cloud-service-provider-snowflake
+            ref="snowflakeProvider"
             v-if="_modelValue.data.provider === csp.ECloudServiceProvider.Snowflake"
+            v-model="_modelValue"
           />
         </div>
       </div>
@@ -75,6 +77,7 @@ import ButtonLabel from 'components/common/ButtonLabel.vue';
  * the provider type and the credentials necessary for authentication.
  */
 type TRequest = {
+  projectId: string;
   provider: csp.ECloudServiceProvider;
   credentials: csp.TCredentials;
 };
@@ -116,6 +119,12 @@ const gcpProvider = ref<InstanceType<typeof CloudServiceProviderGcp> | null>(nul
  * the `CloudServiceProviderAws` class or `null` if no instance is available.
  */
 const awsProvider = ref<InstanceType<typeof CloudServiceProviderAws> | null>(null);
+/**
+ * Represents the Snowflake cloud service provider instance or a null reference.
+ * This variable is used to store a reactive reference to an instance of
+ * the `CloudServiceProviderSnowflake` class or `null` if no instance is available.
+ */
+const snowflakeProvider = ref<InstanceType<typeof CloudServiceProviderSnowflake> | null>(null);
 
 /**
  * Properties used in this component.
@@ -176,7 +185,6 @@ function onProviderSelected(): void {
       _modelValue.value.data.credentials = {
         account: '',
         username: '',
-        password: '',
       } as csp.TCredentialsSnowflake;
       _modelValue.value.data.provider = csp.ECloudServiceProvider.Snowflake;
       break;
@@ -195,6 +203,9 @@ function validate(): boolean {
   if (_modelValue.value.data.provider === csp.ECloudServiceProvider.GCP) {
     return gcpProvider.value?.validate() ?? false;
   }
+  if (_modelValue.value.data.provider === csp.ECloudServiceProvider.Snowflake) {
+    return snowflakeProvider.value?.validate() ?? false;
+  }
   return false;
 }
 
@@ -211,6 +222,7 @@ async function testConnection(): Promise<void> {
     await runFunction<TRequest, TResult>(
       'testConnection',
       {
+        projectId: common.session.activeProject as string,
         provider: _modelValue.value.data.provider,
         credentials: _modelValue.value.data.credentials,
       },

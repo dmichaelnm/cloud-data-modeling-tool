@@ -298,7 +298,8 @@ export default {
       serviceAccount: 'Dienstkonto',
       iamRoleARN: 'ARN der IAM-Rolle',
       region: 'Region',
-      accountId: 'Konto-ID',
+      account: 'Konto',
+      username: 'Benutzername',
     },
     button: {
       testConnection: 'Verbindung testen',
@@ -330,6 +331,13 @@ export default {
             'Informationen können Sie den Details entnehmen.',
         },
       },
+      delete: {
+        title: 'Cloud-Dienstleister löschen?',
+        message:
+          'Sind Sie sicher, dass Sie den Cloud-Dienstleister "{name}" löschen möchten? Alle abhängigen ' +
+          'Artefakte, wie z.B. untergeordnete Cloud-Dienste gehen dabei ebenfalls verloren. Diese Aktion kann ' +
+          'nicht rückgängig gemacht werden.',
+      },
       tab: {
         selection: {
           message:
@@ -354,6 +362,13 @@ export default {
           messageAwsAccountInfo:
             'Die folgenden Informationen können verwendet werden, um im eigenen AWS-Konto die ' +
             'entsprechende Rolle für den Zugriff auf die Dienste durch diese Anwendung zu erstellen.',
+          messageSnowflake:
+            'Um eine Verbindung zu Ihrer Snowflake-Datenbank herstellen zu können, müssen Sie hier Ihr Snowflake-Konto ' +
+            'und den Datenbank-Benutzer angeben, mit dem sich angemeldet werden soll. Dem Datenbank-Benutzer muss der ' +
+            'öffentliche Schlüssel zugeordnet sein, damit ein Zugriff von aussen gewährt werden kann.',
+          messageSnowflakeAccountInfo:
+            'Hier sehen Sie den öffentlichen Schlüssel. Sie können Ihn kopieren und in Ihrer Snowflake-Konsole diesen ' +
+            'Schlüssel dem oben angegeben Datenbank-Benutzer zurordnen.',
         },
       },
     },

@@ -1,10 +1,14 @@
 import {onRequest, Request} from 'firebase-functions/v2/https';
+import {generateKeyPairSync} from 'node:crypto';
 import {Response} from 'express';
+import {TKeyPairRequest} from './types';
 import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
 import * as types from './types';
 import * as aws from './provider/aws';
 import * as gcp from './provider/gcp';
+import * as sf from './provider/snowflake';
+import * as gsm from './gsm';
 
 /**
  * This variable specifies the geographical region setting
@@ -73,13 +77,68 @@ async function authorize<T>(
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ * Retrieves or generates the public key associated with a specific project.
+ *
+ * This function handles requests for getting a public key by either fetching
+ * an existing one from the secret manager or generating a new RSA key pair if
+ * the key does not already exist. The new key pair is securely stored in a
+ * secret manager with separate entries for the public and private keys.
+ */
+export const getProjectPublicKey = onRequest(
+  {region: region, cors: true},
+  async (request, response) => {
+    // Authorize the request
+    await authorize<string>(request, response, async () => {
+      // Get request body
+      const payload = request.body as TKeyPairRequest;
+      // Get project ID
+      const projectId = payload.projectId;
+      // Try to get the public key for the project
+      const secret = await gsm.getSecret(`${projectId}-public-key`);
+      // Check if the public key was found
+      let result: string;
+      if (secret === null) {
+        // Generate the key pair
+        const {privateKey, publicKey} = generateKeyPairSync(
+          'rsa',
+          {
+            modulusLength: 2048,
+            publicKeyEncoding: {
+              type: 'spki',
+              format: 'pem',
+            },
+            privateKeyEncoding: {
+              type: 'pkcs8',
+              format: 'pem',
+            },
+          });
+        // Create the secret for the public key
+        await gsm.addSecret(`${projectId}-public-key`, publicKey);
+        // Create the secret for the private key
+        await gsm.addSecret(`${projectId}-private-key`, privateKey);
+        // Set the public key as the result
+        result = publicKey;
+      } else {
+        // Apply public key
+        result = secret;
+      }
+      // Return the public key
+      return result;
+    });
+  });
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * Handles a request to test the connection for a specified cloud provider.
+ */
 export const testConnection = onRequest(
   {region: region, cors: true},
   async (request, response) => {
     // Authorize the request
     await authorize(request, response, async () => {
       // Get request payload
-      const payload = request.body as types.TRequest;
+      const payload = request.body as types.TProviderRequest;
       // Get provider from payload
       const provider = payload.provider;
       // The result
@@ -93,6 +152,10 @@ export const testConnection = onRequest(
         case 'gcp':
           // Google Cloud Platform
           result = await gcp.testConnection(payload.credentials as types.TCredentialsGCP);
+          break;
+        case 'snowflake':
+          // Snowflake Database
+          result = await sf.testConnection(payload.projectId, payload.credentials as types.TCredentialsSnowflake);
           break;
         default:
           // Unknown provider

@@ -3,11 +3,7 @@
   <div class="row">
     <!-- Message Column -->
     <div class="col">
-      {{
-        $t('cloudServiceProvider.dialog.tab.selection.messageGcp', {
-          account: providerConfig.gcpServiceAccount,
-        })
-      }}
+      {{ $t('cloudServiceProvider.dialog.tab.selection.messageGcp') }}
     </div>
   </div>
   <!-- Service Account Row -->

@@ -37,7 +37,6 @@ export type TCredentialsGCP = {
 export type TCredentialsSnowflake = {
   account: string;
   username: string;
-  password: string;
 };
 
 /**

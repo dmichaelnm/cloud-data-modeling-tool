@@ -1,12 +1,10 @@
 /**
- * Represents an error message with a descriptive text.
- *
- * This type is used to encapsulate error information in a structured format,
- * primarily consisting of a single string message. It helps standardize
- * error handling and reporting across systems or components.
+ * Represents an error message structure with optional properties for code, message, and details.
  */
 export type TErrorMessage = {
-  message: string;
+  code?: number;
+  message?: string;
+  details?: string;
 }
 
 /**
@@ -30,7 +28,6 @@ export type TCredentialsGCP = {
 export type TCredentialsSnowflake = {
   account: string;
   username: string;
-  password: string;
 };
 
 /**
@@ -43,7 +40,15 @@ export type TCredentials = TCredentialsGCP | TCredentialsAWS | TCredentialsSnowf
 /**
  * Represents a request object containing provider details and credentials.
  */
-export type TRequest = {
+export type TProviderRequest = {
+  projectId: string;
   provider: string;
   credentials: TCredentials;
 };
+
+/**
+ * TKeyPairRequest represents the structure of a request to generate or manage a key pair within a specific project.
+ */
+export type TKeyPairRequest = {
+  projectId: string;
+}
